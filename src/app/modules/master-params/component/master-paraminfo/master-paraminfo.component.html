@@ -1,0 +1,106 @@
+<div class="page-main">
+    <section class="content-header">
+        <div class="section-header">
+            <div class="row">
+                <div class="col-6 col-sm-6">
+                    <ol class="breadcrumb float-sm-left">
+                        <li class="breadcrumb-item" style="font-size: 18px;"><a [routerLink]="['/params']">1.1 ข้อมูลค่าพารามิเตอร์</a></li>
+                        <li class="breadcrumb-item active">{{paramGroup}}</li>
+                    </ol>
+                </div>
+                <div class="col-6 col-sm-6" style="text-align: right;">
+                    <button class="mat-btn-tpso" mat-raised-button type="button"
+                        (click)="onAddParamsInfo()"> <mat-icon class="mr-2">add_circle</mat-icon>เพิ่ม</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="section-content">
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="row">
+                        <div class="col-12 mt-3">
+                            <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSortData($event)">
+
+                                <ng-container matColumnDef="no">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ลำดับ</th>
+                                    <td mat-cell *matCellDef="let element; let i = index;"> {{i+1}} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="paramInfo">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>รหัส</th>
+                                    <td mat-cell *matCellDef="let element;">
+                                        {{element.paramCode}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="paraminfoNameTH">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ชื่อภาษาไทย</th>
+                                    <td class="test" mat-cell data contact *matCellDef="let element">
+                                        {{element.paramLocalDescription}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="paraminfoNameEN">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ชื่อภาษาอังกฤษ</th>
+                                    <td class="test" mat-cell data contact *matCellDef="let element">
+                                        {{element.paramEnDescription}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="specialPurpose">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>วัตถุประสงค์</th>
+                                    <td class="test" mat-cell data contact *matCellDef="let element">
+                                        {{null != element.specialPurpose?element.specialPurpose: " - "}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="sortingOrder">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ลำดับ</th>
+                                    <td class="test" mat-cell data contact *matCellDef="let element">
+                                        {{null != element.sortingOrder?element.sortingOrder: " - "}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="isActive">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>สถานะ</th>
+                                    <td class="test" mat-cell data contact *matCellDef="let element">
+                                        <span *ngIf="element.isDeleted == 'N'" style="color: green;">Active</span>
+                                        <span *ngIf="element.isDeleted == 'Y'"  style="color: red;">InActive</span>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="editInfo">
+                                    <th mat-header-cell *matHeaderCellDef>แก้ไข</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <a (click)="onEditParamsInfo(element)"><mat-icon style="color: cornflowerblue;">edit</mat-icon></a>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="deletedInfo">
+                                    <th mat-header-cell *matHeaderCellDef>ลบข้อมูล</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <a [swal]="deleteSwal"><mat-icon style="color: red;">delete_forever</mat-icon></a>
+                                        <swal #deleteSwal title="คุณต้องการลบข้อมูล ใช่หรือไม่?" text="" type="warning"
+                                        [confirmButtonText]="'ตกลง'" [cancelButtonText]="'ยกเลิก'"
+                                            [showCancelButton]="true"  (confirm)="deleteParamInfo(element)"></swal>
+                                    </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            </table>
+                            <div class="noDataSource" *ngIf="dataSource.filteredData.length == 0">ไม่พบข้อมูล</div>
+                            <!-- <mat-paginator [length]="dataSource.filteredData.length" [pageSize]="10"
+                                [pageSizeOptions]="[5, 10, 25, 100]">
+                            </mat-paginator> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<swal #succussParamInfoSwal title="ลบข้อมูลสำเร็จ" [allowOutsideClick]="false"  (confirm)="getParamInfo()"
+[confirmButtonText]="'ตกลง'" text="" type="success"></swal>

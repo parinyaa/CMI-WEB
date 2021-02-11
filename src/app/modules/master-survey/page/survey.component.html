@@ -1,0 +1,263 @@
+<div class="page-main">
+    <section class="content-header">
+        <div class="section-header">
+            <div class="row">
+                <div class="col-6 col-sm-6">
+                    <label style="margin-top: 1%; font-size: 18px;">2.2 {{txtSurveyName}}</label>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="section-content">
+            <div class="card" *ngIf="displaySurvey">
+                <div class="card-body table-responsive p-0">
+                    <div class="row">
+                        <div class="col-12 mt-2">
+                            <mat-grid-list class="mb-2" cols="4" rowHeight="80px">
+                                <mat-grid-tile class="surveyp1" [colspan]="4" style="float: right;">
+                                    <input class="form-control col-2 col-sm-2 mr-2 ml-2" style="width: 15%;" type="text"
+                                        [(ngModel)]="searchFilter.province" placeholder="เลือกจังหวัด"
+                                        [formControl]="filterProvinceControl" [matAutocomplete]="auto">
+                                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
+                                    (optionSelected)='selectedPorvice($event.option.value)'>
+                                        <mat-option *ngFor="let option of filterProvinceOptions | async"
+                                            [value]="option">
+                                            {{option.provinceCode}}&nbsp;{{option.provinceName}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+
+                                    <input class="form-control col-2 col-sm-2 mr-2 " style="width: 15%;" type="text"
+                                    [(ngModel)]="searchFilter.amphur" placeholder="เลือกอำเภอ"
+                                    [formControl]="filterAmphurControl" [matAutocomplete]="auto1">
+                                <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayFnAmphur">
+                                    <mat-option *ngFor="let option of filterAmphurOptions | async"
+                                        [value]="option">
+                                        {{option.amphurName}}
+                                    </mat-option>
+                                </mat-autocomplete>
+
+                                    <!-- <input type="text" [(ngModel)]="searchFilter.amphurName" class="form-control mr-2"
+                                        placeholder="อำเภอ" style="width: 15%"> -->
+                                    <!-- <input type="text" [(ngModel)]="searchFilter.sourceCode" class="form-control mr-2"
+                                        placeholder="รหัสแหล่งข้อมูล" style="width: 15%"> -->
+
+                                        <input class="form-control col-2 col-sm-3 mr-2 " style="width: 15%; font-size: 13px;" type="text"
+                                        [(ngModel)]="searchFilter.sourceCode" placeholder="รหัสแหล่งข้อมูล(ค้นหาจาก 3 ตัวอักษรแรก)"
+                                        (ngModelChange)="getAllSource($event)"
+                                        [formControl]="filterSourceControl" [matAutocomplete]="auto2">
+                                    <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayFnSourceCode">
+                                        <mat-option *ngFor="let option of filterSourceOptions | async" style="font-size: 13px;"
+                                            [value]="option">
+                                            {{option.sourceCode}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+
+                                    <input class="form-control col-2 col-sm-3 mr-3 " style="width: 15%; font-size: 13px;" type="text" 
+                                    [(ngModel)]="searchFilter.sourceName" placeholder="ชื่อแหล่งข้อมูล(ค้นหาจาก 3 ตัวอักษรแรก)"
+                                    (ngModelChange)="getAllSourceName($event)"
+                                    [formControl]="filterSourceNameControl" [matAutocomplete]="auto3">
+                                <mat-autocomplete #auto3="matAutocomplete" [displayWith]="displayFnSourceName">
+                                    <mat-option *ngFor="let option of filterSourceNameOptions | async" style="font-size: 13px;"
+                                        [value]="option">
+                                        {{option.sourceName}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                
+                                    <!-- <input type="text" [(ngModel)]="searchFilter.sourceName" class="form-control mr-2"
+                                        placeholder="ชื่อแหล่งข้อมูล" style="width: 15%"> -->
+                                    <!-- <button class="form-control mr-2" style="width: 5%;" (click)="onSearch()"><i
+                                            class="fas fa-search"></i></button> -->
+                                    <div class="col-1" >
+                                        <span class="input-group-addon">
+                                            <button  (click)="onSearch()" mat-mini-fab color="primary">
+                                                <mat-icon class="ml-1">search</mat-icon>
+                                            </button>
+                                        </span>
+                                     </div>
+                                </mat-grid-tile>
+                            </mat-grid-list>
+                            <div class="row mt-3 mr-2">
+                                <div class="col-12">
+                                    <!-- -เก่า-
+                                    <button class="float-right" mat-raised-button color="primary" type="button"
+                                        (click)="openDialogSource()">
+                                        <mat-icon style="padding-bottom: 31px;padding-left: 0px;">add_circle</mat-icon>
+                                        &nbsp;&nbsp;เพิ่ม
+                                    </button> -->
+                                    <button class="float-right" mat-raised-button color="primary" type="button"
+                                    (click)="onErrorSwal()">
+                                    <mat-icon style="padding-bottom: 31px;padding-left: 0px;">add_circle</mat-icon>
+                                    &nbsp;&nbsp;เพิ่ม
+                                </button>
+                                </div>
+                            </div>
+                            <table mat-table [dataSource]="dataSource" matSort
+                                (matSortChange)="onSortDataSource($event)">
+                                <ng-container matColumnDef="sourceCode">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header >รหัสแหล่งข้อมูล</th>
+                                    <td mat-cell *matCellDef="let element" style="text-align: left;padding-left: 2.4%;"> {{element.source.sourceCode}} </td>
+                                </ng-container>
+
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="sourceName">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        ชื่อแหล่งข้อมูล
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.source.sourceName}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="taxId">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        หมายเลขประจำตัว <br>
+                                        ผู้เสียภาษี
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.source.taxId}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="address">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        ที่อยู่
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <p style="white-space: pre-wrap; margin-top: auto; margin-bottom: auto;">
+                                            {{element.source.address}}</p>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="tambol">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        ตำบล
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <p style="white-space: pre-wrap; margin-top: auto; margin-bottom: auto;">
+                                            {{element.source.tambol!=null?element.source.tambol.tambolName:""}}</p>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="amphur">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        อำเภอ
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <p style="white-space: pre-wrap; margin-top: auto; margin-bottom: auto;">
+                                            {{element.source.amphur.amphurName}}</p>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="province">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        จังหวัด
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <p style="white-space: pre-wrap; margin-top: auto; margin-bottom: auto;">
+                                            {{element.source.province.provinceName}}</p>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="countCpa">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        จำนวนข้อมูล <br>
+                                        ที่ต้องบันทึก
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.countCap}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="edit">
+                                    <!-- -เก่า- -->
+                                    <!-- <th mat-header-cell *matHeaderCellDef>
+                                        แก้ไข
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <a (click)="detailSurvey(element);">
+                                            <mat-icon style="color: cornflowerblue; margin-top: -5px;">edit</mat-icon>
+                                     
+                                        </a>
+
+                                    </td> -->
+
+                                    <th mat-header-cell *matHeaderCellDef>
+                                        ดู
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <a (click)="detailSurvey(element);" style="color: cornflowerblue;" matRipple>
+                                            <mat-icon style="color: cornflowerblue; margin-top: 10px;" >search</mat-icon>
+                                        </a>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="delete">
+                                    <th mat-header-cell *matHeaderCellDef>
+                                        ลบ
+                                    </th>
+                                    <!-- -เก่า-
+                                    <td mat-cell *matCellDef="let element">
+
+                                        <a [swal]="deleteSourceSwal">
+                                            <mat-icon style="color: red; margin-top: auto; margin-bottom: auto;">
+                                                delete_forever</mat-icon>
+                                        </a>
+                                        <swal #deleteSourceSwal title="คุณต้องการลบข้อมูล ใช่หรือไม่?" text="" type="warning" 
+                                        [confirmButtonText]="'ตกลง'" [cancelButtonText]="'ยกเลิก'"
+                                        [showCancelButton]="true" [focusCancel]="true" (confirm)="deleteSource(element)"> </swal>
+                                    </td> -->
+                                    <td mat-cell *matCellDef="let element">
+
+                                        <a>
+                                            <mat-icon (click) = "onErrorSwal()" style="color: red; margin-top: 10px;">
+                                                delete_forever</mat-icon>
+                                        </a>
+                                    </td>
+                                </ng-container>
+
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumnsSource"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumnsSource;"></tr>
+                                <!-- </table> -->
+                                <div class="noDataSource" *ngIf="dataSource.filteredData.length == 0">ไม่พบข้อมูล Source
+                                </div>
+                                <!-- </div>
+                                </div> -->
+                            </table>
+                            <mat-paginator *ngIf="dataSource.filteredData.length != 0" [length]="totalRecordsSource"
+                                [pageSize]="pageSizeSource" [pageSizeOptions]="[5, 10, 25, 100]"
+                                (page)="updatePaginationSource($event)">
+                            </mat-paginator>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <mat-tab-group class="divTabSource mb-4 content-data-config" *ngIf="tabSettingSurvey"
+                (selectedTabChange)="selectedTabChange($event)">
+                <mat-tab label="รายละเอียด" style="min-height:100%; overflow-y: hidden;">
+                    <app-dialog-editsource [data]="data" *ngIf="configShow && tabActive == 0"></app-dialog-editsource>
+                    <div class="row mt-3 mr-2 float-right">
+                        <button mat-raised-button color="warn" (click)="closeTabs()">
+                            <mat-icon>exit_to_app</mat-icon>&nbsp; ปิด
+                        </button>
+                    </div>
+                </mat-tab>
+                <mat-tab label="ชื่อรายการสินค้า" style="min-height:100%; overflow-y: hidden;">
+                    <app-data-config [sourceCode]="sourceCodeActive" [sourceParent] = "sourceParent" *ngIf="sourceCodeActive && tabActive == 1">
+                    </app-data-config>
+                    <div class="row mt-3 mr-2 float-right">
+                        <button mat-raised-button color="warn" (click)="closeTabs()">
+                            <mat-icon>exit_to_app</mat-icon>&nbsp; ปิด
+                        </button>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </section>
+</div>
+<swal #deleteSwalSuccess title="ลบข้อมูลสำเร็จ" [confirmButtonText]="'ตกลง'" text="" type="success"></swal>
+<!-- <swal #updataSurvey title="คุณต้องการเปลี่ยนแปลงข้อมูล <br>ใช่หรือไม่" text="" type="info" [showCancelButton]="true"
+    (confirm)="onUpdataSurvey()"></swal> -->
+<swal #saveSwalSuccess title="บันทึกข้อมูลสำเร็จ" [confirmButtonText]="'ตกลง'" text="" type="success"></swal>
+<swal #errorSwal title="" text="" [confirmButtonText]="'ตกลง'" type="error"></swal>

@@ -1,0 +1,108 @@
+//displayedColumns: string[] = ['position', 'result', 'noOfData',
+// 'minCurrentPrice', 'maxCurrentPrice', 'cvCurrentPrice', 'avgArCurrentPrice',
+// 'avgArPreviousAdjustPrice', 'avgArRelative', 'avgGmCurrentPrice', 'avgGmPreviousAdjustPrice',
+//'avgGmRelative', 'weightValue', 'indexValue'];
+.example-container {
+  height: 100vh;
+  width: 100%;
+  overflow: auto;
+}
+
+table {
+  width: 150%;
+}
+
+.mat-table-sticky:first-child {
+  border-right: 1px solid #e0e0e0;
+}
+
+td,th {
+  border-right: 1px solid #e0e0e0;
+}
+
+th.mat-header-cell {
+  text-align: center;
+}
+
+mat-column-result {
+  padding-left: 8px;
+  width: 25% !important;
+}
+
+
+.mat-column-avgGmCurrentPrice {
+  width: 5% !important;
+  text-align: right;
+}
+.mat-column-avgGmRelative {
+  width: 5% !important;
+  text-align: right;
+}
+
+.mat-column-baseWeightValue {
+  width: 5% !important;
+  text-align: right;
+}
+
+.mat-column-prevWeightValue {
+  width: 5% !important;
+  text-align: right;
+}
+
+.mat-column-prevWeightProportion {
+  width: 5% !important;
+  text-align: right;
+}
+
+.mat-column-curWeightValue {
+  width: 5% !important;
+  text-align: right;
+}
+
+.mat-column-curWeightProportion {
+  width: 5% !important;
+  text-align: right;
+}
+
+.mat-column-prevIndexValue {
+  width: 5% !important;
+  text-align: right;
+}
+
+
+.mat-column-curIndexValue {
+  width: 5% !important;
+  text-align: right;
+}
+
+.mat-column-changeMom {
+  width: 5% !important;
+  text-align: right;
+}
+
+.mat-column-changeYoy {
+  width: 5% !important;
+  text-align: right;
+}
+
+.mat-column-changeAoa {
+  width: 5% !important;
+  text-align: right;
+}
+
+
+.mat-column-cMom {
+  width: 5% !important;
+  text-align: right;
+}
+
+
+.mat-column-cYoy {
+  width: 5% !important;
+  text-align: right;
+}
+
+.mat-column-cAoa {
+  width: 5% !important;
+  text-align: right;
+}

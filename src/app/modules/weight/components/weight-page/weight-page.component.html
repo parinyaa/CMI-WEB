@@ -1,0 +1,99 @@
+<div class="page-main">
+  <section>
+    <div class="section-header">
+      <div class="row align-items-center" style="margin-top: 16px;margin-bottom: 16px;">
+        <div class="col-3 col-sm-3">
+          <mat-select class="form-control" (selectionChange)="selectBaseYear($event)" placeholder="กรุณาเลือกปีฐาน">
+            <mat-option *ngFor="let baseYear of baseYearList" [value]="baseYear">
+              {{baseYear.baseYear}} ({{baseYear.status}})
+            </mat-option>
+          </mat-select>
+        </div>
+        <div class="col-9 col-sm-9" style="text-align: right;" *ngIf="isShowButton">
+          <button mat-raised-button color="warn" [swal]="deleteWeightSwal">
+            <mat-icon>delete_forever</mat-icon>
+            <span>ลบข้อมูลน้ำหนักปีฐาน</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section *ngIf="noBaseYear">
+    <div class="no-base-year">
+      <h2>ไม่มีปีฐาน</h2>
+      <h4>กรุณาจัดทำดัชนีราคาผู้ผลิต</h4>
+      <button mat-raised-button color="primary">สร้างปีฐาน</button>
+    </div>
+  </section>
+  <!-- section1 -->
+  <section class="content" *ngIf="isNewWeight">
+    <div class="section-content">
+      <mat-card>
+        <h6 style="margin: 12px;">อัพโหลดไฟล์สำหรับคำนวณปีฐาน</h6>
+        <div id="drop" class="uploadfilecontainer" (drop)="drop($event)" (dragover)="allowDrop($event)">
+          Drop a file I/O here to see data
+        </div>
+
+        <div class="upload-btn-wrapper mt-4">
+          <button class="btn" (click)="openTabFile.click()">Upload a file</button>
+          <input type="file" #openTabFile
+            accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            class="from-control btn btn-primary mt-4" (change)="onFileChange($event)" multiple="false" />
+        </div>
+      </mat-card>
+    </div>
+  </section>
+  <!-- section2 -->
+  <section class="content" *ngIf="isHaveWeight">
+    <mat-tab-group mat-stretch-tabs class="example-stretched-tabs mat-elevation-z4" animationDuration="1000ms"
+      (selectedTabChange)="onTabClick($event)" [(selectedIndex)]="selectedIndex">
+      <mat-tab label="ขั้นตอนที่ 1">
+        <ng-template matTabContent>
+          <div class="section-content" style="margin-top:12px; margin-bottom:12px;">
+            <app-weight-step1-component *ngIf="TabStep == 1" [weight]="weight" [paramList]="paramList"
+              (changeTabEvent)="getWeightByBaseYearAndStatus()" (changeWeightEvent)="updateWeight($event)">
+            </app-weight-step1-component>
+          </div>
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="ขั้นตอนที่ 2" [disabled]="disableTab2">
+        <ng-template matTabContent>
+          <div class="section-content" style="margin-top:12px; margin-bottom:12px;">
+            <app-weight-step2-component *ngIf="TabStep == 2" [weight]="weight" [paramList]="paramList"
+              (changeTabEvent)="getWeightByBaseYearAndStatus()" (changeWeightEvent)="updateWeight($event)">
+            </app-weight-step2-component>
+          </div>
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="ขั้นตอนที่ 3" [disabled]="disableTab3">
+        <ng-template matTabContent>
+          <div class="section-content" style="margin-top:12px; margin-bottom:12px;">
+            <app-weight-step3-component *ngIf="TabStep == 3" [weight]="weight"
+              (changeTabEvent)="getWeightByBaseYearAndStatus()" (changeWeightEvent)="updateWeight($event)">
+            </app-weight-step3-component>
+          </div>
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="ขั้นตอนที่ 4" [disabled]="disableTab4">
+        <ng-template matTabContent>
+          <div class="section-content" style="margin-top:12px; margin-bottom:12px;">
+            <app-weight-step4-component *ngIf="TabStep == 4" [weight]="weight"
+              (changeTabEvent)="getWeightByBaseYearAndStatus()" (changeWeightEvent)="updateWeight($event)">
+            </app-weight-step4-component>
+          </div>
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+  </section>
+</div>
+<swal #typeFileSwal title="กรุณาเลือกไฟล์ .xlsx" text="" type="warning"></swal>
+<swal #createDataSwal title="คุณต้องการสร้างข้อมูล ใช่หรือไม่?" text="" type="info" [showCancelButton]="true"
+  [focusCancel]="true">
+</swal>
+<swal #warningSwal title="" text="" type="warning"></swal>
+<swal #deleteWeightSwal title="คุณต้องการลบข้อมูลปีฐาน ใช่หรือไม่?" text="" type="info" [showCancelButton]="true"
+  [focusCancel]="true" (confirm)="deleteWeight()">
+</swal>
+<swal #deleteWeightSuccess title="ลบข้อมูลปีฐานสำเร็จ" text="" type="success" [focusCancel]="true"
+  (confirm)="refresh()">
+</swal>

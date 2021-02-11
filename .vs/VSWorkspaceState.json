@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\app",
+    "\\src\\app\\core",
+    "\\src\\app\\core\\service",
+    "\\src\\app\\modules",
+    "\\src\\app\\modules\\master-settingoperator"
+  ],
+  "SelectedNode": "\\src\\app\\modules\\master-settingoperator\\master-settingoperator.component.ts",
+  "PreviewInSolutionExplorer": false
+}

@@ -1,0 +1,52 @@
+.page-dataconfig {
+  min-height: 500px;
+  width: 100%;
+}
+
+.ourceActive {
+  border-left: 4px solid #00b3ea;
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+md-list-item.md-2-line .md-list-item-text,
+md-list-item.md-2-line > .md-no-style .md-list-item-text {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.red-button [class*="fa"] {
+  color: #dc3545;
+}
+
+.red-button {
+  cursor: pointer;
+}
+
+::ng-deep .mat-tab-body-content {
+  height: 100%;
+  overflow: auto;
+  width: 100%;
+}
+
+::ng-deep .mat-list-base .mat-subheader {
+  height: 48px;
+  line-height: 16px;
+  font-size: 15px;
+  font-weight: bolder;
+}
+
+::ng-deep .mat-list-base .mat-list-item, .mat-list-base .mat-list-option {
+  display: block;
+  height: 33px !important;
+  -webkit-tap-highlight-color: transparent;
+  width: 100%;
+  padding: 0;
+}
+
+::ng-deep .mat-form-field-flex > .mat-form-field-infix { padding: 0.5em 0px !important;}
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-label { margin-top:-15px; }
+::ng-deep label.ng-star-inserted { transform: translateY(-0.59375em) scale(.75) !important; }
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-suffix {
+  top: 0em;
+}
+

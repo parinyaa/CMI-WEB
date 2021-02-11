@@ -1,0 +1,92 @@
+<div class="page-main">
+  <div class="content-header">
+    <div class="section-header">
+      <div class="row">
+        <div class="col-6 col-sm-6">
+          <ol class="breadcrumb float-sm-left">
+            <li class="breadcrumb-item"><a>แบบสอบถาม {{version.description}} ({{version.versionCode}})</a></li>
+          </ol>
+        </div>
+        <div class="col-6 col-sm-6" style="text-align: right;">
+          <button class="mat-btn-tpso" mat-raised-button type="button" (click)="openAddQuestionDialog()"
+            *ngIf="!isStatusActive">
+            <mat-icon>add_circle</mat-icon>&nbsp;เพิ่มคำถาม
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="section-content box-content">
+      <div class="row" *ngIf="!noDataQuestionnaire">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+          <ng-container matColumnDef="questionNo">
+            <th mat-header-cell *matHeaderCellDef> ข้อที่ </th>
+            <td mat-cell *matCellDef="let element"> {{element.questionNo}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef> คำถาม </th>
+            <td mat-cell *matCellDef="let element" matTooltip="{{element.description}}">
+              {{element.description | subStringDescription}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="questionType">
+            <th mat-header-cell *matHeaderCellDef> ประเภทคำถาม </th>
+            <td mat-cell *matCellDef="let element"> {{element.questionType.paramLocalDescription}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="edit">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center;"> แก้ไขคำถาม </th>
+            <td mat-cell *matCellDef="let element" matTooltip="แก้ไขคำถาม" style="text-align: center;">
+              <button mat-icon-button (click)="openEditQuestionDialog(element)" *ngIf="!isStatusActive">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="answer">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center;"> ตั้งค่าคำตอบ </th>
+            <td mat-cell *matCellDef="let element" style="text-align: center;">
+              <ng-container
+                *ngIf="element.questionType.paramCode == 'TEXT_INPUT' || element.questionType.paramCode == 'OPTIONAL_TEXT_INPUT' ; else elseTemplate">
+                <button mat-icon-button matTooltip="ตั้งค่าคำตอบ" disabled>
+                  <mat-icon>attachment</mat-icon>
+                </button>
+              </ng-container>
+              <ng-template #elseTemplate>
+                <button mat-icon-button matTooltip="ตั้งค่าคำตอบ" (click)="openAnswerDialog(element)">
+                  <mat-icon>attachment</mat-icon>
+                </button>
+              </ng-template>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="delete">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center;"> ลบคำถาม </th>
+            <td mat-cell *matCellDef="let element" style="text-align: center;">
+              <button mat-icon-button matTooltip="ลบคำถาม" (click)="deleteQuestion(element)" *ngIf="!isStatusActive">
+                <mat-icon style="color: red;">delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator color="primary" [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+          (page)="pageEvent = pageChange($event)">
+        </mat-paginator>
+      </div>
+      <div class="row noDataResult" *ngIf="noDataQuestionnaire">
+        <div class="col-12">
+          <div style="text-align: center;">ไม่พบข้อมูลคำถาม</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<swal #succussDeleteSwal title="ลบข้อมูลสำเร็จ" [allowOutsideClick]="false" text="" type="success"></swal>
+<swal #errorSwal title="" text="" type="error"></swal>
+<swal #deleteQuestionSwal title="" text="" type="warning" [confirmButtonText]="'Yes'" [showCancelButton]="true"></swal>

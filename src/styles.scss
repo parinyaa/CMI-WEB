@@ -1,0 +1,159 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+body {
+  background-color: #f4f6f9;
+  font-family: "kanit";
+}
+input , mat-autocomplete , input.placeholder, span ,mat-select, div {
+  font-family:Roboto,"Helvetica Neue",sans-serif;
+
+}
+h5 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.page-main {
+  min-height: 100vh;
+}
+.content-wrapper > .content {
+  padding: 33px 0.5rem;
+}
+.content-header {
+  padding: 15px 0rem !important;
+}
+.section-header {
+  // border-left: 4px solid #00b3ea;
+  // background-color: rgba(0, 0, 0, 0.03);
+  padding: 1%;
+  margin-left: 4%;
+  margin-right: 4%;
+}
+.box-content {
+  padding: 2%;
+}
+.section-content {
+  background-color: white;
+  // padding: 2%;
+  margin-left: 4%;
+  margin-right: 4%;
+  // box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+  -webkit-box-shadow: 2px 5px 27px 0px rgba(230, 230, 230, 1);
+  -moz-box-shadow: 2px 5px 27px 0px rgba(230, 230, 230, 1);
+  box-shadow: 2px 5px 27px 0px rgba(230, 230, 230, 1);
+}
+.mat-grid-tile .mat-figure {
+  justify-content: flex-end !important ;
+}
+.mat-btn-tpso {
+  background-color: #00b3ea;
+  color: white;
+}
+// .mat-tab-body-content {
+// overflow: unset !important;
+// }
+.afu-valid-file {
+  justify-content: center;
+}
+.mat-expansion-panel-body {
+  background-color: #f4f6f9c7 !important;
+}
+.mat-chip-list-wrapper {
+  justify-content: center !important;
+}
+.icon-money {
+  width: 18px;
+}
+.noDataSource {
+  margin: 5%;
+  text-align: center;
+  color: #949494;
+  font-size: 14px;
+}
+.p-address {
+  white-space: pre-wrap;
+}
+a,
+a label {
+  cursor: pointer;
+}
+.mat-row:nth-child(even) {
+  background-color: white;
+}
+
+.mat-row:nth-child(odd) {
+  background-color: #f8f9fa;
+}
+.noDataResult {
+  padding: 5%;
+}
+.mat-dialog-container {
+  height: auto !important;
+}
+.mat-button-wrapper,
+.mat-menu-item,
+.mat-card {
+  font-family: "kanit";
+}
+.textHeader {
+  color: #000000a6;
+}
+
+.mat-card,
+.mat-card-title {
+  text-align-last: center;
+}
+.mat-card-avatar {
+  width: unset !important;
+}
+.mat-card-header {
+  justify-content: center;
+}
+.mat-card-actions {
+  border-block-start: 1px solid rgba(104, 101, 101, 0.199);
+}
+
+#customInput .mat-form-field-appearance-outline {
+  height: 45px;
+  line-height: 1.725;
+}
+
+#customInput .mat-form-field-appearance-outline .mat-form-field-flex {
+  padding: 0px 10px 0px 10px;
+}
+
+#customInput .mat-form-field-infix {
+  padding: 3px 0 3px 0;
+}
+
+#customInput .mat-form-field-hide-placeholder .mat-form-field-label-wrapper {
+  top: -25px;
+}
+small {
+  color: rgba(0, 0, 0, 0.54);
+}
+.btn-export {
+  float: right;
+  margin-left: 2%;
+}
+.mat-sort-header-container {
+  justify-content: center !important;
+}
+.mat-select-disabled .mat-select-value {
+  color: #495057 !important;
+}
+
+th[mat-header-cell] {
+  text-align: center;
+  // background-color:white;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.87);
+}
+.stageNoData {
+  text-align: center;
+  color: #949494;
+  font-size: 14px;
+  background-color: #ffffff;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  padding: 3%;
+}

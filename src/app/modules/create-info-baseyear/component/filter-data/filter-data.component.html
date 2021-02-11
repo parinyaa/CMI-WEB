@@ -1,0 +1,53 @@
+<section class="section-search box-content" >
+    <div class="row mb-3">
+        <div class="col-2" *ngIf="showBaseYear">
+            ปีฐาน
+        </div>
+        <div class="col-2" *ngIf="showYearTerm">
+            ปี
+        </div>
+        <div class="col-2" *ngIf="showMonthTerm">
+            เดือน
+        </div>
+        <div class="col-2" *ngIf="showCommodityCode">
+            รหัสรายการ
+        </div>
+        <div class="col-3" *ngIf="showCommodityName">
+            ชื่อรายการ
+        </div>
+        <div class="col-1" *ngIf="btnSearch">
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2"  *ngIf="showBaseYear">
+            <input type="text" [(ngModel)]="baseYearFilter" class="form-control">
+        </div>
+        <div class="col-2" *ngIf="showYearTerm">
+            <input type="text" [(ngModel)]="yearTermFilter" class="form-control" >
+        </div>
+        <div class="col-2" *ngIf="showMonthTerm">
+            <mat-select [(ngModel)]="monthTermFilter" class="form-control" >
+                <mat-option [value]="0"></mat-option>
+                <ng-container *ngFor="let month of  month">
+                    <mat-option [value]="month.value">
+                        {{month.name}}
+                    </mat-option>
+                </ng-container>
+            </mat-select>
+        </div>
+        <div class="col-2" *ngIf="showCommodityCode">
+            <input type="text" [(ngModel)]="commodityCodeFilter" class="form-control" >
+        </div>
+        <div class="col-3" *ngIf="showCommodityName">
+            <input type="text" [(ngModel)]="commodityNameFilter" class="form-control" >
+        </div>
+        <div class="col-1" *ngIf="btnSearch">
+            <span class="input-group-addon">
+                &nbsp;&nbsp;<button  (click)="search()" mat-mini-fab color="primary">
+                    <mat-icon>search</mat-icon>
+                </button>
+            </span>
+        </div>
+    </div>
+</section>

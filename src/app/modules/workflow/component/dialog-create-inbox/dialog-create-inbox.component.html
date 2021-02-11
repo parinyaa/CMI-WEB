@@ -1,0 +1,85 @@
+<h1 mat-dialog-title>สร้างคำขอขยายระยะเวลาบันทึกข้อมูล</h1>
+<form [formGroup]="createWorkflowForm" (ngSubmit)="onSubmit()">
+  <div mat-dialog-content>
+    <div class="row">
+      <div class="col-4 mt-1">
+        <p>ความถี่</p>
+      </div>
+      <div class="col-4 mt-1">
+        <p>ช่วงเวลา</p>
+      </div>
+      <div class="col-4 mt-1">
+        <p>วันที่ขอขยายเวลา</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4">
+        <!-- <mat-select class="form-control" formControlName="frequency"
+          [ngClass]="{'is-invalid': submitted && f.frequency.errors}" (selectionChange)="onselectFrequency($event)">
+          <mat-option *ngFor="let type of frequencyList" [value]="type">
+            {{type.paramLocalMessage}}
+          </mat-option>
+        </mat-select>
+        <div *ngIf="submitted && f.frequency.errors" class="invalid-feedback">
+          <div *ngIf="f.frequency.errors.required" class="text-danger help-block">
+            กรุณาเลือกความถี่
+          </div>
+        </div> -->
+        <input type="text" class="form-control" formControlName="frequency" readonly>
+      </div>
+      <div class="col-4">
+        <mat-select class="form-control" formControlName="durationCode"
+          [ngClass]="{'is-invalid': submitted && f.durationCode.errors}">
+          <mat-option *ngFor="let type of durationList" [value]="type.durationCode">
+            {{type.durationCode | subDuration}}
+          </mat-option>
+        </mat-select>
+        <div *ngIf="submitted && f.durationCode.errors" class="invalid-feedback">
+          <div *ngIf="f.durationCode.errors.required" class="text-danger help-block">
+            กรุณาเลือกช่วงเวลา
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="input-group suffix">
+          <input class="form-control" [min]="minDate" [matDatepicker]="picker1" placeholder="กรุณาเลือกวันที่"
+            formControlName="extendedDate" readonly>
+          <span class="input-group-addon ">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          </span>
+        </div>
+        <mat-datepicker #picker1></mat-datepicker>
+        <div *ngIf="submitted && f.extendedDate.errors" class="invalid-feedback">
+          <div *ngIf="f.extendedDate.errors.required" class="text-danger help-block">
+            กรุณาเลือกวันที่
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 mt-3">
+        <p>สาเหตุ</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 mt-1">
+        <textarea type="text" rows="5" class="form-control" placeholder="" formControlName="note"
+          [ngClass]="{'is-invalid': submitted && f.note.errors}"></textarea>
+        <div *ngIf="submitted && f.note.errors" class="invalid-feedback">
+          <div *ngIf="f.note.errors.required" class="text-danger help-block">
+            กรุณากรอกเหตุผล
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions style="float: right;">
+    <button type="submit" mat-button>บันทึก</button>
+    <button mat-raised-button [mat-dialog-close]="">ยกเลิก</button>
+  </div>
+</form>
+<swal #addSwal title="คุณต้องการบันทึกข้อมูล <br>ใช่หรือไม่" text="" type="info" [showCancelButton]="true"
+  (confirm)="addWorkflow()"></swal>
+<swal #succussSwal title="บันทึกข้อมูลสำเร็จ" [allowOutsideClick]="false" (confirm)="closeDialog()" text=""
+  type="success"></swal>
+<swal #errorSwal title="" text="" type="error"></swal>

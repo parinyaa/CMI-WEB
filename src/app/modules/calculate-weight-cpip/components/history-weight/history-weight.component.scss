@@ -1,0 +1,13 @@
+table{
+    width: 100%;
+    table-layout: fixed;
+}
+.table-loaddata  tr {
+    border: 1px solid rgba(0,0,0,.12);
+}
+th[mat-header-cell]{
+    // text-align: center;
+    background-color:#11DA96;
+    font-size:17px;
+    color: black;
+  }

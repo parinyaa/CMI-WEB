@@ -1,0 +1,59 @@
+<!-- <h1 mat-dialog-title>ไฟล์ และ link</h1> -->
+<div mat-dialog-content class="dialogConfig">
+  <mat-tab-group>
+    <mat-tab label="ไฟล์">
+      <ng-template matTabContent>
+        <table mat-table [dataSource]="dataSourceFile" class="mat-elevation-z8">
+
+          <!--- Note that these columns can be defined in any order.
+                        The actual rendered columns are set as a property on the row definition" -->
+
+          <!-- Position Column -->
+          <ng-container matColumnDef="file">
+            <th mat-header-cell *matHeaderCellDef>ไฟล์</th>
+            <td mat-cell *matCellDef="let element"> {{element.file}} </td>
+          </ng-container>
+
+
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="download">
+            <th mat-header-cell *matHeaderCellDef>download</th>
+            <td mat-cell *matCellDef="let element">
+              <a (click)="onDowloadFile(element)" >
+                <mat-icon style="font-size: 35px;color:#269ee4">cloud_download</mat-icon>
+              </a>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="link">
+      <ng-template matTabContent>
+          <table mat-table [dataSource]="dataSourcelink" class="mat-elevation-z8">
+
+              <!--- Note that these columns can be defined in any order.
+                            The actual rendered columns are set as a property on the row definition" -->
+    
+              <!-- Position Column -->
+              <ng-container matColumnDef="link">
+                <th mat-header-cell *matHeaderCellDef>link</th>
+                <td mat-cell *matCellDef="let element"> {{element.link}} </td>
+              </ng-container>
+    
+    
+    
+              <tr mat-header-row *matHeaderRowDef="displayedLinkColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedLinkColumns;"></tr>
+            </table>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">ปิด</button>
+  <!-- <button mat-button [mat-dialog-close] cdkFocusInitial>Ok</button> -->
+</div>

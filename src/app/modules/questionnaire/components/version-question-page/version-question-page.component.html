@@ -1,0 +1,168 @@
+<div class="page-main">
+  <div class="content-header">
+    <div class="section-header">
+      <div class="row">
+        <div class="col-6 col-sm-6">
+          <ol class="breadcrumb float-sm-left">
+            <li class="breadcrumb-item"><a style="font-size: 18px;">แบบสอบถาม</a></li>
+          </ol>
+        </div>
+        <div class="col-6 col-sm-6" style="text-align: right;">
+          <button class="mat-btn-tpso" mat-raised-button type="button" (click)="openAddVersionDialog()">
+            <mat-icon>add_circle</mat-icon>&nbsp;เพิ่มแบบสอบถาม
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="section-content box-content">
+      <div class="row" *ngIf="!noDataQuestionnaire">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef> ลำดับที่ </th>
+            <td mat-cell *matCellDef="let element; let i = index"> {{index+i+1}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="verCode">
+            <th mat-header-cell *matHeaderCellDef> รหัสแบบสอบถาม </th>
+            <td mat-cell *matCellDef="let element" matTooltip="{{element.versionCode}}">
+              {{element.versionCode | subStringDescription}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="verDesc">
+            <th mat-header-cell *matHeaderCellDef> รายละเอียดแบบสอบถาม </th>
+            <td mat-cell *matCellDef="let element" matTooltip="{{element.description}}">
+              {{element.description | subStringDescription}} </td>
+          </ng-container>
+
+          <!-- <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef> สถานะ </th>
+            <td mat-cell *matCellDef="let element"><span
+                [ngClass]="element.status == 'INACTIVE' ? 'inactive-status ':'active-status '">{{element.status}}
+              </span></td>
+          </ng-container> -->
+
+          <ng-container matColumnDef="startDate">
+            <th mat-header-cell *matHeaderCellDef> วันที่เริ่มต้น </th>
+            <td mat-cell *matCellDef="let element"> {{element.startDate | thaiDatePipe}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="endDate">
+            <th mat-header-cell *matHeaderCellDef> วันที่สิ้นสุด </th>
+            <td mat-cell *matCellDef="let element"> {{element.endDate | thaiDatePipe}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="edit">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center;"> แก้ไขแบบสอบถาม </th>
+            <td mat-cell *matCellDef="let element" style="text-align: center;">
+              <ng-container *ngIf="element.isEnable; else elseTemplate1">
+                <button mat-icon-button (click)="openEditVersionDialog(element)" matTooltip="แก้ไขหัวข้อแบบสอบถาม">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </ng-container>
+              <ng-template #elseTemplate1>
+                <!-- <ng-container *ngIf="element.answerFlag == 'N'; else elseTemplate2">
+                  <button mat-icon-button matTooltip="แก้ไขหัวข้อแบบสอบถาม" disabled>
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                </ng-container>
+                <ng-template #elseTemplate2>
+                  <button mat-icon-button (click)="openEditVersionDialog(element)" matTooltip="แก้ไขหัวข้อแบบสอบถาม">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                </ng-template> -->
+                <button mat-icon-button disabled matTooltip="แก้ไขหัวข้อแบบสอบถาม">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </ng-template>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="setting">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center;"> ตั้งค่าคำถาม </th>
+            <td mat-cell *matCellDef="let element" style="text-align: center;">
+              <ng-container *ngIf="element.isEnable; else elseTemplate3">
+                <button mat-icon-button matTooltip="ตั้งค่าคำถาม" (click)="gotoQuestionPage(element)">
+                  <mat-icon>attachment</mat-icon>
+                </button>
+              </ng-container>
+              <ng-template #elseTemplate3>
+                <!-- <ng-container *ngIf="element.answerFlag == 'N'; else elseTemplate4">
+                  <button mat-icon-button matTooltip="ตั้งค่าคำถาม" disabled>
+                    <mat-icon>attachment</mat-icon>
+                  </button>
+                </ng-container>
+                <ng-template #elseTemplate4>
+                  <button mat-icon-button matTooltip="ตั้งค่าคำถาม" (click)="gotoQuestionPage(element)">
+                    <mat-icon>attachment</mat-icon>
+                  </button>
+                </ng-template> -->
+                <button mat-icon-button matTooltip="ตั้งค่าคำถาม" disabled>
+                  <mat-icon>attachment</mat-icon>
+                </button>
+              </ng-template>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="question">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center;"> ดูคำถาม </th>
+            <td mat-cell *matCellDef="let element" style="text-align: center;">
+              <ng-container *ngIf="!element.isEndQuestion; else elseTemplate5">
+                <button mat-icon-button matTooltip="ดูคำถาม" (click)="gotoSendDataQuestionPage(element.versionId)">
+                  <mat-icon>book</mat-icon>
+                </button>
+              </ng-container>
+              <ng-template #elseTemplate5>
+                <button mat-icon-button matTooltip="ดูคำถาม" disabled>
+                  <mat-icon>book</mat-icon>
+                </button>
+              </ng-template>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="result">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center;"> สรุป </th>
+            <td mat-cell *matCellDef="let element" style="text-align: center;">
+              <ng-container *ngIf="element.answerFlag == 'N'; else elseTemplate6">
+                <button mat-icon-button matTooltip="สรุปแบบสอบถาม" disabled>
+                  <mat-icon>insert_chart</mat-icon>
+                </button>
+              </ng-container>
+              <ng-template #elseTemplate6>
+                <button mat-icon-button matTooltip="สรุปแบบสอบถาม" (click)="gotoDataResult(element.versionId)">
+                  <mat-icon>insert_chart</mat-icon>
+                </button>
+              </ng-template>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="delete">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center;"> ลบแบบสอบถาม </th>
+            <td mat-cell *matCellDef="let element" style="text-align: center;">
+              <button mat-icon-button matTooltip="ลบแบบสอบถาม" (click)="deleteVersion(element)">
+                <mat-icon style="color: red;">delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator color="primary" [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+          (page)="pageEvent = pageChange($event)">
+        </mat-paginator>
+      </div>
+      <div class="row noDataResult" *ngIf="noDataQuestionnaire">
+        <div class="col-12">
+          <div style="text-align: center;">ไม่พบข้อมูลแบบสอบถาม</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<swal #succussDeleteSwal title="ลบข้อมูลสำเร็จ" [allowOutsideClick]="false" text="" type="success"></swal>
+<swal #errorSwal title="" text="" type="error"></swal>
+<swal #deleteVersionSwal title="" text="" type="warning" [confirmButtonText]="'ยืนยัน'" [cancelButtonText]="'ยกเลิก'"
+  [showCancelButton]="true"></swal>

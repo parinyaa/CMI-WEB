@@ -1,0 +1,47 @@
+table {
+    width: 95%;
+    table-layout: fixed;
+  }
+  th[mat-header-cell]{
+    text-align: center;
+    background-color:#269ee4;
+    font-size:20px;
+    color: white;
+  }
+  
+  td[mat-cell]{
+    text-align: center;
+  }
+  
+  .btn-add{
+    background-color: #00b3ea;
+    color: #fff;
+    width: 150px;
+    height: 40px;
+    font-size: 15px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+
+
+::ng-deep.mat-tab-body-content {
+  height: 100%;
+  overflow: auto;
+  width: 100% !important;
+  // margin-left: -35.5px !important;
+
+}
+.mat-column-weightCode {
+  width: 20%;
+}
+.mat-column-description {
+  width: 30%;
+}
+.mat-column-weight {
+  width: 20%;
+  // text-align: center !important;
+}
+.mat-column-adjustedWeight {
+  width: 20%;
+  // text-align: center !important;
+}

@@ -1,0 +1,13 @@
+<ul class="treeview mt-4">
+    <li class="list-item">
+        <div class="item">
+            <i class="fa fa-home"></i>
+            <span class="tree-label"><strong>( SOP )</strong> SOP</span>
+            <a class="btn btn-box-tool" style="float: right" title="Add child" (click)="addNode(0)"><mat-icon>add</mat-icon></a>
+        </div>
+        <app-tree-sop [nodes]="nodes" (clickViewChildNode)="viewChildNode($event)"
+            (clickHideChildNode)="hideChildNode($event)" (addChildNode)="addNode($event)" 
+            (deletedChildNode)="deleteNode($event)" (editChildNode)="editNode($event)">
+        </app-tree-sop>
+    </li>
+</ul>

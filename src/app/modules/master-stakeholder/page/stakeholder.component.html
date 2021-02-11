@@ -1,0 +1,117 @@
+<div class="page-main">
+  <section class="content-header">
+    <div class="section-header">
+      <div class="row">
+        <div class="col-6 col-sm-6">
+          <label style="margin-top: 1%; font-size: 18px;">{{txtStakeholderName}}</label><br>
+          <small>({{txtStakeholderCode}})</small>
+        </div>
+        <div class="col-6 col-sm-6" style="text-align: right;">
+          <button *ngIf="btnSaveStakeholder" class="mat-btn-tpso" mat-raised-button type="button"
+            (click)="openDialog()">
+            <mat-icon>add_circle</mat-icon>&nbsp;เพิ่ม
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="content">
+    <div class="section-content">
+      <div class="card" *ngIf="displayStakeholder">
+        <div class="card-body p-0">
+          <div class="row">
+            <div class="col-12 mt-2">
+              <mat-grid-list class="mb-2" cols="4" rowHeight="80px">
+                <mat-grid-tile [colspan]="4" style="float: right;">
+                  <input class="form-control mr-2 ml-2" style="width: 15%;" type="text"
+                    [(ngModel)]="searchFilter.provinceName" placeholder="เลือกจังหวัด"
+                    [formControl]="filterProvinceControl" [matAutocomplete]="auto">
+                  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                    <mat-option *ngFor="let option of filterProvinceOptions | async" [value]="option.provinceName">
+                      {{option.provinceName}}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <input type="text" [(ngModel)]="searchFilter.stakeholderCode" class="form-control mr-2"
+                    placeholder="รหัสผู้มีส่วนได้ส่วนเสีย" style="width: 15%">
+                  <input type="text" [(ngModel)]="searchFilter.stakeholderName" class="form-control mr-2"
+                    placeholder="ผู้มีส่วนได้ส่วนเสีย" style="width: 15%">
+                    <button class="form-control mr-2" style="width: 5%;" (click)="onSearch()"><i
+                      class="fas fa-search"></i></button>
+                </mat-grid-tile>
+              </mat-grid-list>
+              <table mat-table [dataSource]="dataStakeholder" matSort (matSortChange)="onSortData($event)">
+
+                <ng-container matColumnDef="stakeholderCode">
+                  <th mat-header-cell *matHeaderCellDef>รหัสผู้มีส่วนได้ส่วนเสีย</th>
+                  <td mat-cell *matCellDef="let element">
+                    <p *ngIf="element.stakeholder">{{element.stakeholder.stakeholderCode}}</p>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="stakeholderName">
+                  <th mat-header-cell *matHeaderCellDef>
+                    ชื่อผู้มีส่วนได้ส่วนเสีย<br>
+                    หมายเลขประจำตัวผู้เสียภาษี
+                  </th>
+                  <td mat-cell data details *matCellDef="let element">
+                    <p *ngIf="element.stakeholder">
+                      {{element.stakeholder.stakeholderName}}<br>
+                      {{element.stakeholder.taxId}}
+                    </p>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="stakeholderAddr">
+                  <th mat-header-cell *matHeaderCellDef>
+                    ที่อยู่ผู้มีส่วนได้ส่วนเสีย
+                  </th>
+                  <td mat-cell data details *matCellDef="let element">
+                    <p *ngIf="element.stakeholder" style="white-space: pre-wrap">
+                      {{element.stakeholder.address}}</p>
+                    <p *ngIf="element.stakeholder">
+                      {{element.stakeholder.ppiMsTambol?element.stakeholder.ppiMsTambol.tambolName:null}}
+                      &nbsp;
+                      {{element.stakeholder.ppiMsAmphur?element.stakeholder.ppiMsAmphur.amphurName:""}}
+                      &nbsp;{{element.stakeholder.ppiMsProvince?element.stakeholder.ppiMsProvince.provinceName:""}}
+                      &nbsp;{{element.stakeholder.postcode}} <br>
+                    </p>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="view">
+                  <th mat-header-cell *matHeaderCellDef>ดู / แก้ไขข้อมูล</th>
+                  <td mat-cell *matCellDef="let element">
+                    <a *ngIf="element.stakeholder" (click)="detailStakeholder(element)">
+                      <mat-icon style="color: cornflowerblue;">edit</mat-icon>
+                    </a>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="deleted">
+                  <th mat-header-cell *matHeaderCellDef>ลบข้อมูล</th>
+                  <td mat-cell *matCellDef="let element" [swal]="deleteSwal">
+                    <a *ngIf="element.stakeholder">
+                      <mat-icon style="color: red">delete_forever</mat-icon>
+                    </a>
+                    <swal #deleteSwal title="คุณต้องการลบข้อมูล ใช่หรือไม่?" text="" type="warning"
+                      [showCancelButton]="true" [focusCancel]="true" (confirm)="deleteStakeholder(element)">
+                    </swal>
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              </table>
+              <div class="noDataSource" *ngIf="dataStakeholder.filteredData.length == 0">ไม่พบข้อมูล Stakeholder
+              </div>
+              <mat-paginator [length]="totalRecords" [pageSize]="pageSize" [pageIndex]="page-1"
+                [pageSizeOptions]="[5, 10, 25, 100]" (page)="updatePagination($event)">
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>

@@ -1,0 +1,47 @@
+table {
+    width: 100%;
+  }
+.table-source  tr {
+  border: 1px solid rgba(0,0,0,.12);
+}
+.headers-align .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+} 
+mat-form-field {
+  margin-right: 12px;
+}
+.mat-column-commodityCode{
+  width: 21%;
+}
+.mat-column-commodityName{
+  width: 25%;
+}
+.mat-column-survey{
+  width: 27%;
+}
+.mat-column-source{
+  width: 27%;
+}
+.mat-column-commodityCode2{
+  width: 20%;
+}
+.mat-column-commodityName2{
+  width: 20%;
+}
+.mat-column-survey2{
+  width: 20%;
+}
+.mat-column-source2{
+  width: 20%;
+}
+.mat-column-value{
+  width: 10%;
+}
+.mat-column-limit{
+  width: 10%;
+}
+.chipList{
+  background-color: red;
+  color: white;
+}

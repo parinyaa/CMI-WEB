@@ -1,0 +1,43 @@
+<div class="page-main">
+  <div >
+  <div class="box-login">
+    <div class="row" style="height: 100%">
+      <div class="col-8 col-sm-8">
+        <img src="assets/img/CPIP-Picture_Final.gif" class="img-login" style="padding-right: 7%;">
+      </div>
+      <div class="col-4 col-sm-3" style="align-self: center;">
+        <div class="login-logo">
+          <a class="logo">
+            <img src="assets/img/CPIP-Logo-Final-05.png" class="logo-image" alt="User Image"><br>
+            <h5 style="font-family: 'Kanit', sans-serif; font-size: 18px; color: darkgrey;overflow: initial !important">ระบบดัชนีราคาผู้บริโภคระดับจังหวัด</h5>
+          </a>
+        </div>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <input type="input" class="form-control mt-4" formControlName="userCode" placeholder="ชื่อผู้ใช้"
+            [ngClass]="{'is-invalid': submitted && f.userCode.errors}">
+          <div *ngIf="submitted && f.userCode.errors" class="invalid-feedback">
+            <div *ngIf="f.userCode.errors.required" class="text-danger help-block">
+              userCode is mandatory field
+            </div>
+          </div>
+          <input type="password" class="form-control mt-3" formControlName="password" placeholder="รหัสผ่าน"
+            [ngClass]="{'is-invalid': submitted && f.password.errors}">
+          <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+            <div *ngIf="f.password.errors.required" class="text-danger help-block">password is mandatory field
+            </div>
+          </div>
+          <span style="color: red; text-align: center;">{{msgError}}</span>
+          <div class="row mt-3">
+            <div class="col-12" style="text-align: center;">
+              <button type="submit" class="btn-login" mat-button>
+                <i *ngIf="signinLoading" class="fa fa-spinner fa-spin mr-2"></i>เข้าสู่ระบบ
+              </button>
+            </div>
+          </div>
+        </form>
+     
+      </div>
+    </div>
+  </div>
+  </div>
+</div>

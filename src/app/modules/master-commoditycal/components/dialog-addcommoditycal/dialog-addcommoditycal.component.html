@@ -1,0 +1,50 @@
+<h1 mat-dialog-title>เพิ่มข้อมูล</h1>
+<form [formGroup]="addCommodityCalForm" (ngSubmit)="onSubmit()">
+    <div mat-dialog-content>
+        <div class="row">
+            <div class="col-2 text-right mt-1">
+                <p>รหัส :</p>
+            </div>
+            <div class="col-10">
+                <input type="text" class="form-control" placeholder="" formControlName="code" cdkFocusInitial
+                    pattern="[0-9]*" [ngClass]="{'is-invalid': submitted && f.code.errors}">
+                <div *ngIf="submitted && f.code.errors" class="invalid-feedback">
+                    <div *ngIf="f.code.errors.required" class="text-danger help-block">
+                        กรุณากรอกรหัส
+                    </div>
+                    <div *ngIf="f.code.errors.pattern" class="text-danger help-block">
+                        กรุณากรอกรหัสเป็นตัวเลข
+                    </div>
+                </div>
+            </div>
+            <div class="col-2 text-right mt-1">
+                <p>รหัสรายการ:</p>
+            </div>
+            <div class="col-10">
+                <input type="text" class="form-control" formControlName="commodityCode"
+                    [ngClass]="{'is-invalid': submitted && f.commodityCode.errors}" pattern="[0-9]*" minlength="16"
+                    maxlength="16">
+                <div *ngIf="submitted && f.commodityCode.errors" class="invalid-feedback">
+                    <div *ngIf="f.commodityCode.errors.required" class="text-danger help-block">
+                        กรุณากรอกรหัสรายการ
+                    </div>
+                    <div *ngIf="f.commodityCode.errors.minlength" class="text-danger help-block">
+                        กรุณากรอกรหัสรายการให้ครบ 16 หลัก
+                    </div>
+                    <div *ngIf="f.commodityCode.errors.pattern" class="text-danger help-block">
+                        กรุณากรอกรหัสรายการเป็นตัวเลข
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div mat-dialog-actions style="margin-top: 2%; float:right;">
+        <button type="submit" mat-raised-button color="primary">บันทึก</button>
+        <button mat-raised-button [mat-dialog-close]="data.animal">ยกเลิก</button>
+    </div>
+</form>
+<swal #addCommodityCalSwal title="คุณต้องการบันทึกข้อมูล <br>ใช่หรือไม่" text="" type="info" [showCancelButton]="true"
+    (confirm)="addCommodityCal()"></swal>
+<swal #succussCommodityCalSwal title="บันทึกข้อมูลสำเร็จ" [allowOutsideClick]="false" (confirm)="closeDialog()" text=""
+    type="success"></swal>
+<swal #errorCommodityCalSwal title="" text="" type="error"></swal>

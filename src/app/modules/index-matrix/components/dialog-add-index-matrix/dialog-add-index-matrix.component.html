@@ -1,0 +1,49 @@
+<h1 mat-dialog-title style="text-align: left;">เพิ่ม ข้อมูลความสัมพันธ์ระหว่างดัชนี และภูมิภาค/จังหวัด</h1>
+<div mat-dialog-content>
+    <div class="row">
+        <div class="col-4 text-right mt-1">
+            <p>กลุ่มดัชนี :</p>
+        </div>
+        <div class="col-5">
+            <mat-select class="form-control" [(ngModel)]="indexGroupAdd" (ngModelChange)="selectIndexGroup()" [disabled]="isDisableSelect">
+                <mat-option *ngFor="let item of listIndexGroupAdd" [value]="item.paramId">
+                    {{item.paramLocalMessage}}
+                </mat-option>
+            </mat-select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4 text-right mt-1" *ngIf="isShowRegionInputAdd">
+            <p>ภูมิภาค :</p>
+        </div>
+        <div class="col-5" *ngIf="isShowRegionInputAdd">
+            <mat-select class="form-control" [(ngModel)]="regionIdAdd">
+                <mat-option *ngFor="let item of listIndexMatrixAdd" [value]="item.regionId"
+                    (onSelectionChange)="onSelectRegion($event)">
+                    {{item.regionName + ' ' + item.regionNameEn}}
+                </mat-option>
+            </mat-select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4 text-right mt-1" *ngIf="isShowProvinceInputAdd">
+            <p>จังหวัด :</p>
+        </div>
+        <div class="col-5" *ngIf="isShowProvinceInputAdd">
+            <mat-select class="form-control" [(ngModel)]="provinceIdAdd">
+                <mat-option *ngFor="let item of listIndexMatrixProvinceAdd" [value]="item.provinceId"
+                    (onSelectionChange)="onSelectRegion($event)">
+                    {{ item.provinceName }}
+                </mat-option>
+            </mat-select>
+        </div>
+    </div>
+</div>
+<div mat-dialog-actions style="float: right;">
+    <button type="submit" mat-raised-button color="primary" *ngIf="isShowSaveAdd" (click)="onSubmit()">บันทึก</button>
+    <button mat-raised-button [mat-dialog-close]="">ยกเลิก</button>
+</div>
+<swal #addIndexMatrixSwal title="คุณต้องการบันทึกข้อมูล <br>ใช่หรือไม่" text="" type="info" [showCancelButton]="true"
+    (confirm)="onSave()"></swal>
+<swal #succussIndexMatrixSwal title="บันทึกข้อมูลสำเร็จ" [allowOutsideClick]="false" (confirm)="closeDialog()" text=""
+    type="success"></swal>

@@ -1,0 +1,75 @@
+<div mat-dialog-content style="max-height: 70vh;">
+  <div class="row" style="margin-left: 4.3%;">
+    <div class="col-3">
+      <mat-select
+        (selectionChange)="search()"
+        [(ngModel)]="weightGroup"
+        class="form-control"
+      >
+        <mat-option value=""> ทั้งหมด </mat-option>
+        <mat-option value="EG"> EG </mat-option>
+        <mat-option value="EF"> EF </mat-option>
+      </mat-select>
+    </div>
+    <div class="col-3" >
+        <input type="text"  class="form-control" placeholder="รหัส"  [(ngModel)]="weightCode">
+    </div>
+    <div class="col-3" >
+        <input type="text"  class="form-control" placeholder="รายการ" [(ngModel)]="weightName">
+    </div>
+    <div class="col-1" >
+        <span class="input-group-addon">
+            &nbsp;&nbsp;<button  (click)="search()" mat-mini-fab color="primary">
+                <mat-icon>search</mat-icon>
+            </button>
+        </span>
+    </div>
+</div>
+    <div class="row mt-4">
+       <div class="col-11" style="margin-left: 5%;">
+         <table mat-table [dataSource]="dataSource" class="table-loaddata">
+           <!--- Note that these columns can be defined in any order.
+                                 The actual rendered columns are set as a property on the row definition" -->
+           <!-- Position Column -->
+           <ng-container matColumnDef="action">
+               <th mat-header-cell *matHeaderCellDef> เลือก </th>
+               <!-- <td mat-cell *matCellDef="let row">
+                   <mat-checkbox color="primary" (change)="selectResult(row,$event)"></mat-checkbox> -->
+                   <td mat-cell *matCellDef="let element;let i = index">
+                    <mat-checkbox color="primary" [checked]="element.checked" (change)="selectResult(element,$event)"></mat-checkbox>
+               </td>
+             </ng-container>
+           <ng-container matColumnDef="weightCode">
+             <th mat-header-cell *matHeaderCellDef> รหัส </th>
+             <td mat-cell *matCellDef="let row" style="text-align: left;"> {{row.weightCode}} </td>
+           </ng-container>
+           <!-- Name Column -->
+           <ng-container matColumnDef="description">
+             <th mat-header-cell *matHeaderCellDef> รายการ </th>
+             <td mat-cell *matCellDef="let row" style="text-align: left;"> {{row.description}} </td>
+           </ng-container>
+           <!-- Weight Column -->
+           <!-- <ng-container matColumnDef="pweight">
+             <th mat-header-cell *matHeaderCellDef> น้ำหนัก </th>
+             <td mat-cell *matCellDef="let row" style="text-align: right;"> {{row.pweight == 0 ? ' ' : row.pweight}} </td>
+           </ng-container> -->
+           <ng-container matColumnDef="adjustedWeight">
+            <th mat-header-cell *matHeaderCellDef> น้ำหนัก </th>
+            <td mat-cell *matCellDef="let row"  style="text-align: right;"> {{row.adjustedWeight == 0 ? ' ' : row.adjustedWeight | number: '1.5-5':'en-US' }} </td>
+          </ng-container>
+     
+           <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="element-header"></tr>
+           <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="element-row"></tr>
+         </table>
+         <mat-paginator #paginator *ngIf="!noDataSource" [length]="length" [pageSize]="pageSize" [pageIndex]="pageIndex"
+          [pageSizeOptions]="pageSizeOptions" (page)="pageEvent = pageChange($event)">
+         </mat-paginator>
+       </div> 
+     </div> 
+   </div>
+     <div mat-dialog-actions style="float: right;">
+       <button mat-button type="submit"  (click)="onSave()" class="mat-btn-tpso">ยืนยัน</button>
+       <button mat-raised-button type="button" (click)="cancel(false)" class="btn-cancle">ยกเลิก</button>
+       </div>
+   
+   

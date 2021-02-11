@@ -1,0 +1,37 @@
+
+.mat-select-disabled {
+    background-color: #e9ecef;
+  }
+
+
+  input::-webkit-input-placeholder {
+    color: rgba(0,0,0,.87);
+}
+
+::ng-deep .valign-select-export-commodity .mat-select-trigger {
+  display: inline-table;
+  cursor: pointer;
+  position: relative;
+  margin-top: 3px !important;
+  box-sizing: border-box;
+}
+
+::ng-deep .content-header-export-commoditty .content-header {
+    padding-top: unset !important;
+    padding-right: 0rem !important;
+    padding-bottom: unset !important;
+    padding-left: 0rem !important;
+}
+
+// ::ng-deep .mat-dialog-container {
+//   // display: block;
+//   // padding: 24px;
+//   padding-top: unset;
+//   // padding-right: 24px;
+//   padding-bottom: unset;
+//   // padding-left: 24px;
+// }
+
+::ng-deep .head-export-commodity .breadcrumb {
+  background-color: #ffffff;
+}

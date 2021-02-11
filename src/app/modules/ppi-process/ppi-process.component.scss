@@ -1,0 +1,31 @@
+.table-source  tr {
+    border: 1px solid rgba(0,0,0,.12);
+}
+.mat-column-year{
+  width: 10%;
+}
+.mat-column-content{
+  width: 30%;
+}
+.mat-column-description{
+  width: 47%;
+}
+.mat-column-file{
+  width: 13%;
+}
+.icon-export{
+  width: 30px;
+}
+
+::ng-deep .mat-tooltip {
+  font-size: 16px !important;
+}
+.content {
+  font-size: 16px;
+}
+
+.tabHead {
+  ::ng-deep .mat-tab-label{
+    font-size: 17px !important;
+  }
+}

@@ -1,0 +1,24 @@
+<table class="table-source" mat-table [dataSource]="compareSource">
+  <ng-container matColumnDef="1">
+    <th mat-header-cell *matHeaderCellDef> Commodity Code</th>
+    <td mat-cell *matCellDef="let element">
+      {{element.commodityCode}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="2">
+    <th mat-header-cell *matHeaderCellDef> Commodity Name</th>
+    <td mat-cell *matCellDef="let element"> {{element.commodityThName}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="3">
+    <th mat-header-cell *matHeaderCellDef> Survey Name</th>
+    <td mat-cell *matCellDef="let element"> {{element.surveyName}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="4">
+    <th mat-header-cell *matHeaderCellDef> Source Name</th>
+    <td mat-cell *matCellDef="let element"> {{element.sourceName}} </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="['1','2','3','4']"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['1','2','3','4'];"></tr>
+</table>

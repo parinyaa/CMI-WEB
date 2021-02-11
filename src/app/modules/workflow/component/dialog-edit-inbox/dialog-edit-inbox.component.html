@@ -1,0 +1,64 @@
+<h1 mat-dialog-title>แก้ไขคำขอขยายระยะเวลาบันทึกข้อมูล</h1>
+<form [formGroup]="editWorkflowForm" (ngSubmit)="onSubmit()">
+  <div mat-dialog-content>
+    <div class="row">
+      <div class="col-4 mt-1">
+        <p>ความถี่</p>
+      </div>
+      <div class="col-4 mt-1">
+        <p>ช่วงเวลา</p>
+      </div>
+      <div class="col-4 mt-1">
+        <p>วันที่ขอขยายเวลา</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4">
+        <input class="form-control" value="{{workflowObj.frequency.paramLocalDescription}}" readonly>
+      </div>
+      <div class="col-4">
+        <input class="form-control" value="{{workflowObj.durationCode.durationCode}}" readonly>
+      </div>
+      <div class="col-4">
+        <div class="input-group suffix">
+          <input class="form-control" [min]="minDate" [matDatepicker]="picker1" placeholder="กรุณาเลือกวันที่"
+            formControlName="extendedDate" readonly>
+          <span class="input-group-addon ">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          </span>
+        </div>
+        <mat-datepicker #picker1></mat-datepicker>
+        <div *ngIf="submitted && f.extendedDate.errors" class="invalid-feedback">
+          <div *ngIf="f.extendedDate.errors.required" class="text-danger help-block">
+            กรุณาเลือกวันที่
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 mt-3">
+        <p>สาเหตุ</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 mt-1">
+        <textarea type="text" rows="5" class="form-control" placeholder="" formControlName="note"
+          [ngClass]="{'is-invalid': submitted && f.note.errors}"></textarea>
+        <div *ngIf="submitted && f.note.errors" class="invalid-feedback">
+          <div *ngIf="f.note.errors.required" class="text-danger help-block">
+            กรุณากรอกเหตุผล
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions style="float: right;">
+    <button type="submit" mat-button>บันทึก</button>
+    <button mat-raised-button [mat-dialog-close]="">ยกเลิก</button>
+  </div>
+</form>
+<swal #addSwal title="คุณต้องการบันทึกข้อมูล <br>ใช่หรือไม่" text="" type="info" [showCancelButton]="true"
+  (confirm)="editWorkflow()"></swal>
+<swal #succussSwal title="บันทึกข้อมูลสำเร็จ" [allowOutsideClick]="false" (confirm)="closeDialog()" text=""
+  type="success"></swal>
+<swal #errorSwal title="" text="" type="error"></swal>

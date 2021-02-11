@@ -1,0 +1,47 @@
+th.mat-header-cell {
+  text-align: center !important;
+}
+
+.mat-column-productCode{
+  width: 15%;
+  text-align: left;
+}
+.mat-column-surveyName{
+  width: 15%;
+  text-align: left;
+}
+.mat-column-currentAdjustedPrice{
+  width: 10%;
+  text-align: right;
+}
+.mat-column-currentCalculatedPrice{
+  width: 10%;
+  text-align: right;
+}
+.mat-column-currentPrice{
+  width: 10%;
+  text-align: right;
+}
+.mat-column-previousAdjustedPrice{
+  width: 10%;
+  text-align: right;
+}
+.mat-column-previousCalculatedPrice{
+  width: 10%;
+  text-align: right;
+}
+.mat-column-previousPrice{
+  width: 10%;
+  text-align: right;
+}
+.mat-column-rel{
+  width: 5%;
+  text-align: right;
+}
+.mat-column-action{
+  width: 7%;
+  text-align: center;
+}
+table{
+  width:100% ;
+}

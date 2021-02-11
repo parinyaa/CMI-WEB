@@ -1,0 +1,35 @@
+table {
+  width: 95%;
+  table-layout: fixed;
+}
+th[mat-header-cell] {
+  text-align: center;
+  background-color: #269ee4;
+  font-size: 20px;
+  color: white;
+}
+
+td[mat-cell] {
+  text-align: center;
+}
+
+::ng-deep.mat-tab-body-content {
+  height: 100%;
+  overflow: auto;
+  width: 100% !important;
+}
+
+.mat-select {
+  text-align-last: left;
+}
+.mat-column-action {
+  width: 5%;
+}
+.mat-column-percent1 {
+  width: 15%;
+  padding-right: 2%;
+}
+.mat-column-percent2 {
+  width: 15%;
+  padding-right: 2%;
+}

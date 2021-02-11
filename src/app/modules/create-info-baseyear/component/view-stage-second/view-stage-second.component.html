@@ -1,0 +1,177 @@
+<div class="col-12">
+  <fieldset class="border p-3">
+    <legend class="w-auto"> &nbsp; หาราคาจากจุดเชื่อมต่อถึงปีฐาน &nbsp; </legend>
+    <app-filter-data (onSearch)="onSearch($event)"></app-filter-data>
+    <button (click)="export();" class="mt-2 mb-2 btn-export" mat-raised-button color="primary">
+      <img src="/assets/img/export.png" style="width: 20px;"> export
+    </button>
+    <button (click)="goNext()" class="mt-2 mb-2 mr-2" mat-raised-button color="primary" style="float: right;"
+      *ngIf="stage40 === 5.1">หาราคาจากจุดเชื่อมต่อถึงปีฐาน</button>
+    <button (click)="changeStage()" class="mt-2 mb-2 mr-2" mat-raised-button color="primary" style="float: right;"
+      *ngIf="stage40 === 5.2">หาราคา / ยืมราคา <mat-icon>chevron_right</mat-icon></button>
+  <div class="col-12" style="overflow: scroll;">
+    <table class="create-baseyear mat-elevation-z8" mat-table [dataSource]="dataSource" matSort
+      (matSortChange)="sortChange($event);">
+
+      <ng-container matColumnDef="commodityCode">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> รหัสรายการ
+        </th>
+        <td mat-cell *matCellDef="let element">
+            {{element.commodityCode}}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="commodityName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ชื่อรายการ
+        </th>
+        <td mat-cell *matCellDef="let element">
+            {{element.commodityName}}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="yearTerm">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ปี</th>
+        <td mat-cell *matCellDef="let element" >
+            {{element.yearTerm}}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price01">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ราคา <br> เดือนมกราคม
+        </th>
+        <td mat-cell *matCellDef="let element">
+            {{(element.price01 === 0 || element.price01 === null) ? null : element.price01 | number:'1.5-5':'en-US'  }}
+            <!-- {{(element.price01 === 0 || element.price01 === null) ? null : element.price01 | number:'1.2-2':'en-US'  }} -->
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price02">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ราคา <br> เดือนกุมภาพันธ์
+        </th>
+        <td mat-cell *matCellDef="let element">
+            {{(element.price02 === 0 || element.price02 === null) ? null : element.price02 | number:'1.5-5':'en-US'  }}
+            <!-- {{(element.price02 === 0 || element.price02 === null) ? null : element.price02 | number:'1.2-2':'en-US'  }} -->
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price03">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ราคา <br> เดือนมีนาคม
+        </th>
+        <td mat-cell *matCellDef="let element">
+
+            {{(element.price03 === 0 || element.price03 === null) ? null : element.price03 | number:'1.5-5':'en-US'  }}
+            <!-- {{(element.price03 === 0 || element.price03 === null) ? null : element.price03 | number:'1.2-2':'en-US'  }} -->
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price04">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ราคา <br> เดือนเมษายน
+        </th>
+        <td mat-cell *matCellDef="let element">
+            {{(element.price04 === 0 || element.price04 === null) ? null : element.price04 | number:'1.5-5':'en-US'  }}
+            <!-- {{(element.price04 === 0 || element.price04 === null) ? null : element.price04 | number:'1.2-2':'en-US'  }} -->
+
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price05">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ราคา <br> เดือนพฤษภาคม
+        </th>
+        <td mat-cell *matCellDef="let element">
+            {{(element.price05 === 0 || element.price05 === null) ? null : element.price05 | number:'1.5-5':'en-US'  }}
+            <!-- {{(element.price05 === 0 || element.price05 === null) ? null : element.price05 | number:'1.2-2':'en-US'  }} -->
+
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price06">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ราคา <br> เดือนมิถุนายน
+        </th>
+        <td mat-cell *matCellDef="let element">
+            {{(element.price06 === 0 || element.price06 === null) ? null : element.price06 | number:'1.5-5':'en-US'  }}
+            <!-- {{(element.price06 === 0 || element.price06 === null) ? null : element.price06 | number:'1.2-2':'en-US'  }} -->
+
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price07">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ราคา <br> เดือนกรกฎาคม
+        </th>
+        <td mat-cell *matCellDef="let element">
+            {{(element.price07 === 0 || element.price07 === null) ? null : element.price07 | number:'1.5-5':'en-US'  }}
+            <!-- {{(element.price07 === 0 || element.price07 === null) ? null : element.price07 | number:'1.2-2':'en-US'  }} -->
+
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price08">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ราคา <br> เดือนสิงหาคม
+        </th>
+        <td mat-cell *matCellDef="let element">
+            {{(element.price08 === 0 || element.price08 === null) ? null : element.price08 | number:'1.5-5':'en-US'  }}
+            <!-- {{(element.price08 === 0 || element.price08 === null) ? null : element.price08 | number:'1.2-2':'en-US'  }} -->
+
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price09">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ราคา <br> เดือนกันยายน
+        </th>
+        <td mat-cell *matCellDef="let element">
+            {{(element.price09 === 0 || element.price09 === null) ? null : element.price09 | number:'1.5-5':'en-US'  }}
+            <!-- {{(element.price09 === 0 || element.price09 === null) ? null : element.price09 | number:'1.2-2':'en-US'  }} -->
+
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price10">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ราคา <br> เดือนตุลาคม
+        </th>
+        <td mat-cell *matCellDef="let element">
+            {{(element.price10 === 0 || element.price10 === null) ? null : element.price10 | number:'1.5-5':'en-US'  }}
+            {{(element.price10 === 0 || element.price10 === null) ? null : element.price10 | number:'1.2-2':'en-US'  }}
+
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price11">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ราคา <br> เดือนพฤศจิกายน
+        </th>
+        <td mat-cell *matCellDef="let element">
+            {{(element.price11 === 0 || element.price11 === null) ? null : element.price11 | number:'1.5-5':'en-US'  }}
+            <!-- {{(element.price11 === 0 || element.price11 === null) ? null : element.price11 | number:'1.2-2':'en-US'  }} -->
+
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price12">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>ราคา <br> เดือนธันวาคม
+        </th>
+        <td mat-cell *matCellDef="let element">
+            {{(element.price12 === 0 || element.price12 === null) ? null : element.price12 | number:'1.5-5':'en-US'  }}
+            <!-- {{(element.price12 === 0 || element.price12 === null) ? null : element.price12 | number:'1.2-2':'en-US'  }} -->
+
+        </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="priceAvg">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ราคาเฉลี่ย
+        </th>
+        <td mat-cell *matCellDef="let element">
+            {{(element.priceAvg === 0 || element.priceAvg === null) ? null : element.priceAvg | number:'1.5-5':'en-US'  }}
+
+        </td>
+    </ng-container>
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+  </div>
+    <mat-paginator [length]="length" [pageSize]="pageSize" [pageIndex]="pageIndex" [pageSizeOptions]="pageSizeOptions"
+      (page)="pageEvent = pageChange($event)">
+    </mat-paginator>
+  </fieldset>
+</div>

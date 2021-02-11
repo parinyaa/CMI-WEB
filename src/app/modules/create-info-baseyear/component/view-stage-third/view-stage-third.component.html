@@ -1,0 +1,128 @@
+<div class="col-12">
+  <!-- <mat-tab-group (selectedTabChange)="selectedTabChange($event)">
+    <mat-tab label="ราคาเฉลี่ย​ ณ ปีฐาน"> -->
+  <fieldset class="border p-3">
+    <legend class="w-auto"> &nbsp; ราคาเฉลี่ย​ ณ ปีฐาน &nbsp; </legend>
+    <app-filter-data #pbar (onSearch)="onSearchGetPBar($event)"></app-filter-data>
+    <button (click)="exportPbar();" class="mt-2 btn-export" mat-raised-button color="primary">
+      <img src="/assets/img/export.png" style="width: 20px;"> export
+    </button>
+    <button (click)="goNext()" class="mt-2 mr-2" mat-raised-button color="primary" style="float: right;"
+      *ngIf="stage40 === 5.31">หาราคาเฉลี่ย ณ ปีฐาน</button>
+    <button (click)="changeStage()" class="mt-2 mr-2" mat-raised-button color="primary" style="float: right;"
+      *ngIf="stage40 === 5.32">หา​น้ำหนักจากจุดเชื่อมถึงปีฐาน<mat-icon>chevron_right</mat-icon></button>
+    <table class="pbar" mat-table [dataSource]="dataSourcePbar" matSort (matSortChange)="sortChangePbar($event);">
+
+      <ng-container matColumnDef="0">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ปีฐาน</th>
+        <td mat-cell *matCellDef="let element" matTooltip="{{element.yearTerm}} ">
+          {{element.baseYear}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="1">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>รหัสรายการ</th>
+        <td mat-cell *matCellDef="let element" matTooltip="{{element.monthTerm}} ">
+          {{element.commodityCode}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="2">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ชื่อรายการ
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.commodityName}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="3">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ระดับรายการ
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.commodityLevel}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="4">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> P bar
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <!-- {{element.averagePrice}} -->
+          {{(element.averagePrice === 0 || element.averagePrice === null) ? null : element.averagePrice | number:'1.5-5':'en-US'  }}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsPbar"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsPbar;"></tr>
+
+    </table>
+    <mat-paginator [length]="length" [pageSize]="pageSize" [pageIndex]="pageIndex" [pageSizeOptions]="pageSizeOptions"
+      (page)="pageEvent = pageChange($event)">
+    </mat-paginator>
+
+    <!-- </mat-tab> -->
+    <!-- <mat-tab label="​น้ำหนักเฉลี่ย ณ ปีฐาน">
+      <app-filter-data #wbar (onSearch)="onSearch($event)"></app-filter-data>
+      <button (click)="export();" class="mt-2 btn-export" mat-raised-button color="primary">
+        <mat-icon>cloud_download</mat-icon> export
+      </button>
+      <table class="wbar" mat-table [dataSource]="dataSource" matSort (matSortChange)="sortChangeWbar($event);">
+
+        <ng-container matColumnDef="0">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> ปี</th>
+          <td mat-cell *matCellDef="let element" matTooltip="{{element.yearTerm}} ">
+            {{element.yearTerm}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="1">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> เดือน</th>
+          <td mat-cell *matCellDef="let element" matTooltip="{{element.monthTerm}} ">
+            {{element.monthTerm}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="2">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> รหัสรายการ
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.commodityCode}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="3">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> ชื่อรายการ
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.commodityName}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="4">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> ระดับรายการ
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.commodityLevel}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="5">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> น้ำหนัก
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.weight}}
+          </td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+      <mat-paginator [length]="length" [pageSize]="pageSize" [pageIndex]="pageIndex" [pageSizeOptions]="pageSizeOptions"
+        (page)="pageEvent = pageChange($event)">
+      </mat-paginator>
+    </mat-tab> -->
+    <!-- </mat-tab-group> -->
+  </fieldset>
+</div>

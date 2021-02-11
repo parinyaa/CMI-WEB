@@ -1,0 +1,73 @@
+.btn-add {
+  background-color: #00b3ea;
+  color: #fff;
+  width: 150px;
+  height: 40px;
+  font-size: 15px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+input[type="text"]:disabled {
+  background: #fff;
+}
+.swal2-title {
+  font-size: 16px !important;
+}
+.label-title {
+  margin-top: 1%;
+  font-size: 18px;
+}
+.sec-content {
+  margin-left: 4%;
+  margin-right: 4%;
+}
+.card-spec {
+  max-height: calc(100vh - 89px);
+  min-height: calc(100vh - 89px);
+  overflow-y: auto;
+  width: 100%;
+}
+.btn-swap {
+  outline: unset;
+}
+.mat-select {
+  text-align-last: left;
+}
+.filter .mat-form-field-wrapper {
+  padding-bottom: unset !important;
+}
+::ng-deep .filter .mat-form-field-flex {
+  height: 50px !important;
+}
+
+::ng-deep .filter .mat-form-field-appearance-outline .mat-form-field-infix {
+  padding: unset !important;
+}
+::ng-deep .filter .mat-form-field {
+  line-height: 2.125 !important;
+}
+
+// ::ng-deep .mat-select-cpip{
+//   min-width: 112px;
+//   max-width: 520px !important;
+//   overflow: auto;
+//   -webkit-overflow-scrolling: touch;
+//   padding-top: 0;
+//   padding-bottom: 0;
+//   max-height: 256px;
+//   min-width: 100%;
+//   border-radius: 4px;
+// }
+
+::ng-deep  .mat-select-panel {
+  min-width: 112px;
+  max-width: 520px !important;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-top: 0;
+  padding-bottom: 0;
+  max-height: 256px;
+  min-width: 100%;
+  border-radius: 4px;
+}

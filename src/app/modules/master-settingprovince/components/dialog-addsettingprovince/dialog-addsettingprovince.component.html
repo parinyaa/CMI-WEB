@@ -1,0 +1,87 @@
+<h1 mat-dialog-title>เพิ่มข้อมูล</h1>
+<form [formGroup]="addFormGroup" (ngSubmit)="onSubmit()">
+    <div mat-dialog-content>
+        <div class="row">
+            <div class="col-2 text-right mt-1">
+                <p>จังหวัด:</p>
+            </div>
+            <div class="col-10">
+                <mat-select class="form-control" formControlName="province" placeholder="ิกรุณาเลือกจังหวัด"
+                    [ngClass]="{'is-invalid': submitted && f.province.errors}">
+                    <mat-option *ngFor="let option of province" (onSelectionChange)="selectionChange($event)"
+                        [value]="option">
+                        {{option.provinceName}}
+                    </mat-option>
+                </mat-select>
+                <div *ngIf="submitted && f.province.errors" class="invalid-feedback">
+                    <div *ngIf="f.province.errors.required" class="text-danger help-block">
+                        กรุณาเลือกจังหวัด
+                    </div>
+                </div>
+            </div>
+            <div class="col-2 text-right mt-1">
+                <p>ผู้ให้ข้อมูล:</p>
+            </div>
+            <div class="col-10">
+                <input type="text" class="form-control" formControlName="surveyCode" pattern="[0-9]*" minlength="10"
+                    maxlength="10" [ngClass]="{'is-invalid': submitted && f.surveyCode.errors}">
+                <div *ngIf="submitted && f.surveyCode.errors" class="invalid-feedback">
+                    <div *ngIf="f.surveyCode.errors.required" class="text-danger help-block">
+                        กรุณาเลือกผู้ให้ข้อมูล
+                    </div>
+                    <div *ngIf="f.surveyCode.errors.pattern" class="text-danger help-block">
+                        กรุณากรอกข้อมูลเป็นตัวเลข
+                    </div>
+                    <div *ngIf="f.surveyCode.errors.minlength" class="text-danger help-block">
+                        กรุณากรอกข้อมูลให้ครบ 10 หลัก
+                    </div>
+                </div>
+            </div>
+            <div class="col-2 text-right mt-1">
+                <p>แหล่งข้อมูล:</p>
+            </div>
+            <div class="col-10">
+                <input type="text" class="form-control" formControlName="sourceCode" pattern="[0-9]*" minlength="10"
+                    maxlength="10" [ngClass]="{'is-invalid': submitted && f.sourceCode.errors}">
+                <div *ngIf="submitted && f.sourceCode.errors" class="invalid-feedback">
+                    <div *ngIf="f.sourceCode.errors.required" class="text-danger help-block">
+                        กรุณาเลือกแหล่งข้อมูล
+                    </div>
+                    <div *ngIf="f.sourceCode.errors.pattern" class="text-danger help-block">
+                        กรุณากรอกข้อมูลเป็นตัวเลข
+                    </div>
+                    <div *ngIf="f.sourceCode.errors.minlength" class="text-danger help-block">
+                        กรุณากรอกข้อมูลให้ครบ 10 หลัก
+                    </div>
+                </div>
+            </div>
+            <div class="col-2 text-right mt-1">
+                <p>รหัสดัชนี PPI:</p>
+            </div>
+            <div class="col-10">
+                <input type="text" class="form-control" formControlName="commodityCode" pattern="[0-9]*" minlength="16"
+                    maxlength="16" [ngClass]="{'is-invalid': submitted && f.commodityCode.errors}">
+                <div *ngIf="submitted && f.commodityCode.errors" class="invalid-feedback">
+                    <div *ngIf="f.commodityCode.errors.required" class="text-danger help-block">
+                        กรุณากรอกรหัสดัชนี PPI
+                    </div>
+                    <div *ngIf="f.commodityCode.errors.pattern" class="text-danger help-block">
+                        กรุณากรอกข้อมูลเป็นตัวเลข
+                    </div>
+                    <div *ngIf="f.commodityCode.errors.minlength" class="text-danger help-block">
+                        กรุณากรอกข้อมูลให้ครบ 16 หลัก
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div mat-dialog-actions style="margin-top: 2%; float:right;">
+        <button type="submit" mat-raised-button color="primary">บันทึก</button>
+        <button mat-raised-button [mat-dialog-close]="">ยกเลิก</button>
+    </div>
+</form>
+<swal #addDataSwal title="คุณต้องการบันทึกข้อมูล <br>ใช่หรือไม่" text="" type="info" [showCancelButton]="true"
+    (confirm)="onAddData()"></swal>
+<swal #succussDataSwal title="บันทึกข้อมูลสำเร็จ" [allowOutsideClick]="false" (confirm)="closeDialog()" text=""
+    type="success"></swal>
+<swal #errorSwal title="" text="" type="error"></swal>

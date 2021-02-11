@@ -1,0 +1,112 @@
+//displayedColumns: string[] = ['position', 'result', 'noOfData',
+// 'minCurrentPrice', 'maxCurrentPrice', 'cvCurrentPrice', 'avgArCurrentPrice',
+// 'avgArPreviousAdjustPrice', 'avgArRelative', 'avgGmCurrentPrice', 'avgGmPreviousAdjustPrice',
+//'avgGmRelative', 'weightValue', 'indexValue'];
+.example-container {
+  height: 550px;
+  width: 100%;
+  overflow: auto;
+}
+
+th[mat-header-cell]{
+  background-color:#269ee4;
+  color: white;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-table-sticky:first-child {
+  border-right: 1px solid #e0e0e0;
+}
+
+td,th {
+    border-right: 1px solid #e0e0e0;
+}
+
+th.mat-header-cell {
+  text-align: center;
+}
+
+td.mat-column-result {
+  padding-left: 8px;
+  width: 50% !important;
+}
+
+.mat-column-noOfData {
+  width: 10% !important;
+  text-align: right;
+}
+
+.mat-column-minCurrentPrice {
+  width: 10% !important;
+  text-align: right;
+}
+
+.mat-column-maxCurrentPrice {
+  width: 10% !important;
+  text-align: right;
+}
+
+.mat-column-cvCurrentPrice {
+  width: 10% !important;
+  text-align: right;
+}
+
+.mat-column-avgArCurrentPrice {
+  width: 10% !important;
+  text-align: right;
+}
+
+.mat-column-avgArPreviousAdjustPrice {
+  width: 10% !important;
+  text-align: right;
+}
+
+.mat-column-avgArRelative {
+  width: 10% !important;
+  text-align: right;
+}
+
+.mat-column-avgGmCurrentPrice {
+  width: 10% !important;
+  text-align: right;
+}
+
+.mat-column-avgGmPreviousAdjustPrice {
+  width: 10% !important;
+  text-align: right;
+}
+
+.mat-column-avgGmRelative {
+  width: 10% !important;
+  text-align: right;
+}
+
+.mat-column-weightValue {
+  width: 10% !important;
+  text-align: right;
+}
+
+.mat-column-indexValue {
+  width: 10% !important;
+  text-align: right;
+}
+td.mat-cell:last-of-type{
+  padding-right: unset !important;
+}
+.show-div {
+  // display: block;
+}
+
+.hidden-div {
+  display: none;
+}
+
+::ng-deep .custom-dialog-container .mat-dialog-container {
+padding-top: unset;
+padding-bottom: unset;
+}
+
+

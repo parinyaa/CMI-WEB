@@ -1,0 +1,49 @@
+<h1 mat-dialog-title>แก้ไขข้อมูลภูมิภาค</h1>
+<form [formGroup]="editRegionForm" (ngSubmit)="onSubmit()">
+  <div mat-dialog-content>
+    <div class="row">
+      <div class="col-3 text-right mt-1">
+        <p>รหัสภูมิภาค:</p>
+      </div>
+      <div class="col-9">
+        <input class="form-control" formControlName="regionCode" pattern="[0-9]*"
+          [ngClass]="{'is-invalid': submitted && f.regionCode.errors}" readonly>
+        <div *ngIf="submitted && f.regionCode.errors" class="invalid-feedback">
+          <div *ngIf="f.regionCode.errors.required" class="text-danger help-block">
+            กรุณากรอกรหัสภูมิภาค
+          </div>
+          <div *ngIf="f.regionCode.errors.pattern" class="text-danger help-block">
+            กรุณากรอกเป็นตัวเลข
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-3 text-right mt-1">
+        <p>ชื่อภูมิภาค:</p>
+      </div>
+      <div class="col-9">
+        <input class="form-control" formControlName="regionName" pattern="^[^\s].+[^\s]$"
+          [ngClass]="{'is-invalid': submitted && f.regionName.errors}" (keypress)="inputUtils.characterOnly($event)">
+        <div *ngIf="submitted && f.regionName.errors" class="invalid-feedback">
+          <div *ngIf="f.regionName.errors.required || f.regionName.errors.whitespace" class="text-danger help-block">
+            กรุณากรอกชื่อภูมิภาค
+          </div>
+          <div *ngIf="f.regionName.errors.pattern" class="text-danger help-block">
+            กรุณากรอกเป็นตัวอักษร
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div mat-dialog-actions style="float: right;">
+    <button type="submit" mat-button>บันทึก</button>
+    <button mat-raised-button [mat-dialog-close]="">ยกเลิก</button>
+  </div>
+</form>
+<swal #editSwal title="คุณต้องการเปลี่ยนแปลงข้อมูล <br>ใช่หรือไม่" text="" type="info" [showCancelButton]="true"
+  (confirm)="editRegion()"></swal>
+<swal #succussSwal title="บันทึกข้อมูลสำเร็จ" [allowOutsideClick]="false" (confirm)="closeDialog()" text=""
+  type="success"></swal>
+<swal #errorSwal title="" text="" type="error"></swal>

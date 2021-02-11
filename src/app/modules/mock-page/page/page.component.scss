@@ -1,0 +1,62 @@
+table {
+    width: 100%;
+    table-layout: fixed;
+}
+.mat-column-avgAf, .mat-column-avgGm{
+    text-align: center;
+}
+.mat-column-af1 ,.mat-column-af2 , .mat-column-af3 ,.mat-column-gm1 ,.mat-column-gm2,.mat-column-gm3 {
+  width: 5%;
+  text-align: center;
+}
+
+.table-source  tr {
+    border: 1px solid rgba(0,0,0,.12);
+}
+.mat-column-action2{
+  text-align: center;
+}
+.mat-column-productCode{
+    width: 15%;
+  }
+  .mat-column-surveyName{
+    width: 15%;
+  }
+  .mat-column-pricePrevious{
+    width: 7%;
+    text-align: center;
+  }
+  .mat-column-priceCurrent{
+    width: 7%;
+  }
+  .mat-column-priceDb{
+    width: 7%;
+  }
+  .mat-column-priceUse{
+    width: 7%;
+  }
+  .mat-column-priceNot{
+    width: 4%;
+    text-align: center;
+  }
+  .mat-column-productLink{
+    width: 5%;
+    text-align: center;
+  }
+  .mat-column-priceChange{
+    width: 5%;
+    text-align: center;
+  }
+  .mat-column-priceRel{
+    width: 4%;
+    text-align: center;
+  }
+  .mat-column-productStatus{
+    width: 13%;
+  }
+  .mat-column-editBy{
+    text-align: center;
+  }
+  .mat-header-cell{
+    text-align: center;
+  }

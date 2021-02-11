@@ -1,0 +1,87 @@
+<h1 mat-dialog-title>เพิ่มข้อมูล</h1>
+<form [formGroup]="addDataMatrix" (ngSubmit)="onSubmit()">
+<div mat-dialog-content>
+    <div class="row">
+        <div class="col-4 text-right mt-2">
+            <p>ระดับ: </p>
+        </div>
+        <div class="col-8">
+            <select class="form-control" (change)="onChange($event.target.value)">
+                <option value="0">ส่วนกลาง</option>
+                <option value="1">ระดับจังหวัด</option>
+                <option value="2">ผู้ประกอบการ</option>
+            </select>
+        </div>
+    </div>
+    <div class="row" *ngIf="showprovince">
+        <div class="col-4 text-right mt-2">
+            <p>จังหวัด: </p>
+        </div>
+        <div class="col-8">
+            <select class="form-control">
+                <option value="0">เชียงใหม่</option>
+                <option value="1">เชียงราย</option>
+                <option value="2">กาญจนบุรี</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4 text-right mt-2">
+            <p>commodityCode: </p>
+        </div>
+        <div class="col-8">
+            <input type="text" class="form-control">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4 text-right mt-2">
+            <p>commodityName (ภาษาไทย): </p>
+        </div>
+        <div class="col-8">
+            <input type="text" class="form-control">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4 text-right mt-2">
+            <p>sourceCode: </p>
+        </div>
+        <div class="col-8">
+            <input type="text" class="form-control">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4 text-right mt-2">
+            <p>sourceName(ภาษาไทย): </p>
+        </div>
+        <div class="col-8">
+            <input type="text" class="form-control">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4 text-right mt-2">
+            <p>surveyCode: </p>
+        </div>
+        <div class="col-8">
+            <input type="text" class="form-control">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4 text-right mt-2">
+            <p>surveyName(ภาษาไทย): </p>
+        </div>
+        <div class="col-8">
+            <input type="text" class="form-control">
+        </div>
+    </div>
+</div>
+
+<div mat-dialog-actions style="margin-top: 2%; float:right;">
+    <button type="submit" mat-raised-button color="primary">บันทึก</button>
+    <button mat-raised-button [mat-dialog-close]="">ยกเลิก</button>
+</div>
+</form>
+<swal #addDataSwal title="คุณต้องการบันทึกข้อมูล <br>ใช่หรือไม่" text="" type="info" [showCancelButton]="true"
+    (confirm)="onAddData()"></swal>
+<swal #succussDataSwal title="บันทึกข้อมูลสำเร็จ" [allowOutsideClick]="false" (confirm)="closeDialog()" text=""
+    type="success"></swal>
+<swal #errorSwal title="" text="" type="error"></swal>

@@ -1,0 +1,199 @@
+<div class="page-main">
+    <section class="content-header" >
+        <div class="section-header divTable" *ngIf="divTable">
+            <div class="row">
+                <div class="col-6 col-sm-6">
+                    <label style="font-size: 18px;">2.3 ข้อมูลความสัมพันธ์ระหว่าง Spec และ แหล่งข้อมูล</label>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="section-content">
+            <div class="card divTable" *ngIf="divTable">
+                <div class="card-body table-responsive p-0">
+                    <mat-grid-list cols="4" rowHeight="80px">
+                        <mat-grid-tile [colspan]="4" >
+                            <!-- <mat-select class="form-control mr-2 " style="width: 15%;"
+                            [(ngModel)]= "searchObj.provinceName"  [disabled]="checkProvinceId===true"
+                            placeholder="จังหวัด">
+                                <mat-option [value]="">ทั้งหมด</mat-option>
+                                <mat-option *ngFor="let item of listProvince" [value]="item.provinceName" >
+                                  {{item.provinceName}}
+                                </mat-option>
+                              </mat-select> -->
+                              <div class="col-2 mr-2">
+
+                              <input class="form-control" [formControl]="filterProvinceControl" [matAutocomplete]="auto"
+                              [disabled]="checkProvinceId" placeholder="จังหวัด" style="width: 104%;">
+                            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFilterProvince">
+                              <mat-option *ngFor="let option of filterProvinceOptions | async" [value]="option">
+                                {{option.provinceCode}}&nbsp;{{option.provinceName}}
+                              </mat-option>
+                            </mat-autocomplete>
+                        </div>
+
+                            <!-- <mat-select [(ngModel)]="searchObj.searchType" [value]="0" class="form-control mr-2 ml-2"
+                                style="width: 15%;" placeholder="ทั้งหมด">
+                                <mat-option [value]="0">ทั้งหมด</mat-option>
+                                <mat-option [value]="1">ยังไม่ถูกตั้งค่า</mat-option>
+                            </mat-select> -->
+                            <input [(ngModel)]="searchObj.commodityCode" type="text" class="form-control col-2 mr-2"
+                                placeholder="รหัสสินค้า" style="width: 15%">
+                            <input [(ngModel)]="searchObj.commodityName" type="text" class="form-control col-3 mr-2"
+                                placeholder="ชื่อสินค้า" style="width: 15%">
+                            <div class="col-1" >
+                                <span class="input-group-addon">
+                                    <button  (click)="onSearch()" mat-mini-fab color="primary">
+                                        <mat-icon class="ml-1">search</mat-icon>
+                                    </button>
+                                </span>
+                            </div>
+                        </mat-grid-tile>
+                    </mat-grid-list>
+                    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSortData($event)">
+
+                        <ng-container matColumnDef="commodityCode">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> รหัสสินค้า</th>
+                            <td mat-cell *matCellDef="let element"> {{element.commodityCode}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="commodityThName">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>ชื่อสินค้า <br> </th>
+                            <td mat-cell *matCellDef="let element"> {{element.commodityThName}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="frequency">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> ความถี่ <br> </th>
+                            <td mat-cell *matCellDef="let element"> {{element.frequency!=null?element.frequency:""}}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="countSource">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>จำนวนแหล่งข้อมูล</th>
+                            <td mat-cell *matCellDef="let element"> {{element.countSource}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef> ดูข้อมูล </th>
+                            <td mat-cell *matCellDef="let element">
+                                <a (click)="openDivMap(element)" style="color: cornflowerblue;" matRipple>
+                                    <mat-icon class="mt-2">search</mat-icon>
+                                </a>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                    <div class="noDataSource" *ngIf="dataSource.filteredData.length === 0">
+                        ไม่พบข้อมูล</div>
+                    <mat-paginator [length]="totalRecords" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 100]"
+                        (page)="updatePagination($event)" [pageIndex]= "page">
+                    </mat-paginator>
+                </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="divMap" class="divMap page-datacommodity">
+            <div class="col-12">
+                <mat-card>
+                    <div class="row">
+                        <mat-card-title style="text-align-last: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" class="col-8">
+                            <span class="col-2" style="font: 14px;">
+                                {{commodityActive.commodityCode}}
+                            </span><br>
+                            <span class="col-6" style="font: 14px;">
+                                {{commodityActive.commodityThName}}
+                            </span>
+                   
+                        
+                        </mat-card-title>
+                        <mat-card-title style="text-align-last: left;" class="col-4">
+                            <!-- <span class="col-6" style="font: 14px; text-overflow: clip;">{{commodityActive.commodityCode}}&nbsp;{{commodityActive.commodityThName}}</span> -->
+                            <button (click)="closeDivMap()" class="ml-2" style="float: right;" mat-raised-button
+                                color="accent">
+                                <mat-icon>clear</mat-icon>&nbsp;ปิด
+                            </button>
+                            <!-- <button [swal]="saveDataConfigSwal"  style="float: right;" mat-raised-button color="primary">
+                                <mat-icon>add_circle</mat-icon>&nbsp;บันทึก
+                            </button> -->
+                            <button  (click)="onErrorSwal()" class="ml-2" style="float: right;" mat-raised-button color="primary">
+                                <mat-icon>add_circle</mat-icon>&nbsp;บันทึก
+                            </button>
+                            <button class="" (click)="export();" style="float: right;" mat-raised-button color="primary">
+                                <mat-icon>cloud_download</mat-icon> export
+                            </button>
+                        </mat-card-title>
+                    </div>
+                
+                </mat-card>
+                <div class="row">
+                    <!-- <div class="col-6 mt-3">
+                        <mat-card style="height: 550px; overflow-y: auto ;text-align: center;">
+                            <p mat-line>จำนวน : {{sourceSelect.selectedOptions.selected.length}}
+                                <a>
+                                    <mat-icon style="float:right;" [matMenuTriggerFor]="menu">filter_list</mat-icon>
+                                </a>
+                            </p>
+                            <mat-menu #menu="matMenu">
+                                <ng-container *ngFor="let filter of filterList">
+                                        <a *ngIf="typeFilter == filter.type" mat-menu-item (click)="filterType(filter)"><mat-icon>fiber_manual_record</mat-icon><span>&nbsp;{{filter.name}}</span></a>
+                                        <a *ngIf="typeFilter != filter.type" mat-menu-item (click)="filterType(filter)"><mat-icon  style="color: white;">fiber_manual_record</mat-icon><span>&nbsp;{{filter.name}}</span></a>
+                                </ng-container>
+                            </mat-menu>
+                            <mat-form-field appearance="outline" style="width: 100%;">
+                                <input [(ngModel)]="searchSource"  matInput
+                                    [placeholder]= "placeholderFilter"  style="text-align-last: left">
+                                <mat-icon style="cursor:pointer"  (click)="onSearchSource()" matSuffix>search</mat-icon>
+                            </mat-form-field>
+                            <mat-card-title style="text-align-last: left;">
+                                <mat-selection-list  (selectionChange)="selectionChange($event)" #sourceSelect >
+                                    <ng-container *ngFor="let item of source">
+                                        <mat-list-option checkboxPosition="before" [value]="item" [selected]="item.seleted"> 
+                                            <p mat-line style="color: rgba(0,0,0,.54); font-size: 12px;">
+                                                {{item.surveyCode}} {{item.surveyName}}</p>
+                                            <h4 mat-line> {{item.sourceCode}} {{item.sourceName}}</h4>
+                                        </mat-list-option>
+                                        <mat-divider></mat-divider>
+                                    </ng-container>
+                                </mat-selection-list>
+                                <mat-paginator [length]="totalRecordSource" [pageSize]="pageSizeSource" [pageSizeOptions]="[50, 100 , 500]"
+                                (page)="updatePaginationSource($event)">
+                            </mat-paginator>
+                            </mat-card-title>
+                        </mat-card>
+                    </div> -->
+                    <div class="col-12 mt-3">
+                        <mat-card>
+                            <div>
+                                <p >จำนวนที่มีในระบบ : {{sourceMapping.length}}</p>
+                                <mat-form-field appearance="outline" style="width: 100%; top:unset; opacity: 1;">
+                                    <input class="mb-2" [(ngModel)]="searchSourceMapping" (ngModelChange)="onFilterSourceMapping($event)" matInput placeholder="ค้นหาชื่อแหล่งข้อมูล" style="text-align-last: left">
+                                    <mat-icon matSuffix>search</mat-icon>
+                                </mat-form-field>
+                            </div>
+                            <mat-card-title style="text-align-last: left;overflow-y: auto; height: 500px;" >
+                                <mat-list>
+                                    <ng-container *ngFor="let item of sourceMapping">
+                                        <mat-list-item>
+                                            <p mat-line style="color: rgba(0,0,0,.54); font-size: 12px;">
+                                                {{item.surveyCode}} {{item.surveyName}}</p>
+                                            <h4 mat-line>{{item.sourceCode}} {{item.sourceName}} </h4>
+                                            <mat-divider></mat-divider>
+                                        </mat-list-item>
+                                    </ng-container>
+                                </mat-list>
+                            </mat-card-title>
+                        </mat-card>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<swal #saveDataConfigSwal title="คุณต้องการบันทึกข้อมูล ใช่หรือไม่?" [allowOutsideClick]="false" [showCancelButton]="true"
+[confirmButtonText]="'ตกลง'" [cancelButtonText]="'ยกเลิก'" text="" type="info" (confirm)="onSave()"></swal>
+
+<swal #successSurveySwal title="บันทึกข้อมูลสำเร็จ" [allowOutsideClick]="false" 
+(confirm)="getSourceByCpa(pageEvent)" text="" [confirmButtonText]="'ตกลง'" type="success"></swal>
+<swal #errorSwal title="" text="" [confirmButtonText]="'ตกลง'" type="error"></swal>

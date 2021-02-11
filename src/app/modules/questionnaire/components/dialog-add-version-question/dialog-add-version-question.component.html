@@ -1,0 +1,58 @@
+<h1 mat-dialog-title>เพิ่มแบบสอบถาม</h1>
+<form [formGroup]="addVersionQuestionForm" (ngSubmit)="onSubmit()">
+  <div mat-dialog-content>
+    <div class="row">
+      <div class="col-3 text-right mt-1">
+        <p>รหัสแบบสอบถาม:</p>
+      </div>
+      <div class="col-9">
+        <input class="form-control" formControlName="versionCode" minlength="1" maxlength="50"
+          [ngClass]="{'is-invalid': submitted && f.versionCode.errors}">
+        <div *ngIf="submitted && f.versionCode.errors" class="invalid-feedback">
+          <div *ngIf="f.versionCode.errors.required" class="text-danger help-block">
+            กรุณากรอกรหัสแบบสอบถาม
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-3 text-right mt-1">
+        <p>รายละเอียดแบบสอบถาม:</p>
+      </div>
+      <div class="col-9">
+        <textarea class="form-control" formControlName="versionDesc"
+          [ngClass]="{'is-invalid': submitted && f.versionDesc.errors}" maxlength="500"></textarea>
+        <div *ngIf="submitted && f.versionDesc.errors" class="invalid-feedback">
+          <div *ngIf="f.versionDesc.errors.required" class="text-danger help-block">
+            กรอกรายละเอียดแบบสอบถาม
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-6 text-right">
+        <mat-form-field>
+          <input matInput [min]="minStartDate" [matDatepicker]="picker1" placeholder="วันที่เริ่มต้น" formControlName="startDate" (dateChange)="chooseStartDate($event)" readonly>
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="col-6">
+        <mat-form-field>
+          <input matInput [min]="minEndDate" [matDatepicker]="picker2" placeholder="วันที่สิ้นสุด" formControlName="endDate" readonly>
+          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions style="float: right;">
+    <button type="submit" mat-button>บันทึก</button>
+    <button mat-raised-button [mat-dialog-close]="">ยกเลิก</button>
+  </div>
+</form>
+<swal #addSwal title="คุณต้องการบันทึกข้อมูล <br>ใช่หรือไม่" text="" type="info" [showCancelButton]="true"
+  (confirm)="addVersion()"></swal>
+<swal #succussSwal title="บันทึกข้อมูลสำเร็จ" [allowOutsideClick]="false" (confirm)="closeDialog()" text=""
+  type="success"></swal>
+<swal #errorSwal title="" text="" type="error"></swal>

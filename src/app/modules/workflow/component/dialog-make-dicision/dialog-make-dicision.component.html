@@ -1,0 +1,48 @@
+<h1 mat-dialog-title>คำขอขยายระยะเวลาบันทึกข้อมูล</h1>
+<form [formGroup]="makeDecisionForm" (ngSubmit)="onSubmit()">
+  <div mat-dialog-content>
+    <div class="row">
+      <div class="col-3 mt-2">
+        <p>ผลการอนุมัติ</p>
+      </div>
+      <div class="col-4 mt-2">
+        <mat-select class="form-control" formControlName="status"
+          [ngClass]="{'is-invalid': submitted && f.status.errors}" (selectionChange)="onselectStatus($event)">
+          <mat-option *ngFor="let status of statusList" [value]="status.en">
+            {{status.th}}
+          </mat-option>
+        </mat-select>
+        <div *ngIf="submitted && f.status.errors" class="invalid-feedback">
+          <div *ngIf="f.status.errors.required" class="text-danger help-block">
+            กรุณาเลือกผลการอนุมัติ
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 mt-1">
+        <p>เหตุผล</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 mt-1">
+        <textarea type="text" rows="2" class="form-control" placeholder="" formControlName="decisionNote"
+          [ngClass]="{'is-invalid': submitted && f.decisionNote.errors}"></textarea>
+        <div *ngIf="submitted && f.decisionNote.errors" class="invalid-feedback">
+          <div *ngIf="f.decisionNote.errors.required" class="text-danger help-block">
+            กรุณากรอกเหตุผล
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions style="float: right;">
+    <button type="submit" mat-button>บันทึก</button>
+    <button mat-raised-button [mat-dialog-close]="">ยกเลิก</button>
+  </div>
+</form>
+<swal #addSwal title="คุณต้องการบันทึกข้อมูล <br>ใช่หรือไม่" text="" type="info" [showCancelButton]="true"
+  (confirm)="makeDecision()"></swal>
+<swal #succussSwal title="บันทึกข้อมูลสำเร็จ" [allowOutsideClick]="false" (confirm)="closeDialog()" text=""
+  type="success"></swal>
+<swal #errorSwal title="" text="" type="error"></swal>

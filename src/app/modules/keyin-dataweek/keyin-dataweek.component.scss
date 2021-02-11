@@ -1,0 +1,74 @@
+table {
+    width: 100%;
+    table-layout: fixed;
+}  
+input{
+  width: -webkit-fill-available;
+  font-size: 12px;
+}
+.tableSource{
+  margin-top: 20px;
+}
+.mat-column-productCode{
+  width: 15%;
+}
+.mat-column-surveyName{
+  width: 15%;
+}
+.mat-column-currency{
+  width: 5%;
+}
+.mat-column-pricePrevious{
+  width: 7%;
+  text-align: center;
+}
+.mat-column-priceCurrent{
+  width: 7%;
+  text-align: center;
+}
+.mat-column-week1{
+  width: 5%;
+}
+.mat-column-week2{
+  width: 5%;
+}
+.mat-column-week3{
+  width: 5%;
+}
+.mat-column-week4{
+  width: 5%;
+}
+
+
+.mat-column-priceNot{
+  width: 4%;
+  text-align: center;
+}
+.mat-column-productLink{
+  width: 5%;
+  text-align: center;
+}
+.mat-column-priceChange{
+  width: 5%;
+  text-align: center;
+}
+.mat-column-priceRel{
+  width: 4%;
+  text-align: center;
+}
+.mat-column-productStatus{
+  width: 13%;
+}
+.mat-header-cell{
+  text-align: center;
+}
+// th, td {
+  // overflow: hidden;
+  // width:auto;
+  // text-overflow: ellipsis;
+  // white-space: nowrap;
+// }
+.mat-grid-list{
+  background-color: white;
+  border-bottom: 1px solid  rgba(0,0,0,.12);;
+}

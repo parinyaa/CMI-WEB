@@ -1,0 +1,17 @@
+table {
+    width: 100%;
+    table-layout: fixed;
+}  
+.mat-column-code{
+    width: 40%;
+}
+.mat-column-commodityCode{
+    width: 50%;
+}
+.mat-column-action{
+    width: 10%;
+}
+.table-source tr{
+    border: 1px solid rgba(0,0,0,.12);
+}
+  

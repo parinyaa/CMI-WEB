@@ -1,0 +1,40 @@
+<h1 mat-dialog-title>แก้ไขข้อมูล</h1>
+<form [formGroup]="editCommodityCalForm" (ngSubmit)="onSubmit()">
+    <div mat-dialog-content>
+        <div class="row">
+            <div class="col-2 text-right mt-1">
+                <p>รหัส :</p>
+            </div>
+            <div class="col-10">
+                <input type="text" class="form-control" placeholder="" formControlName="code"
+                    [ngClass]="{'is-invalid': submitted && f.code.errors}" readonly>
+                <div *ngIf="submitted && f.code.errors" class="invalid-feedback">
+                    <div *ngIf="f.code.errors.required" class="text-danger help-block">
+                        กรุณากรอกรหัส
+                    </div>
+                </div>
+            </div>
+            <div class="col-2 text-right mt-1">
+                <p>รหัสรายการ:</p>
+            </div>
+            <div class="col-10">
+                <input type="text" class="form-control" formControlName="commodityCode"
+                    [ngClass]="{'is-invalid': submitted && f.commodityCode.errors}" cdkFocusInitial>
+                <div *ngIf="submitted && f.commodityCode.errors" class="invalid-feedback">
+                    <div *ngIf="f.commodityCode.errors.required" class="text-danger help-block">
+                        กรุณากรอกรหัสรายการ
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div mat-dialog-actions style="margin-top: 2%; float:right;">
+        <button type="submit" mat-raised-button color="primary">บันทึก</button>
+        <button mat-raised-button [mat-dialog-close]="data.animal">ยกเลิก</button>
+    </div>
+</form>
+<swal #editCommodityCalSwal title="คุณต้องการเปลี่ยนแปลงข้อมูล <br>ใช่หรือไม่" text="" type="info" [showCancelButton]="true"
+    (confirm)="editCommodityCal()"></swal>
+<swal #succussCommodityCalSwal title="บันทึกข้อมูลสำเร็จ" [allowOutsideClick]="false" (confirm)="closeDialog()" text=""
+    type="success"></swal>
+<swal #errorCommodityCalSwal title="" text="" type="error"></swal>

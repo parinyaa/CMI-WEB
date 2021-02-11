@@ -1,0 +1,67 @@
+<div class="page-main">
+  <div class="content-header">
+    <div class="section-header">
+      <div class="row">
+        <div class="col-6 col-sm-6">
+          <ol class="breadcrumb float-sm-left">
+            <li class="breadcrumb-item"><a style="font-size: 18px;">สรุป</a></li>
+          </ol>
+        </div>
+        <div class="col-6 col-sm-6" style="text-align: right;">
+          <button class="mat-btn-tpso" mat-raised-button type="button" printSectionId="print-section" ngxPrint>
+            <mat-icon>cloud_download</mat-icon>&nbsp;
+            <span>ดาวน์โหลด PDF</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="section-content box-content">
+      <div class="row" id="print-section">
+        <ul style="width: 100%;">
+          <li *ngFor="let question of questionEntries | keyvalue">
+            คำถาม : {{question.key}}
+            <div style="text-align: -webkit-center;">
+              <table mat-table [dataSource]="question.value" class="mat-elevation-z8">
+
+                <ng-container matColumnDef="position">
+                  <th mat-header-cell *matHeaderCellDef> ข้อที่ </th>
+                  <td mat-cell *matCellDef="let element;let itemIndex  = index"> {{itemIndex+1}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="description">
+                  <th mat-header-cell *matHeaderCellDef> คำตอบ </th>
+                  <td mat-cell *matCellDef="let element" matTooltip="{{element.description}}">
+                    {{element.answerDesc | subStringDescription}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="numberAnswer">
+                  <th mat-header-cell *matHeaderCellDef> จำนวนคนตอบ </th>
+                  <td mat-cell *matCellDef="let element"> {{element.numberAnswer}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="percentAnswer">
+                  <th mat-header-cell *matHeaderCellDef> อัตราส่วน </th>
+                  <td mat-cell *matCellDef="let element"> {{element.percentOfAnswer}}% </td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                  <th mat-header-cell *matHeaderCellDef style="text-align: center;"> คำตอบประเภทอื่นๆ </th>
+                  <td mat-cell *matCellDef="let element" style="text-align: center;">
+                    <button mat-mini-fab color="primary" (click)="openRemarkDialog(element)"
+                      *ngIf="element.otherFlag == 'Y'">
+                      <mat-icon>search</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              </table>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

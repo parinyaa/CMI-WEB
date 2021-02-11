@@ -1,0 +1,147 @@
+<h1 mat-dialog-title>เพิ่มข้อมูล</h1>
+<form [formGroup]="addPpiForm" (ngSubmit)="onSubmit()">
+    <div mat-dialog-content>
+        <div class="row">
+            <div class="col-4 text-right mt-1">
+                <p>Commodity Code:</p>
+            </div>
+            <div class="col-8">
+                <input type="text" class="form-control" placeholder="" formControlName="commodityCode" maxlength="16" minlength="16"
+                    pattern="[0-9]*" [ngClass]="{'is-invalid': submitted && f.commodityCode.errors}">
+                <div *ngIf="submitted && f.commodityCode.errors" class="invalid-feedback">
+                    <div *ngIf="f.commodityCode.errors.required" class="text-danger help-block">
+                        กรุณากรอกรหัส
+                    </div>
+                    <div *ngIf="f.commodityCode.errors.whitespace" class="text-danger help-block">
+                        กรุณากรอกรหัส
+                    </div>
+                    <div *ngIf="f.commodityCode.errors.pattern" class="text-danger help-block">
+                        กรุณากรอกรหัสเป็นตัวเลข
+                    </div>
+                    <div *ngIf="f.commodityCode.errors.minlength" class="text-danger help-block">
+                        กรุณากรอกรหัสเป็นตัวเลข 16 หลัก
+                    </div>
+                </div>
+            </div>
+            <div class="col-4 text-right mt-1">
+                <p>Commodity Name Th:</p>
+            </div>
+            <div class="col-8">
+                <input type="text" class="form-control" placeholder="" formControlName="commodityThName"
+                    [ngClass]="{'is-invalid': submitted && f.commodityThName.errors}">
+                <div *ngIf="submitted && f.commodityThName.errors" class="invalid-feedback">
+                    <div *ngIf="f.commodityThName.errors.required" class="text-danger help-block">
+                        กรุณากรอกชื่อ
+                    </div>
+                    <div *ngIf="f.commodityThName.errors.whitespace" class="text-danger help-block">
+                        กรุณากรอกชื่อ
+                    </div>
+                </div>
+            </div>
+            <div class="col-4 text-right mt-1">
+                <p>Commodity Name En:</p>
+            </div>
+            <div class="col-8">
+                <input type="text" class="form-control" placeholder="" formControlName="commodityEnName"
+                    [ngClass]="{'is-invalid': submitted && f.commodityEnName.errors}">
+                <div *ngIf="submitted && f.commodityEnName.errors" class="invalid-feedback">
+                    <div *ngIf="f.commodityEnName.errors.required" class="text-danger help-block">
+                        กรุณากรอกชื่อ
+                    </div>
+                    <div *ngIf="f.commodityEnName.errors.whitespace" class="text-danger help-block">
+                        กรุณากรอกชื่อ
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="showInputCpa">
+            <div class="col-4 text-right mt-1">
+                <p>ความถี่ในการบันทึกข้อมูล: </p>
+            </div>
+            <div class="col-8">
+                <mat-select  class="form-control" formControlName="frequency" (selectionChange)="selectionChangeFrequency($event)"
+                [ngClass]="{'is-invalid': submitted && f.frequency.errors}" placeholder="ความถี่ในการบันทึกข้อมูล">
+                    <mat-option *ngFor="let option of FREQUENCY" 
+                    [value]="option">
+                    {{option.paramInfo}} ({{option.paramLocalMessage}})
+                </mat-option>
+                </mat-select>
+                <div *ngIf="submitted && f.frequency.errors" class="invalid-feedback">
+                    <div *ngIf="f.frequency.errors.required" class="text-danger help-block">
+                        กรุณาเลือกความถี่
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-4 text-right mt-1">
+                <p>% อัตราการเปลี่ยนแปลงราคา: </p>
+            </div>
+            <div class="col-8">
+                <input type="text" class="form-control" placeholder="" formControlName="priceChangePercentage"
+                [ngClass]="{'is-invalid': submitted && f.priceChangePercentage.errors}">
+                <div *ngIf="submitted && f.priceChangePercentage.errors" class="invalid-feedback">
+                    <div *ngIf="f.priceChangePercentage.errors.required" class="text-danger help-block">
+                        กรุณากรอกอัตราการเปลี่ยนแปลงราคา
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-4 text-right mt-1">
+                <p>หน่วย : </p>
+            </div>
+            <div class="col-8">
+                <mat-select  class="form-control" formControlName="measureUnit" (selectionChange)="selectionChangeMeasureUnit($event)"
+                [ngClass]="{'is-invalid': submitted && f.measureUnit.errors}" placeholder="หน่วย">
+                <mat-option *ngFor="let option of MEASURE_UNIT" 
+                [value]="option">
+                {{option.paramInfo}} ({{option.paramLocalMessage}})
+            </mat-option>
+                </mat-select>
+                <div *ngIf="submitted && f.measureUnit.errors" class="invalid-feedback">
+                    <div *ngIf="f.measureUnit.errors.required" class="text-danger help-block">
+                        กรุณากรอกอัตราการเปลี่ยนแปลงราคา
+                    </div>
+                </div>
+            </div>
+            <div class="col-4 text-right mt-1">
+                <p>สกุลเงิน : </p>
+            </div>
+            <div class="col-8">
+                <mat-select  class="form-control" formControlName="currenctUnit" (selectionChange)="selectionChangeCurrenctUnit($event)"
+                [ngClass]="{'is-invalid': submitted && f.currenctUnit.errors}" placeholder="สกุลเงิน">
+                <mat-option *ngFor="let option of CURRENCY_UNIT" 
+                [value]="option">
+                {{option.paramInfo}} ({{option.paramLocalMessage}})
+            </mat-option>
+                </mat-select>
+                <div *ngIf="submitted && f.currenctUnit.errors" class="invalid-feedback">
+                    <div *ngIf="f.currenctUnit.errors.required" class="text-danger help-block">
+                        กรุณาเลือกสกุลเงิน
+                </div>
+            </div>
+            </div>
+
+            <div class="col-4 text-right mt-1">
+                <p>จำนวนครั้งของราคาที่ไม่เปลี่ยนแปลงข้อมูล : </p>
+            </div>
+            <div class="col-8">
+                <input type="text" class="form-control" placeholder="" formControlName="noOfCarrierForward"
+                [ngClass]="{'is-invalid': submitted && f.noOfCarrierForward.errors}">
+                <div *ngIf="submitted && f.noOfCarrierForward.errors" class="invalid-feedback">
+                    <div *ngIf="f.noOfCarrierForward.errors.required" class="text-danger help-block">
+                        กรุณากรอกจำนวนครั้งของราคาที่ไม่เปลี่ยนแปลงข้อมูล
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div mat-dialog-actions style="margin-top: 2%; float:right;">
+        <button type="submit" mat-raised-button color="primary">บันทึก</button>
+        <button mat-raised-button [mat-dialog-close]="data.animal" cdkFocusInitial>ยกเลิก</button>
+    </div>
+</form>
+<swal #savePpiTreeSwal title="คุณต้องการบันทึกข้อมูล ใช่หรือไม่?" [allowOutsideClick]="false" [showCancelButton]="true"
+    text="" type="info" [confirmButtonText]="'ตกลง'" [cancelButtonText]="'ยกเลิก'" (confirm)="onCreatePpiTree()"></swal>
+
+<swal #sucessPpiTreeSwal title="บันทึกข้อมูลสำเร็จ" [allowOutsideClick]="false" text="" type="success"
+[confirmButtonText]="'ตกลง'"  (confirm)="closeDialog()"></swal>

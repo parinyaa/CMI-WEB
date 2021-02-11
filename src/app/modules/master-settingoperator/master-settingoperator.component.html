@@ -1,0 +1,150 @@
+<div class="page-main">
+    <section class="content-header">
+        <div class="section-header">
+            <div class="row">
+                <div class="col-6 col-sm-6">
+                    <label style="margin-top: 1%; font-size: 18px;">2.4 ข้อมูลกำหนดสิทธิ์การบันทึกข้อมูล</label>
+                </div>
+                <!-- <div class="col-6 col-sm-6" style="text-align: right;">
+                    <button class="mat-btn-tpso" mat-raised-button type="button" [swal]="saveSwal"><mat-icon>save</mat-icon>&nbsp;บันทึก</button>
+
+                </div> -->
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="section-content">
+            <div class="card">
+                <div class="card-body table-responsive p-0">
+                        <mat-grid-list cols="4" rowHeight="80px">
+                            <mat-grid-tile [colspan]="4">
+                                    <!-- <mat-select [(ngModel)]="searchFilter.searchType"  (selectionChange)="onChangeTypeSearch($event)" [value]="0" class="form-control mr-2 ml-2" style="width: 15%;" placeholder="ทั้งหมด">
+                                            <mat-option [value]="0">ทั้งหมด</mat-option>
+                                            <mat-option [value]="1">ยังไม่ถูกตั้งค่า</mat-option>
+                                    </mat-select> -->
+                                <mat-select [(ngModel)]="searchFilter.province" class="form-control mr-2 ml-2" style="width: 15%;" placeholder="เลืือกจังหวัด">
+                                    <!-- <mat-option [value]="''">จังหวัด</mat-option> -->
+                                    <ng-container *ngFor="let province of provinceAll">
+                                        <mat-option [value]="province.provinceName">
+                                            {{province.provinceCode}}&nbsp;{{province.provinceName}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-select>
+                                <input [(ngModel)]="searchFilter.sourceName" type="text" class="form-control mr-2" placeholder="ชื่อแหล่งข้อมูล" style="width: 15%">
+                                <input [(ngModel)]="searchFilter.commodityCode" type="text" class="form-control mr-2" placeholder="รหัสสินค้า" style="width: 15%">
+                                <input [(ngModel)]="searchFilter.commodityThName" type="text" class="form-control mr-2" placeholder="ชื่อรายการสินค้า" style="width: 15%">
+                                <div class="col-1" >
+                                    <span class="input-group-addon">
+                                        <button  (click)="onSearch()" mat-mini-fab color="primary">
+                                            <mat-icon class="ml-1">search</mat-icon>
+                                        </button>
+                                    </span>
+                                </div>
+                            </mat-grid-tile>
+                        </mat-grid-list>
+                    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSortData($event)">
+        
+                        <!-- <ng-container matColumnDef="level">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> ระดับ </th>
+                            <td mat-cell *matCellDef="let element">
+                                <p *ngIf="element.matrix">{{element.matrix == null?element.matrix:element.matrix.userType.paramLocalDescription}} </p>
+                                <mat-select [(ngModel)]="element.userType" (ngModelChange)="selectUserType($event,element)" class="mr-2 ml-2" *ngIf="!element.matrix" [(value)]="element.userType"  class="form-control" placeholder="เลือกผู้ใช้">
+                                    <mat-option [value]="null"></mat-option>
+                                    <ng-container *ngFor="let type of userTypeList">
+                                        <mat-option *ngIf="type.paramInfo != 'IAM_ADMIN'" [value]="type.paramInfoId">
+                                            {{type.paramLocalMessage}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-select>
+                            </td>
+                        </ng-container> -->
+        
+                        <ng-container matColumnDef="province">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> จังหวัด </th>
+                            <td mat-cell *matCellDef="let element" style="padding-left: 15px;">
+                                <p *ngIf="element.matrix" style="margin-top: auto; margin-bottom: auto;">{{element.matrix == null?element.matrix:element.matrix.province == null?element.matrix.province:element.matrix.province.provinceName}} </p>
+                                <mat-select class="mr-2 ml-2" *ngIf="!element.matrix && openSelectProvince(element)" (selectionChange)="onChangeProvince($event,element)" [(value)]="element.province" [disabled]=""  class="form-control" placeholder="เลือกจังหวัด">
+                                        <!-- <mat-option [value]="null"></mat-option> -->
+                                        <ng-container *ngFor="let province of provinceAll">
+                                            <mat-option  [value]="province.provinceId">
+                                                {{province.provinceName}}
+                                            </mat-option>
+                                        </ng-container>
+                                </mat-select>
+                            </td>
+                        </ng-container>
+        
+                        <ng-container matColumnDef="sourceCode">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header style="padding-left: 1.1%;">รหัสแหล่งข้อมูล</th>
+                            <td mat-cell *matCellDef="let element" > 
+                                {{
+                                element &&
+                                element.cpipMsDataConfigs &&
+                                element.cpipMsDataConfigs.cpipMsSource
+                                  ? element.cpipMsDataConfigs.cpipMsSource.sourceCode
+                                  : '-'
+                              }} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="sourceName">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>ชื่อแหล่งข้อมูล</th>
+                                <td mat-cell *matCellDef="let element"> 
+                                    {{
+                                    element &&
+                                    element.cpipMsDataConfigs &&
+                                    element.cpipMsDataConfigs.cpipMsSource
+                                      ? element.cpipMsDataConfigs.cpipMsSource.sourceName
+                                      : '-'
+                                  }}</td>
+                            </ng-container>
+        
+                        <ng-container matColumnDef="commodityCode">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> รหัสรายการ </th>
+                            <td mat-cell *matCellDef="let element"> 
+                                {{
+                                    element &&
+                                    element.cpipMsDataConfigs &&
+                                    element.cpipMsDataConfigs.cpipMsCpip
+                                      ? element.cpipMsDataConfigs.cpipMsCpip.commodityCode
+                                      : '-'
+                                  }}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="commodityThName">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> ชื่อรายการ </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{
+                                    element &&
+                                    element.cpipMsDataConfigs &&
+                                    element.cpipMsDataConfigs.cpipMsCpip
+                                      ? element.cpipMsDataConfigs.cpipMsCpip.commodityThName
+                                      : '-'
+                                  }}</td>
+                        </ng-container>
+        
+                        <!-- <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef> Action </th>
+                            <td mat-cell *matCellDef="let element">
+                                <mat-icon *ngIf="element.editFlag" style="color: #20c997;">check</mat-icon>&nbsp;
+                            </td>
+                        </ng-container> -->
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                    <div class="noDataSource" *ngIf="dataSource.filteredData.length === 0">
+                        ไม่พบข้อมูล</div>
+                    <mat-paginator [length]="totalRecords"  [pageSize]="pageSize" 
+                        [pageSizeOptions]="[5, 10, 25, 100]" (page)="pageEvent = $event;updatePagination($event)" >
+                    </mat-paginator>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<swal #deleteSuccessSwal title="ลบข้อมูลสำเร็จ" [confirmButtonText]="'ตกลง'"  [allowOutsideClick]="false" text="" type="success"></swal>
+<swal #saveSuccessSwal title="บันทึกข้อมูลสำเร็จ" [confirmButtonText]="'ตกลง'"  [allowOutsideClick]="false" text="" type="success" (confirm)="getDataConfig(page,pageSize)"></swal>
+<!-- <swal #saveSwal title="คุณต้องการบันทึกข้อมูล ใช่หรือไม่?" [allowOutsideClick]="false" [showCancelButton]="true" text="" 
+[confirmButtonText]="'ตกลง'" [cancelButtonText]="'ยกเลิก'" type="info" (confirm)="onSave()"></swal> -->
+<swal #alertForEditSwal title="คุณยังไม่ได้บันทึกข้อมูล ต้องการบันทึกข้อมูลหรือไม่ ?" [allowOutsideClick]="false" [showCancelButton]="true" text="" 
+[confirmButtonText]="'ตกลง'" [cancelButtonText]="'ยกเลิก'" type="info" (confirm)="onSave()" (cancel)="onCancelSave()"></swal>

@@ -1,0 +1,63 @@
+//displayedColumns: string[] = ['position', 'result', 'noOfData',
+// 'minCurrentPrice', 'maxCurrentPrice', 'cvCurrentPrice', 'avgArCurrentPrice',
+// 'avgArPreviousAdjustPrice', 'avgArRelative', 'avgGmCurrentPrice', 'avgGmPreviousAdjustPrice',
+//'avgGmRelative', 'weightValue', 'indexValue'];
+.example-container {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-table-sticky:first-child {
+  border-right: 1px solid #e0e0e0;
+}
+
+td,th {
+  border-right: 1px solid #e0e0e0;
+}
+th.mat-header-cell {
+  text-align: center;
+}
+td.mat-column-result {
+  padding-left: 8px;
+  width: 50% !important;
+}
+
+.mat-column-index {
+  width: 10% !important;
+  text-align: right;
+}
+
+.mat-column-mom {
+  width: 10% !important;
+  text-align: right;
+}
+.mat-column-aoa {
+  width: 10% !important;
+  text-align: right;
+}
+.mat-column-yoy {
+  width: 10% !important;
+  text-align: right;
+}
+.mat-column-baseIndex {
+  width: 10% !important;
+  text-align: right;
+}
+.mat-column-baseMom {
+  width: 10% !important;
+  text-align: right;
+}.mat-column-baseAoa {
+   width: 10% !important;
+   text-align: right;
+ }
+.mat-column-baseYoy {
+  width: 10% !important;
+  text-align: right;
+}
+
+

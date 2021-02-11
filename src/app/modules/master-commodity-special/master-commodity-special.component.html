@@ -1,0 +1,111 @@
+<div class="page-main">
+    <section class="content-header">
+        <div class="section-header">
+            <div class="row">
+                <div class="col-6 col-sm-6">
+                    <label class="label-title">2.6 กำหนดกลุ่มโครงสร้างข้อมูล CPIP พิเศษ</label>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="sec-content">
+            <div class="div-search">
+                <mat-card>
+                    <div class="row">
+                        <div class="col-5">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">CPIP :</span>
+                                </div>
+                                <mat-select class="form-control" [(ngModel)]="commoditySpecial"
+                                    (selectionChange)="selectionChange($event)" placeholder="กรุณาเลือกกลุ่มโครงสร้าง">
+                                    <mat-option *ngFor="let item of commoditySpecialList" [value]="item">
+                                        <span>{{item.commodityCode}} : {{item.commodityThName}}</span>
+                                    </mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card>
+            </div>
+            <div class="content" *ngIf="commoditySpecial">
+                <div class="row">
+                    <div class="col mt-3 mb-2">
+                        <mat-card>
+                            <p>โครงสร้างที่ยังไม่ได้เลือก</p>
+                            <div class="filter">
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input matInput placeholder="ค้นหา รหัส/ชื่อโครงสร้างข้อมูล" [(ngModel)]="keywordCommodity"
+                                        (keydown.enter)="searchFilter('COMMODITY')" style="text-align-last: left">
+                                    <mat-icon style="cursor:pointer" (click)="searchFilter('COMMODITY')" matSuffix>
+                                        search
+                                    </mat-icon>
+                                </mat-form-field>
+                            </div>
+                            <div class="card-spec">
+                                <mat-card-title style="text-align-last: left;">
+                                    <mat-selection-list (selectionChange)="selectionCommodityChange($event)" #cpa>
+                                        <mat-list-option checkboxPosition="before" *ngFor="let cpa of commodityList"
+                                            [value]="cpa">
+                                            <h4 mat-line>{{cpa.commodityCode}} </h4>
+                                            <p mat-line> {{cpa.commodityThName}}</p>
+                                        </mat-list-option>
+                                    </mat-selection-list>
+                                </mat-card-title>
+                            </div>
+                            <mat-paginator #paginator [length]="totalRecordCommodity" [pageSize]="pageSize"
+                                [pageSizeOptions]="[5, 10, 25, 100, 1000]" (page)="updatePagination($event)">
+                            </mat-paginator>
+                        </mat-card>
+                    </div>
+                    <div class="col-1 mt-3 mb-2">
+                        <div class="row" style="margin-top: calc(100vh - 75vh);">
+                            <div class="col-12 text-center">
+                                <button class="btn-swap" mat-fab color="primary"
+                                    (click)="updateCommodityMappingSpecial('ADD')">
+                                    <mat-icon class="chevron">fast_forward</mat-icon>
+                                </button>
+                            </div>
+                            <div class="col-12 mt-3 text-center">
+                                <button class="btn-swap" mat-fab color="primary"
+                                    (click)="updateCommodityMappingSpecial('DELETED')">
+                                    <mat-icon class="chevron">fast_rewind</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mt-3 mb-2">
+                        <mat-card>
+                            <p>โครงสร้างที่เลือก</p>
+                            <div class="filter">
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input matInput placeholder="ค้นหา รหัส/ชื่อโครงสร้างข้อมูล" [(ngModel)]="keywordMapping"
+                                        (keydown.enter)="searchFilter('SPECIAL')" style="text-align-last: left">
+                                    <mat-icon style="cursor:pointer" (click)="searchFilter('SPECIAL')" matSuffix>search
+                                    </mat-icon>
+                                </mat-form-field>
+                            </div>
+                            <div class="card-spec">
+                                <mat-card-title style="text-align-last: left;">
+                                    <mat-selection-list (selectionChange)="selectionCommodityMappingChange($event)"
+                                        #cpa>
+                                        <mat-list-option checkboxPosition="before"
+                                            *ngFor="let cpa of commodityMappingList" [value]="cpa">
+                                            <h4 mat-line>{{cpa.commodityCode}} </h4>
+                                            <p mat-line> {{cpa.commodityThName}}</p>
+                                        </mat-list-option>
+                                    </mat-selection-list>
+                                </mat-card-title>
+                            </div>
+                            <mat-paginator #paginatorSpecial [length]="totalRecordCommodityMapping"
+                                [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 100, 1000]"
+                                (page)="updatePaginationSpecial($event)">
+                            </mat-paginator>
+                        </mat-card>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,63 @@
+.mat-list-icon {
+    color: rgba(0, 0, 0, 0.54);
+  }
+
+  .div.relative{
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: auto;
+  
+  }
+  // .cardTable {
+  //   margin: auto;
+  //   width: 97%;
+  //   height: 97%;
+  //   font-size: 18px;
+  // }
+
+  table{
+    font-size: 18px;
+    width: 100%;
+    text-align: left;
+    
+  }
+  .mat-column-position{
+    width: 7%;
+    // font-size: 15.5px;
+  }
+
+  .mat-column-link{
+    width: 80%;
+    // font-size: 15.5px;
+  }
+ 
+  .mat-column-file{
+    width: 80%;
+    // font-size: 15.5px;
+  }
+
+  .mat-column-download{
+    width: 7%;
+    // font-size: 15.5px;
+  }
+
+  .mat-column-action{
+    width: 6%;
+    // font-size: 15.5px;
+  }
+
+  .content {
+    font-size: 16px
+  }
+
+
+ .tabTable {
+   ::ng-deep .mat-tab-label{
+     font-size: 16px !important;
+   }
+
+
+ }
+  
+  

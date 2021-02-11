@@ -1,0 +1,53 @@
+table {
+    width: 100%;
+    // table-layout: fixed;
+}
+
+.mat-column-level {
+    text-align: center;
+    width: 10%;
+}
+
+.mat-column-province {
+    text-align: left;
+    width: 7%;
+    // width: 15%;
+}
+
+.mat-column-sourceCode {
+    text-align: center;
+    width: 12%;
+}
+
+::ng-deep .mat-grid-tile .mat-figure {
+    justify-content:unset !important;
+  }
+
+.mat-column-sourceName {
+    text-align: left;
+    width: 20%;
+}
+
+.mat-column-commodityCode {
+    text-align: center;
+    width: 15%;
+}
+
+.mat-column-commodityName {
+    text-align: left;
+    width: 20%;
+}
+
+.mat-column-action {
+    text-align: center;
+    width: 5%;
+}
+
+.table-source tr {
+    border: 1px solid rgba(0, 0, 0, .12);
+}
+
+::ng-deep .mat-sort-header-container {
+    display: flex;
+    justify-content: center;
+}

@@ -1,0 +1,160 @@
+<form [formGroup]="processGroup">
+  <div class="row ml-4 mr-4"  class="content">
+    <div class="col-12">
+      <p>{{typePageName}} </p>
+    </div>
+    <div class="col-12">
+      <textarea class="form-control" rows="5" formControlName="descriptionInput"  (ngModelChange)="modelChanged($event,item)"></textarea>
+    </div>
+  </div>
+
+  <div formArrayName="url" *ngFor="let creds of urlForms.controls; let i = index">
+    <ng-container [formGroupName]="i">
+      <div class="row ml-4 mr-4 mt-3">
+        <div class="col-4 text-right mt-1">
+          <p>Link:</p>
+        </div>
+        <div class="col-5">
+          <input class="form-control" formControlName="urlData"  (ngModelChange)="modelChanged($event,i)">
+        </div>
+        <div class="col-1" style="align-self:center;" *ngIf="i == 0">
+                <a  (click)="addUrl()">
+                    <mat-icon  style="font-size: 25px;color:darkgreen">add_circle</mat-icon>
+                </a>
+            </div>
+            <div class="col-1" style="align-self:center;" *ngIf="i > 0">
+                <a  (click)="removeUrl(i)">
+                    <mat-icon  style="font-size: 25px;color: darkred">cancel</mat-icon>
+                </a>
+            </div>
+      </div>
+
+    </ng-container>
+
+  </div>
+
+
+
+  <div class="row ml-4 mr-4 mt-3">
+    <div class="col-4 text-right mt-1">
+      <p>เอกสารอ้างอิง:</p>
+    </div>
+    <div class="col-5">
+      <input #fileInput type="file" class="custom-file-input" (change)="onSelectFile($event)"
+       multiple required accept="image/*,application/pdf">
+      <label class="custom-file-label" for="validatedCustomFile">Choose file(.jpg, .png, .raw, .pdf)</label>
+      <div class="invalid-feedback">Example invalid custom file feedback</div>
+      <mat-list *ngIf="disableFile === true">
+        <mat-list-item *ngFor="let item of file; let i = index" [attr.data-index]="i">
+          <mat-icon mat-list-icon>note</mat-icon>
+          <h4 mat-line>{{item.name}}</h4>
+          <p mat-line> {{item.updated | date}} </p>
+          <a (click)="removeSelectedFile(i)">
+            <mat-icon  style="font-size: 25px;color: darkred">cancel</mat-icon>
+        </a>
+        </mat-list-item>
+      </mat-list>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col-12 text-center">
+      <button class="mr-2 mb-5" type="submit" mat-raised-button color="primary" (confirm)="addDocument()"
+        [swal]="saveSwal" *ngIf="disableSave === true">บันทึก</button>
+      <button mat-raised-button (click)="resetStep()" *ngIf="disableSave === true">ยกเลิก</button>
+    </div>
+    
+  </div>
+  <div class="relative">
+  <mat-tab-group class="tabTable" (selectedTabChange)="selectedTabChange($event)" *ngIf="dataSourceFile.data.length !== 0 || dataSourcelink.data.length !== 0 " >
+    <mat-tab label="Link"  *ngIf="dataSourcelink.data.length !== 0 ">
+      <ng-template matTabContent>
+          <table mat-table [dataSource]="dataSourcelink" class="mat-elevation-z8">
+
+            <ng-container matColumnDef="position">
+              <th mat-header-cell *matHeaderCellDef> No. </th>
+              <td mat-cell *matCellDef="let i = index">
+                  {{linkPaginator.pageIndex == 0 ? i + 1 : 1 + i + linkPaginator.pageIndex * linkPaginator.pageSize}}
+              </td>
+            </ng-container>
+
+              <ng-container matColumnDef="link">
+                <th mat-header-cell *matHeaderCellDef style=" text-align: left;">Link</th>
+                <td mat-cell *matCellDef="let element" ><a href="{{element.link}}" target="_blank"> {{element.link}}</a> </td>
+              </ng-container>
+
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>Action</th>
+                <td mat-cell *matCellDef="let element">
+    
+                  <a [swal]="deleteSourceSwal" >
+                    <mat-icon style="color: red" *ngIf="editMode === true">delete_forever</mat-icon>
+                </a>
+                <swal #deleteSourceSwal title="คุณต้องการลบข้อมูล ใช่หรือไม่?" text=""
+                [confirmButtonText]="'ตกลง'" [cancelButtonText]="'ยกเลิก'"
+                    type="warning" [showCancelButton]="true" [focusCancel]="true"
+                    (confirm)="deleteDucument(element)"> </swal>
+                </td>
+              </ng-container>
+    
+    
+              <tr mat-header-row *matHeaderRowDef="displayedLinkColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedLinkColumns;"></tr>
+            </table>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="เอกสารอ้างอิง" *ngIf="dataSourceFile.data.length !== 0 " >
+      <ng-template matTabContent >
+        <table mat-table [dataSource]="dataSourceFile" class="mat-elevation-z8">
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef> No. </th>
+            <td mat-cell *matCellDef="let i = index">
+                {{filePaginator.pageIndex == 0 ? i + 1 : 1 + i + filePaginator.pageIndex * filePaginator.pageSize}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="file">
+            <th mat-header-cell *matHeaderCellDef style=" text-align: left;">เอกสารอ้างอิง</th>
+            <td mat-cell *matCellDef="let element"> {{element.file}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="download">
+            <th mat-header-cell *matHeaderCellDef>download</th>
+            <td mat-cell *matCellDef="let element">
+              <a (click)="onDowloadFile(element)" >
+                <mat-icon style="font-size: 35px;color:#269ee4">cloud_download</mat-icon>
+              </a>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <td mat-cell *matCellDef="let element">
+
+              <a [swal]="deleteSourceSwal" >
+                <mat-icon style="color: red" *ngIf="editMode === true">delete_forever</mat-icon>
+            </a>
+            <swal #deleteSourceSwal title="คุณต้องการลบข้อมูล ใช่หรือไม่?" text=""
+            [confirmButtonText]="'ตกลง'" [cancelButtonText]="'ยกเลิก'"
+                type="warning" [showCancelButton]="true" [focusCancel]="true"
+                (confirm)="deleteDucument(element)"> </swal>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+  <mat-paginator  #FilePaginator="matPaginator"  [pageSizeOptions]="[10, 100, 1000]" showFirstLastButtons [hidden]="conditionTab1" ></mat-paginator>
+  <mat-paginator  #LinkPaginator="matPaginator" [pageSizeOptions]="[10, 100, 1000]" showFirstLastButtons [hidden]="conditionTab0"></mat-paginator>
+</div>
+</form>
+<swal #saveSwal title="คุณต้องบันทึกข้อมูล ใช่หรือไม่?" text="" type="info"
+ [showCancelButton]="true" [confirmButtonText]="'ตกลง'" [cancelButtonText]="'ยกเลิก'"
+  [focusCancel]="true" (confirm)="onSaveProcess()">
+</swal>
+<swal #successSwal title="บันทึกข้อมูลสำเร็จ" [confirmButtonText]="'ตกลง'" text="" type="success"></swal>
+<swal #deleteSwalSuccess title="ลบข้อมูลสำเร็จ" [confirmButtonText]="'ตกลง'" text="" type="success"></swal>
+<swal #errorSwal [allowOutsideClick]="false" [confirmButtonText]="'ตกลง'" text="" type="error"
+    (confirm)="errorDialog()"></swal>

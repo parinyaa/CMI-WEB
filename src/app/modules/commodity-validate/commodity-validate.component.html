@@ -1,0 +1,1323 @@
+<div class="row" *ngIf="dataDialog" >
+  <div class="col-12 text-right">
+    <button (click)="closeDialog()" mat-mini-fab color="primary">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+</div>
+<div class="page-main">
+  <section class="content-header">
+    <div class="section-header">
+      <div class="row">
+        <div class="col-12">
+          <label style="margin-top: 1%; font-size: 18px">5.1 ตรวจสอบข้อมูลราคา</label>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="content">
+    <div class="section-content">
+      <mat-tab-group
+        class="tab-group"
+        [selectedIndex]="tabs.value"
+        (selectedIndexChange)="changeTab($event)"
+      >
+        <mat-tab label="หน้าสรุปผล">
+          <mat-grid-list cols="4" rowHeight="80px" style="text-align-last: left;">
+            <mat-grid-tile [colspan]="4" style="text-align-last: left;">
+              <input
+                [readOnly]="
+                  userProfile && userProfile.userTypeCode
+                    ? userProfile.userTypeCode === 'PROVINCE_USER'
+                    : false
+                "
+                class="form-control mr-2 ml-2"
+                style="width: 15%; font-size: 12px ; text-align: left;"
+                type="text"
+                placeholder="จังหวัด"
+                aria-label="จังหวัด"
+                [formControl]="filterProvinceControl"
+                [matAutocomplete]="auto1"
+              />
+              <mat-autocomplete
+                #auto1="matAutocomplete"
+                [displayWith]="displayFilterProvince"
+                (optionSelected)="selectProvince()"
+              >
+                <mat-option
+                  *ngFor="let option of filterProvinceOptions | async"
+                  [value]="option"
+                  style="font-size: 12px;"
+                >
+                {{option.provinceCode}}&nbsp;{{option.provinceName}}
+                </mat-option>
+              </mat-autocomplete>
+
+              <input
+              class="form-control mr-2 ml-2"
+              style="width: 15%; font-size: 12px ; text-align: left;"
+              type="text"
+              placeholder="ปี"
+              aria-label="ปี"
+              [formControl]="filterYearControl"
+              [matAutocomplete]="auto3"
+            />
+            <mat-autocomplete
+              #auto3="matAutocomplete"
+              [displayWith]="displayFilterYear"
+              (optionSelected)="selectYearTerm()"
+            >
+              <mat-option
+                *ngFor="let item of filterYearOptions | async"
+                [value]="item"
+                style="font-size: 12px;"
+              >
+                {{ item }}
+              </mat-option>
+            </mat-autocomplete>
+              
+              <mat-select
+                class="form-control mr-2 ml-2"
+                style="width: 15%; font-size: 12px; text-align: left;"
+                [formControl]="filterMonthControl"
+              >
+                <mat-option *ngFor="let item of month" [value]="item.value" style="margin-top: auto; margin-bottom: auto">
+                  {{ item.name }}
+                </mat-option>
+              </mat-select>
+              <!-- <input
+                class="form-control mr-2 ml-2"
+                style="width: 15%; font-size: 12px"
+                type="text"
+                placeholder="เดือน"
+                aria-label="เดือน"
+                [formControl]="filterMonthControl"
+                [matAutocomplete]="auto2"
+              />
+              <mat-autocomplete
+                #auto2="matAutocomplete"
+                [displayWith]="displayFilterMonth"
+              >
+                <mat-option
+                  *ngFor="let item of filterMonthOptions | async"
+                  [value]="item"
+                >
+                  {{ item.name }}
+                </mat-option>
+              </mat-autocomplete> -->
+              <input
+                type="text"
+                class="form-control mr-2"
+                placeholder="รหัสสินค้า"
+                style="width: 15%; text-align: left;"
+                [(ngModel)]="filterProductCode"
+              />
+              <input
+                type="text"
+                class="form-control mr-2"
+                placeholder="ชื่อรายการสินค้า"
+                style="width: 15%; text-align: left;"
+                [(ngModel)]="filterProductName"
+              />
+              <!-- <input
+                type="text"
+                class="form-control mr-2"
+                placeholder="ผู้ให้ข้อมูล"
+                style="width: 15%"
+                [(ngModel)]="filterSurveyName"
+              /> -->      
+              <button  (click)="filterParent()" mat-mini-fab color="primary">
+                <mat-icon class="ml-2">search</mat-icon>
+            </button>
+            </mat-grid-tile>
+
+          </mat-grid-list>
+          <div class="row mt-4">
+            <div class="col-1 text-right mt-1">
+              <p>หมวด :</p>
+            </div>
+            <div class="col-3">
+              <mat-select
+                class="form-control"
+                placeholder="เลือกหมวด"
+                [(ngModel)]="currentType"
+                (selectionChange)="changeIndex()"
+              >
+                <mat-option
+                  *ngFor="let option of categoryList"
+                  [value]="option"
+                >
+                  {{ option.commodityCode }} | {{ option.commodityName }}
+                </mat-option>
+              </mat-select>
+            </div>
+            <div class="col-8">
+              <button
+              class="ml-2"
+              mat-raised-button
+              color="primary" 
+              *ngIf="!enabledCalculateWeightAndIndex && !enabledPublishWeightAndIndex && !enabledCancelPublishWeightAndIndex"
+              (click)="autoCalRelative()"
+            >
+                คำนวณ Relative
+            </button>
+              <button
+                class="ml-2"
+                mat-raised-button
+                color="primary"
+                *ngIf="enabledCalculateWeightAndIndex"
+                (click)="openCalIndex()"
+              >
+                คำนวณน้ำหนักและดัชนี
+              </button>
+              <button
+                class="ml-2"
+                mat-raised-button
+                color="primary"
+                *ngIf="enabledPublishWeightAndIndex"
+                (click)="publishIndex()"
+              >
+                ประกาศน้ำหนักและดัชนี
+              </button>
+              <button
+                class="ml-2"
+                mat-raised-button
+                color="warn"
+                (click)="cancelCreateIndex()"
+                *ngIf="enabledPublishWeightAndIndex"
+              >
+                ยกเลิกการสร้าง น้ำหนักและดัชนี
+              </button>
+              <button
+                class="ml-2"
+                mat-raised-button
+                color="warn"
+                (click)="cancelPublishIndex()"
+                *ngIf="enabledCancelPublishWeightAndIndex"
+              >
+                ยกเลิกประกาศ น้ำหนักและดัชนี
+              </button>
+            </div>
+          </div>
+
+          <div class="row mt-3 ml-3 mr-3">
+            <div class="col-12 example-container1">
+              <table class="table-source" mat-table [dataSource]="inboxSource">
+                <ng-container matColumnDef="commodityCode" sticky>
+                  <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    [ngStyle]="{display: 'none'}"
+                  >
+                    รายการ
+                  </th>
+                  <td
+                    mat-cell
+                    *matCellDef="let element"
+                    (click)="openChildOfIndex(element)"
+                    class="click-row"
+                    matTooltip="{{ element.parentCommodityThName }}({{ element.items }})"
+                  >
+                    {{ element.parentCommodityCode }}<br />
+                    {{ element.parentCommodityThName }}({{ element.items }})
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="no1">
+                  <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">
+                    รายการ
+                  </th>
+                </ng-container>
+
+                <ng-container matColumnDef="compareCount">
+                  <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    [ngStyle]="{display: 'none'}"
+                  >
+                    จำนวนตัวอย่าง (-/+)
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    <a (click)="openDialogPopup(element, 'minus')">{{
+                      element.countMinus
+                    }}</a>
+                    /
+                    <a (click)="openDialogPopup(element, 'plus')">{{
+                      element.countPlus
+                    }}</a>
+                  </td>
+                </ng-container>
+                <!-- <ng-container matColumnDef="no5">
+                  <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">
+                    จำนวนตัวอย่าง(-/+)
+                  </th>
+                </ng-container> -->
+
+                <ng-container matColumnDef="status">
+                  <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    [ngStyle]="{display: 'none'}"
+                  >
+                    สถานะ
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    <mat-chip-list aria-label="Fish selection">
+                      <mat-chip
+                        (click)="openChildOfIndex(element)"
+                        class="click-row"
+                        *ngIf="element.relativeStatus === 'NEW'"
+                        color="warn"
+                        selected
+                        >รอตรวจสอบข้อมูล
+                      </mat-chip>
+                      <mat-chip
+                        (click)="openChildOfIndex(element)"
+                        class="click-row"
+                        *ngIf="element.relativeStatus === 'CALCULATE_RELATIVE'"
+                        color="warn"
+                        selected
+                        >คำนวณ Relative
+                      </mat-chip>
+                      <mat-chip
+                        (click)="openChildOfIndex(element)"
+                        class="click-row"
+                        *ngIf="element.relativeStatus === 'VERIFY_RELATIVE'"
+                        style="background-color: #4caf50"
+                        selected
+                        >ยืนยัน Relative
+                      </mat-chip>
+                      <mat-chip
+                        (click)="openChildOfIndex(element)"
+                        class="click-row"
+                        *ngIf="element.relativeStatus === 'CREATE_INDEX'"
+                        color="primary"
+                        selected
+                        >สร้างดัชนี
+                      </mat-chip>
+                      <mat-chip
+                        (click)="openChildOfIndex(element)"
+                        class="click-row"
+                        *ngIf="element.relativeStatus === 'PUBLIC_INDEX'"
+                        color="primary"
+                        selected
+                        >เผยแพร่ดัชนี
+                      </mat-chip>
+                    </mat-chip-list>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="no2">
+                  <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">
+                    สถานะ
+                  </th>
+                </ng-container>
+
+                <!-- Weight Column -->
+                <ng-container matColumnDef="avgArCurrentPrice">
+                  <th mat-header-cell *matHeaderCellDef>P<sub>t</sub></th>
+                  <td
+                    mat-cell
+                    *matCellDef="let element"
+                    matTooltip="{{ element.sourceName }}"
+                    (click)="openChildOfIndex(element)"
+                    class="click-row"
+                  >
+                    {{ element.avgArCurrentPrice | number: '1.5-5' }}
+                  </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="avgArPreviousAdjustPrice">
+                  <th mat-header-cell *matHeaderCellDef>P<sub>t-1</sub></th>
+                  <td
+                    mat-cell
+                    *matCellDef="let element"
+                    (click)="openChildOfIndex(element)"
+                    class="click-row"
+                  >
+                    {{ element.avgArPreviousAdjustPrice | number: '1.5-5' }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="avgArRelative">
+                  <th mat-header-cell *matHeaderCellDef>Rel</th>
+                  <td
+                    mat-cell
+                    *matCellDef="let element"
+                    (click)="openChildOfIndex(element)"
+                    class="click-row"
+                  >
+                    {{ element.avgArRelative | number: '1.5-5' }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="avgGmCurrentPrice">
+                  <th mat-header-cell *matHeaderCellDef>P<sub>t</sub></th>
+                  <td
+                    mat-cell
+                    *matCellDef="let element"
+                    (click)="openChildOfIndex(element)"
+                    class="click-row"
+                  >
+                    {{ element.avgGmCurrentPrice | number: '1.5-5' }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="avgGmPreviousAdjustPrice">
+                  <th mat-header-cell *matHeaderCellDef>P<sub>t-1</sub></th>
+                  <td
+                    mat-cell
+                    *matCellDef="let element"
+                    (click)="openChildOfIndex(element)"
+                    class="click-row"
+                  >
+                    {{ element.avgGmPreviousAdjustPrice | number: '1.5-5' }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="avgGmRelative">
+                  <th mat-header-cell *matHeaderCellDef>Rel</th>
+                  <td
+                    mat-cell
+                    *matCellDef="let element"
+                    (click)="openChildOfIndex(element)"
+                    class="click-row"
+                  >
+                    {{ element.avgGmRelative | number: '1.5-5' }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="avgAf">
+                  <th mat-header-cell *matHeaderCellDef [attr.colspan]="3">
+                    ค่าเฉลี่ย AR
+                  </th>
+                </ng-container>
+
+                <ng-container matColumnDef="avgGm">
+                  <th mat-header-cell *matHeaderCellDef [attr.colspan]="3">
+                    ค่าเฉลี่ย GM
+                  </th>
+                </ng-container>
+
+                <tr
+                  mat-header-row
+                  *matHeaderRowDef="['no1', 'no2', 'avgAf', 'avgGm'] sticky: true"
+                ></tr>
+                <tr
+                  mat-header-row
+                  *matHeaderRowDef="displayedValidateSource"
+                ></tr>
+                <tr
+                  mat-row
+                  *matRowDef="let row; columns: displayedValidateSource"
+                ></tr>
+              </table>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab label="ตรวจสอบข้อมูล" disabled class="tab-price">
+          <div class="row">
+            <div class="col-12">
+              <div class="table-source example-container">
+                <table mat-table [dataSource]="inboxDetailSource">
+                  <ng-container matColumnDef="action2" sticky>
+                    <th mat-header-cell *matHeaderCellDef>
+                      <mat-checkbox
+                        (change)="masterToggle($event)"
+                        [(ngModel)]="allSelected"
+                        [checked]="allSelected"
+                      >
+                      </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-checkbox
+                        [(ngModel)]="element.checked"
+                        (change)="itemToggle($event, element)"
+                        [checked]="element.checked"
+                        [disabled]="
+                          (null == element.currentCalculatedPrice &&
+                            0 === element.currentCalculatedPrice) ||
+                          (null == element.previousCalculatedPrice &&
+                            0 === element.previousCalculatedPrice) ||
+                          disabledCheckbox
+                        "
+                      >
+                      </mat-checkbox>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="productCode" >
+                    <th mat-header-cell *matHeaderCellDef>
+                      รหัสสินค้า /<br />รายละเอียด
+                    </th>
+                    <td
+                      mat-cell
+                      *matCellDef="let element"
+                      matTooltip="{{ element.parentCommodityThName }}"
+                    >
+                      <a (click)="openDialogPopupDetail(element)">
+                        {{ element.parentCommodityCode }} <br />
+                        <span class="text-name">{{
+                          element.parentCommodityThName
+                        }}</span>
+                        <!-- <br>
+                        {{getDescriptForCurrency(element.currencyUnit)}} -->
+                      </a>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="surveyName">
+                    <th mat-header-cell *matHeaderCellDef>แหล่งข้อมูล</th>
+                    <td mat-cell *matCellDef="let element">
+                      <span class="text-name"
+                        >{{ element.sourceName }} ({{
+                          element.provinceSource != null
+                            ? element.provinceSource
+                            : '-'
+                        }})</span
+                      >
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="pricePrevious">
+                    <th mat-header-cell *matHeaderCellDef>
+                      ราคา<br />เดือน<br />ก่อนหน้า
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.previousPrice | number: '1.2-2' }}
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="price1">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                      [ngStyle]="{
+                        display: displayPrice1 ? 'table-cell' : 'none'
+                      }"
+                    >
+                      {{ labelPrice1 }}
+                    </th>
+                    <td
+                      mat-cell
+                      *matCellDef="let element"
+                      [ngStyle]="{
+                        display: displayPrice1 ? 'table-cell' : 'none'
+                      }"
+                    >
+                      <input
+                        type="text"
+                        myNumberOnly
+                        class="form-control"
+                        style="text-align: right"
+                        [(ngModel)]="element.price1"
+                        (ngModelChange)="element.isUpdate = true"
+                        appTwodigitdecimaldirective
+                        [readOnly]="readOnlyPrice"
+                        (blur)="calculateRel(element)"
+                      />
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="price2">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                      [ngStyle]="{
+                        display: displayPrice2 ? 'table-cell' : 'none'
+                      }"
+                    >
+                      {{ labelPrice2 }}
+                    </th>
+                    <td
+                      mat-cell
+                      *matCellDef="let element"
+                      [ngStyle]="{
+                        display: displayPrice2 ? 'table-cell' : 'none'
+                      }"
+                    >
+                      <input
+                        type="text"
+                        myNumberOnly
+                        class="form-control"
+                        style="text-align: right"
+                        [(ngModel)]="element.price2"
+                        [readOnly]="readOnlyPrice"
+                        (ngModelChange)="element.isUpdate = true"
+                        (blur)="calculateRel(element)"
+                      />
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="price3">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                      [ngStyle]="{
+                        display: displayPrice3 ? 'table-cell' : 'none'
+                      }"
+                    >
+                      {{ labelPrice3 }}
+                    </th>
+                    <td
+                      mat-cell
+                      *matCellDef="let element"
+                      [ngStyle]="{
+                        display: displayPrice3 ? 'table-cell' : 'none'
+                      }"
+                    >
+                      <input
+                        type="text"
+                        myNumberOnly
+                        class="form-control"
+                        style="text-align: right"
+                        [(ngModel)]="element.price3"
+                        [readOnly]="readOnlyPrice"
+                        (ngModelChange)="element.isUpdate = true"
+                        (blur)="calculateRel(element)"
+                      />
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="price4">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                      [ngStyle]="{
+                        display: displayPrice4 ? 'table-cell' : 'none'
+                      }"
+                    >
+                      {{ labelPrice4 }}
+                    </th>
+                    <td
+                      mat-cell
+                      *matCellDef="let element"
+                      [ngStyle]="{
+                        display: displayPrice4 ? 'table-cell' : 'none'
+                      }"
+                    >
+                      <input
+                        type="text"
+                        myNumberOnly
+                        class="form-control"
+                        style="text-align: right"
+                        [(ngModel)]="element.price4"
+                        [readOnly]="readOnlyPrice"
+                        (ngModelChange)="element.isUpdate = true"
+                        (blur)="calculateRel(element)"
+                      />
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="priceCurrent">
+                    <th mat-header-cell *matHeaderCellDef>
+                      ราคา<br />ปัจจุบัน
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <input
+                        type="text"
+                        class="form-control"
+                        myNumberOnly
+                        [(ngModel)]="element.currentAdjustedPrice"
+                        [readOnly]="
+                          element.isCurrentAdjustedPriceReadOnly ||
+                          readOnlyPrice
+                        "
+                        (blur)="calculateAdjustedPrice(element)"
+                      />
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+                  <ng-container matColumnDef="priceNot">
+                    <th mat-header-cell *matHeaderCellDef>วิธีปรับราคา</th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-select
+                        [(value)]="element.impute"
+                        class="form-control"
+                        (selectionChange)="onChangePriceNot($event, element)"
+                        [disabled]="element.disabledImpute || readOnlyPrice"
+                      >
+                        <mat-option>None</mat-option>
+                        <mat-option
+                          *ngFor="let l of imputationList"
+                          [value]="l.paramId"
+                        >
+                          {{ l.paramLocalMessage }}
+                        </mat-option>
+                      </mat-select>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="productLink">
+                    <th mat-header-cell *matHeaderCellDef>Link</th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-select
+                        [(value)]="element.link"
+                        class="form-control"
+                        (selectionChange)="onChangeLink($event, element)"
+                        [disabled]="readOnlyPrice"
+                      >
+                        <mat-option
+                          *ngFor="let l of linkFlag"
+                          [value]="l.paramId"
+                        >
+                          {{ l.paramEnMessage }}
+                        </mat-option>
+                      </mat-select>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="previousAdjustedPrice">
+                    <th mat-header-cell *matHeaderCellDef>
+                      ราคา <br>
+                      เปรียบเทียบ
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <input
+                        type="text"
+                        class="form-control"
+                        [(ngModel)]="element.previousAdjustedPrice"
+                        appTwodigitdecimaldirective
+                        [readOnly]="
+                          element.isPreviousAdjustedPriceReadOnly ||
+                          readOnlyPrice
+                        "
+                        (blur)="calculateAdjustedPrice(element)"
+                      />
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="rel">
+                    <th mat-header-cell *matHeaderCellDef>Rel</th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.rel | number: '1.2-2' }}
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="productStatus">
+                    <th mat-header-cell *matHeaderCellDef>ภาวะ</th>
+                    <td mat-cell *matCellDef="let element">
+                      <input
+                        type="text"
+                        style="text-align: left;"
+                        class="form-control"
+                        [(ngModel)]="element.remark"
+                        (ngModelChange)="element.isUpdate = true"
+                        [readOnly]="readOnlyPrice"
+                      />
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>action</th>
+                    <td mat-cell *matCellDef="let element">
+                      <a
+                        [ngStyle]="{
+                          display:
+                            element.impute == null || readOnlyPrice
+                              ? 'none'
+                              : 'inline'
+                        }"
+                        (click)="cancelAction(element)"
+                        matTooltip="ยกเลิกรายการ"
+                      >
+                        <mat-icon style="color: red"
+                          >cancel_presentation</mat-icon
+                        >&nbsp;
+                      </a>
+                      <a
+                        [ngStyle]="{display: readOnlyPrice ? 'none' : 'inline'}"
+                        (click)="openDialogComment(element, 'inspect')"
+                        matTooltip="ความเห็น"
+                      >
+                        <mat-icon
+                          *ngIf="
+                            typeUser == 2 &&
+                            element.requestCommentFlag == 'N' &&
+                            element.answerCommentFlag == 'N' &&
+                            element.commentFlag == 'N'
+                          "
+                          style="color: #279ee4"
+                          >comment</mat-icon
+                        >
+                        <mat-icon
+                          *ngIf="
+                            typeUser == 2 &&
+                            element.requestCommentFlag == 'Y' &&
+                            element.answerCommentFlag == 'N' &&
+                            element.commentFlag == 'Y'
+                          "
+                          style="color: #e40218"
+                          matBadge="!"
+                          matBadgeColor="warn"
+                        >
+                          comment</mat-icon
+                        >
+                        <mat-icon
+                          *ngIf="
+                            typeUser == 2 &&
+                            element.requestCommentFlag == 'Y' &&
+                            element.answerCommentFlag == 'Y' &&
+                            element.commentFlag == 'Y'
+                          "
+                          style="color: #e40218"
+                          matBadge="!"
+                          matBadgeColor="warn"
+                        >
+                          comment</mat-icon
+                        >
+                        <mat-icon
+                          *ngIf="
+                            typeUser == 2 &&
+                            element.requestCommentFlag == 'N' &&
+                            element.answerCommentFlag == 'N' &&
+                            element.commentFlag == 'Y'
+                          "
+                          style="color: #00e418"
+                        >
+                          comment</mat-icon
+                        >
+                      </a>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+                  <ng-container matColumnDef="userUpdate">
+                    <th mat-header-cell *matHeaderCellDef>บันทึกโดย</th>
+                    <td
+                      mat-cell
+                      *matCellDef="let element"
+                      matTooltip="{{ element.userUpdate }}"
+                    >
+                      <p class="text-name" style="margin-top: auto; margin-bottom: auto;"
+                      >{{ element.userUpdate }}</p>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumnsValidate; sticky: true"></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: displayedColumnsValidate"
+                  ></tr>
+                  <!-- <tr
+                    mat-footer-row
+                    *matFooterRowDef="displayedColumnsValidate"
+                  ></tr> -->
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-12 text-right">
+              <button
+                *ngIf="enabledSave"
+                (click)="clickSave()"
+                class="mat-btn-tpso ml-2 mr-2 mt-2 mb-2"
+                mat-raised-button
+                type="button"
+              >
+                <mat-icon>save</mat-icon>&nbsp;บันทึก
+              </button>
+            </div>
+          </div>
+          <div class="row" *ngIf="toBeAddSource.filteredData.length > 0">
+            <div class="col-12">
+              <div class="table-source">
+                <table mat-table [dataSource]="toBeAddSource">
+                  <ng-container matColumnDef="action2">
+                    <th mat-header-cell *matHeaderCellDef>รายการเพิ่ม</th>
+                    <td mat-cell *matCellDef="let element"></td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="productCode">
+                    <th mat-header-cell *matHeaderCellDef>
+                      รหัสสินค้า /<br />รายละเอียด
+                    </th>
+                    <td
+                      mat-cell
+                      *matCellDef="let element"
+                      matTooltip="{{ element.parentCommodityCode }}"
+                    >
+                      <a (click)="openDialogPopupDetail(element)">
+                        <span class="text-name">
+                          {{ element.parentCommodityCode }} <br />
+                          {{ element.parentCommodityThName }} <br />
+                          {{ getDescriptForCurrency(element.currencyUnit) }}
+                        </span>
+                      </a>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="surveyName">
+                    <th mat-header-cell *matHeaderCellDef>แหล่งข้อมูล</th>
+                    <td mat-cell *matCellDef="let element">
+                      <span class="text-name">
+                        {{ element.surveyName }}<br />
+                        {{ element.sourceName }}
+                      </span>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+                  <ng-container matColumnDef="currencyUnit">
+                    <th mat-header-cell *matHeaderCellDef>สกุลเงิน</th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-select
+                        [(ngModel)]="element.currencyUnit"
+                        [ngClass]="{
+                          'alert-no-currency': !element.hasCurrencyRate
+                        }"
+                        (selectionChange)="onSelect(element)"
+                        class="form-control"
+                      >
+                        <mat-option
+                          *ngFor="let l of currencyUnitList"
+                          [value]="l.paramId"
+                        >
+                          {{ l.paramEnMessage }}
+                        </mat-option>
+                      </mat-select>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+                  <ng-container matColumnDef="pricePrevious">
+                    <th mat-header-cell *matHeaderCellDef>
+                      ราคา<br />เดือน<br />ก่อนหน้า
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.previousPrice | number: '1.2-2' }}
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="price1">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                      [ngStyle]="{
+                        display: displayPrice1 ? 'table-cell' : 'none'
+                      }"
+                    >
+                      {{labelPrice1}}
+                    </th>
+                    <td 
+                      mat-cell
+                      *matCellDef="let element"
+                      [ngStyle]="{
+                        display: displayPrice1 ? 'table-cell' : 'none'
+                      }"
+                    >
+                      <input
+                        type="text"
+                        myNumberOnly
+                        class="form-control"
+                        style="text-align: right"
+                        [(ngModel)]="element.price1"
+                        appTwodigitdecimaldirective
+                        [readOnly]="element.isCurrentAdjustedPriceReadOnly"
+                        (blur)="calculateRel(element)"
+                      />
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="price2">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                      [ngStyle]="{
+                        display: displayPrice2 ? 'table-cell' : 'none'
+                      }"
+                    >
+                    {{labelPrice2}}
+                    </th>
+                    <td
+                      mat-cell
+                      *matCellDef="let element"
+                      [ngStyle]="{
+                        display: displayPrice2 ? 'table-cell' : 'none'
+                      }"
+                    >
+                      <input
+                        type="text"
+                        myNumberOnly
+                        class="form-control"
+                        style="text-align: right"
+                        [(ngModel)]="element.price2"
+                        [readOnly]="element.isCurrentAdjustedPriceReadOnly"
+                        (blur)="calculateRel(element)"
+                      />
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="price3">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                      [ngStyle]="{
+                        display: displayPrice3 ? 'table-cell' : 'none'
+                      }"
+                    >
+                    {{labelPrice3}}
+                    </th>
+                    <td
+                      mat-cell
+                      *matCellDef="let element"
+                      [ngStyle]="{
+                        display: displayPrice3 ? 'table-cell' : 'none'
+                      }"
+                    >
+                      <input
+                        type="text"
+                        myNumberOnly
+                        class="form-control"
+                        style="text-align: right"
+                        [(ngModel)]="element.price3"
+                        [readOnly]="element.isCurrentAdjustedPriceReadOnly"
+                        (blur)="calculateRel(element)"
+                      />
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="price4">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                      [ngStyle]="{
+                        display: displayPrice4 ? 'table-cell' : 'none'
+                      }"
+                    >
+                    {{labelPrice4}}
+                    </th>
+                    <td
+                      mat-cell
+                      *matCellDef="let element"
+                      [ngStyle]="{
+                        display: displayPrice4 ? 'table-cell' : 'none'
+                      }"
+                    >
+                      <input
+                        type="text"
+                        myNumberOnly
+                        class="form-control"
+                        style="text-align: right"
+                        [(ngModel)]="element.price4"
+                        [readOnly]="element.isCurrentAdjustedPriceReadOnly"
+                        (blur)="calculateRel(element)"
+                      />
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="priceCurrent">
+                    <th mat-header-cell *matHeaderCellDef>
+                      ราคา<br />ปัจจุบัน
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <input
+                        type="text"
+                        class="form-control"
+                        [(ngModel)]="element.currentAdjustedPrice"
+                        appTwodigitdecimaldirective
+                        [readOnly]="element.isCurrentAdjustedPriceReadOnly"
+                        (blur)="calculateAdjustedPrice(element)"
+                      />
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+                  <ng-container matColumnDef="priceFlag">
+                    <th mat-header-cell *matHeaderCellDef>ไม่สามารถหาราคา</th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-checkbox
+                        [(ngModel)]="element.priceFlagChecked"
+                        [disabled]="true"
+                        [checked]="element.priceFlagChecked"
+                      >
+                      </mat-checkbox>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+                  <ng-container matColumnDef="priceNot">
+                    <th mat-header-cell *matHeaderCellDef>วิธีปรับราคา</th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-select
+                        [(ngModel)]="element.impute"
+                        class="form-control"
+                        (selectionChange)="onChangePriceNot($event, element)"
+                        [disabled]="element.disabledImpute"
+                      >
+                        <mat-option [value]="null">-- None --</mat-option>
+                        <mat-option
+                          *ngFor="let l of imputationList"
+                          [value]="l.paramId"
+                        >
+                          {{ l.paramLocalMessage }}
+                        </mat-option>
+                      </mat-select>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="productLink">
+                    <th mat-header-cell *matHeaderCellDef>Link</th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-select
+                        [value]="element.link"
+                        class="form-control"
+                        (selectionChange)="onChangeLink($event, element)"
+                      >
+                        <mat-option
+                          *ngFor="let l of linkFlag"
+                          [value]="l.paramId"
+                        >
+                          {{ l.paramEnMessage }}
+                        </mat-option>
+                      </mat-select>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="previousAdjustedPrice">
+                    <th mat-header-cell *matHeaderCellDef>
+                      ปรับ<br />ราคา<br />เดือนก่อนหน้า
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <input
+                        type="text"
+                        class="form-control"
+                        [(ngModel)]="element.previousAdjustedPrice"
+                        appTwodigitdecimaldirective
+                        [readOnly]="element.isPreviousAdjustedPriceReadOnly"
+                      />
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="rel">
+                    <th mat-header-cell *matHeaderCellDef>Rel</th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.rel | number: '1.2-2' }}
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="productStatus">
+                    <th mat-header-cell *matHeaderCellDef>ภาวะ</th>
+                    <td mat-cell *matCellDef="let element">
+                      <input
+                        type="text"
+                        style="text-align: left;"
+                        class="form-control"
+                        [(ngModel)]="element.remark"
+                      />
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>action</th>
+                    <td mat-cell *matCellDef="let element">
+                      <a
+                        [ngStyle]="{
+                          display:
+                            element.impute == null || readOnlyPrice
+                              ? 'none'
+                              : 'inline'
+                        }"
+                        (click)="cancelAction(element)"
+                        matTooltip="ยกเลิกรายการ"
+                      >
+                        <mat-icon style="color: red"
+                          >cancel_presentation</mat-icon
+                        >&nbsp;
+                      </a>
+                      <a (click)="removeAddItem(element)" matTooltip="ลบรายการ">
+                        <mat-icon style="color: red">delete</mat-icon>
+                      </a>
+                      <a (click)="clickAdd(element)" matTooltip="เพิ่มรายการ">
+                        <mat-icon style="color: #269ee4">add</mat-icon>
+                      </a>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                  </ng-container>
+                  <tr
+                    mat-header-row
+                    *matHeaderRowDef="displayedColumns; sticky: true"
+                  ></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: displayedColumns"
+                  ></tr>
+                  <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <table
+                class="table-source"
+                mat-table
+                [dataSource]="commoditySource"
+              >
+                <ng-container matColumnDef="month">
+                  <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    [ngStyle]="{display: 'none'}"
+                  ></th>
+                  <td mat-cell *matCellDef="let element">
+                    <div>{{ element.month }}</div>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="no1">
+                  <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"></th>
+                </ng-container>
+
+                <ng-container matColumnDef="afAverageCurrentPrice">
+                  <th mat-header-cell *matHeaderCellDef>P<sub>t</sub></th>
+                  <td
+                    mat-cell
+                    *matCellDef="let element"
+                    matTooltip="{{
+                      element.afAverageCurrentPrice | number: '1.5-5'
+                    }}"
+                  >
+                    {{ element.afAverageCurrentPrice | number: '1.5-5' }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="afAverageComparePrice">
+                  <th mat-header-cell *matHeaderCellDef>P<sub>t-1</sub></th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.afAverageComparePrice | number: '1.5-5' }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="afAverageRelativePrice">
+                  <th mat-header-cell *matHeaderCellDef>Rel</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.afAverageRelativePrice | number: '1.5-5' }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="gmAverageCurrentPrice">
+                  <th mat-header-cell *matHeaderCellDef>P<sub>t</sub></th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.gmAverageCurrentPrice | number: '1.5-5' }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="gmAverageComparePrice">
+                  <th mat-header-cell *matHeaderCellDef>P<sub>t-1</sub></th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.gmAverageComparePrice | number: '1.5-5' }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="gmAverageRelativePrice">
+                  <th mat-header-cell *matHeaderCellDef>Rel</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.gmAverageRelativePrice | number: '1.5-5' }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="avgAf">
+                  <th mat-header-cell *matHeaderCellDef [attr.colspan]="3">
+                    ค่าเฉลี่ย AR
+                  </th>
+                </ng-container>
+
+                <ng-container matColumnDef="avgGm">
+                  <th mat-header-cell *matHeaderCellDef [attr.colspan]="3">
+                    ค่าเฉลี่ย GM
+                  </th>
+                </ng-container>
+
+                <tr
+                  mat-header-row
+                  *matHeaderRowDef="['no1', 'avgAf', 'avgGm']; sticky: true"
+                ></tr>
+                <tr  mat-header-row *matHeaderRowDef="displayedDatasource; sticky: true"></tr>
+                <tr
+                  mat-row
+                  *matRowDef="let row; columns: displayedDatasource"
+                ></tr>
+              </table>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-12">
+              <button
+                style="float: left"
+                mat-raised-button
+                class="ml-2 mr-2 mt-2 mb-2"
+                color="primary"
+                (click)="calRelative('save', currentIndex)"
+                *ngIf="this.commodityList.length > 0 && enabledVerifyRelative"
+              >
+                ยืนยัน Relative
+              </button>
+              <button
+                style="float: left"
+                mat-raised-button
+                color="warn"
+                class="ml-2 mr-2 mt-2 mb-2"
+                (click)="cancelVerifyRelative()"
+                *ngIf="enabledCancelVerifyRelative"
+              >
+                ยกเลิก ยืนยัน Relative
+              </button>
+              <button
+                style="float: right"
+                mat-raised-button
+                color="primary"
+                class="ml-2 mr-2 mt-2 mb-2"
+                *ngIf="enabledCalRelative"
+                (click)="calRelative('saveCal', currentIndex)"
+              >
+                คำนวณ Relative
+              </button>
+              <button
+                style="float: right"
+                mat-raised-button
+                color="warn"
+                class="ml-2 mr-2 mt-2 mb-2"
+                *ngIf="enabledCancelCalRelative"
+                (click)="cancelCalRelative()"
+              >
+                ยกเลิก คำนวณ Relative
+              </button>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </section>
+</div>
+<swal
+  #sucesssaveDataSwal
+  title="บันทึกข้อมูลสำเร็จ"
+  [allowOutsideClick]="false"
+  text=""
+  [confirmButtonText]="'ตกลง'" 
+  type="success"
+></swal>
+<swal #alert title="" [allowOutsideClick]="false" text="" [confirmButtonText]="'ตกลง'"  type="warning"></swal>
+<swal #errorSwal title="" text="" [confirmButtonText]="'ตกลง'"  type="error"></swal>
+<swal #warningSwal title="" text="" [confirmButtonText]="'ตกลง'"  type="warning"></swal>

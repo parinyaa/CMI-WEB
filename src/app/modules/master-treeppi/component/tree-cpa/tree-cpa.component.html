@@ -1,0 +1,53 @@
+<ul class="treeview">
+  <li *ngFor="let node of nodes" class="list-item">
+    <div class="item">
+      <a *ngIf="node.loading" class="toggle"><i class="fa fa-spinner fa-spin"></i></a>
+      <a *ngIf="node.ppiTotalChild > 0 && !node.showChild && !node.loading" class="toggle"
+        (click)="viewChildNode(node)">
+        <i class="fa fa-caret-right"></i>
+      </a>
+      <a *ngIf="node.ppiTotalChild > 0 && node.showChild && !node.loading" class="toggle"
+        (click)="hideChildNode(node.ppiId)">
+        <i class="fa fa-caret-down"></i>
+      </a>
+      <span class="tree-label">( {{node.commodityCode}} )&nbsp;{{node.commodityThName}}</span>
+      <span *ngIf="node.commodityLevel > 7">
+      <a class="mr-2" style="float: right" [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </a>
+      <mat-menu  #menu="matMenu">
+        <a mat-menu-item disabled>
+          <mat-icon><i class="fa fa-balance-scale-right"></i></mat-icon>
+          <span>{{node.measureUnitId?node.measureUnitId.paramEnDescription:""}} ({{node.measureUnitId?node.measureUnitId.paramEnDescription:""}})</span>
+        </a>
+        <a mat-menu-item disabled>
+          <mat-icon>date_range</mat-icon>
+          <span>{{node.frequencyId?node.frequencyId.paramLocalDescription:""}} ({{node.frequencyId?node.frequencyId.paramEnDescription:""}})</span>
+        </a>
+        <a mat-menu-item disabled>
+          <mat-icon>swap_vert</mat-icon>
+          <span>{{node.priceChangePercentage}} %</span>
+        </a>
+        <a mat-menu-item disabled>
+          <mat-icon>swap_horiz</mat-icon>
+          <span>{{node.noOfCarrierForward}}</span>
+        </a>
+        <a mat-menu-item disabled>
+          <mat-icon>attach_money</mat-icon>
+          <span>{{node.currencyUnitId?node.currencyUnitId.paramLocalDescription:""}} ({{node.currencyUnitId?node.currencyUnitId.paramEnDescription:""}})</span>
+        </a>
+      </mat-menu>
+    </span>
+      <a [swal]="errorSwal" class="mr-2" style="float: right" title="Delete" (click)="onErrorSwal()"><mat-icon>delete</mat-icon></a>
+      <!-- <swal #deleteNodeSwal title="คุณต้องการลบข้อมูล ใช่หรือไม่?" text="" type="info" [showCancelButton]="true"
+      [confirmButtonText]="'ตกลง'" [cancelButtonText]="'ยกเลิก'"
+        (confirm)="deleteNode(node)"></swal> -->
+      <a class="mr-2" style="float: right" (click)="editNode(node)" title="Edit"><i class="fa fa-edit"></i></a>
+      <a class="ml-3 mr-2" style="float: right" (click)="addNode(node)" title="Add child"><mat-icon>add</mat-icon></a>
+    </div>
+    <app-tree-cpa [nodes]="node.child" *ngIf="node.child && node.showChild" (clickViewChildNode)="viewChildNode($event)"
+      (clickHideChildNode)="hideChildNode($event)" (addChildNode)="addNode($event)"
+      (deletedChildNode)="onErrorSwal()" (editChildNode)="editNode($event)"></app-tree-cpa>
+  </li>
+</ul>
+<swal #errorSwal title="" text="" [confirmButtonText]="'ตกลง'" type="error"></swal>

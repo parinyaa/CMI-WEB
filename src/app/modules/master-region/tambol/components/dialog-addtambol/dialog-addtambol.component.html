@@ -1,0 +1,70 @@
+<h1 mat-dialog-title>เพิ่มข้อมูลตำบล</h1>
+<form [formGroup]="addTambolForm" (ngSubmit)="onSubmit()">
+  <div mat-dialog-content>
+    <div class="row">
+      <div class="col-3 text-right mt-1">
+        <p>รหัสตำบล:</p>
+      </div>
+      <div class="col-9">
+        <input class="form-control" formControlName="tambolCode" pattern="[0-9]*" minlength="3" maxlength="3"
+          [ngClass]="{'is-invalid': submitted && f.tambolCode.errors}" (keypress)="inputUtils.numberOnly($event)">
+        <div *ngIf="submitted && f.tambolCode.errors" class="invalid-feedback">
+          <div *ngIf="f.tambolCode.errors.required || f.tambolCode.errors.whitespace" class="text-danger help-block">
+            กรุณากรอกรหัสตำบล
+          </div>
+          <div *ngIf="f.tambolCode.errors.pattern" class="text-danger help-block">
+            กรุณากรอกเป็นตัวเลข
+          </div>
+          <div *ngIf="f.tambolCode.errors.minlength" class="text-danger help-block">
+            กรุณากรอกเป็นตัวเลข 6 หลัก
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-3 text-right mt-1">
+        <p>ชื่อตำบล:</p>
+      </div>
+      <div class="col-9">
+        <input class="form-control" formControlName="tambolName" pattern="^[^\s].+[^\s]$"
+          (keypress)="inputUtils.characterOnly($event)" [ngClass]="{'is-invalid': submitted && f.tambolName.errors}">
+        <div *ngIf="submitted && f.tambolName.errors" class="invalid-feedback">
+          <div *ngIf="f.tambolName.errors.required || f.tambolName.errors.whitespace" class="text-danger help-block">
+            กรุณากรอกชื่อตำบล
+          </div>
+          <div *ngIf="f.tambolName.errors.pattern" class="text-danger help-block">
+            กรุณากรอกเป็นตัวอักษร
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="row mt-2">
+      <div class="col-3 text-right mt-1">
+        <p>รหัสไปรษณีย์:</p>
+      </div>
+      <div class="col-9">
+        <input class="form-control" formControlName="postCode" pattern="[0-9]*" maxlength="5"
+          [ngClass]="{'is-invalid': submitted && f.postCode.errors}" (keypress)="inputUtils.numberOnly($event)">
+        <div *ngIf="submitted && f.postCode.errors" class="invalid-feedback">
+          <div *ngIf="f.postCode.errors.required || f.postCode.errors.whitespace" class="text-danger help-block">
+            กรุณากรอกรหัสไปรษณีย์
+          </div>
+          <div *ngIf="f.postCode.errors.pattern" class="text-danger help-block">
+            กรุณากรอกเป็นตัวเลข
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+  </div>
+  <div mat-dialog-actions style="float: right;">
+    <button type="submit" mat-button>บันทึก</button>
+    <button mat-raised-button [mat-dialog-close]="">ยกเลิก</button>
+  </div>
+</form>
+<swal #addSwal title="คุณต้องการบันทึกข้อมูล <br>ใช่หรือไม่" text="" type="info" [showCancelButton]="true"
+  (confirm)="onAddTambol()"></swal>
+<swal #succussSwal title="บันทึกข้อมูลสำเร็จ" [allowOutsideClick]="false" (confirm)="closeDialog()" text=""
+  type="success"></swal>
+<swal #errorAmphurSwal title="" text="" type="error"></swal>

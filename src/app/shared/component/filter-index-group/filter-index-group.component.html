@@ -1,0 +1,58 @@
+<div class="row"> 
+          <div class="col-5">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">กลุ่มดัชนี :</span>
+              </div>
+              <input class="form-control" 
+                 (ngModelChange)="selectChangeIndexGroup($event)" [formControl]="filterIndexGroupControl" [matAutocomplete]="auto"
+                 style="text-align-last: left;">
+              <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFilterIndexGroup">
+                <mat-option *ngFor="let option of filterIndexGroupOptions | async" [value]="option">
+                  {{option.paramInfo}}
+                </mat-option>
+              </mat-autocomplete>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="input-group mb-3" *ngIf="showRegion">
+              <div class="input-group-prepend">
+                <span class="input-group-text">ภูมิภาค :</span>
+              </div>
+              <input class="form-control" [formControl]="filterRegionControl" [matAutocomplete]="auto"
+              style="text-align-last: left;">
+              <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFilterRegion">
+                <mat-option *ngFor="let option of filterRegionOptions | async" [value]="option"
+                (onSelectionChange)="onSelectRegion($event)" >
+                  {{option.regionName}}
+                </mat-option>
+              </mat-autocomplete>
+            </div>
+            <div class="input-group " *ngIf="showProvince">
+              <div class="input-group-prepend">
+                <span class="input-group-text">จังหวัด :</span>
+              </div>
+
+              <input class="form-control" [formControl]="filterProvinceControl" [matAutocomplete]="auto"
+              style="text-align-last: left;">
+              <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFilterProvince">
+                <mat-option *ngFor="let option of filterProvinceOptions | async" [value]="option"
+                (onSelectionChange)="onSelectRegion($event)" >
+                {{option.provinceCode}}&nbsp;{{option.provinceName}} 
+                </mat-option>
+              </mat-autocomplete>
+
+            </div>
+          </div>
+          <div class="col-1 text-center" *ngIf="showBtnSearch">
+            <button  mat-mini-fab color="primary"(click)="onSearch()">
+              <mat-icon>search</mat-icon>
+            </button>
+          </div>
+
+          <div class="col-1 text-center" *ngIf="checkdDisabled &&  !showBtnSearch">
+            <button  mat-mini-fab color="primary"(click)="clearSearch()">
+              <mat-icon>cached</mat-icon>
+            </button>
+          </div>
+</div>

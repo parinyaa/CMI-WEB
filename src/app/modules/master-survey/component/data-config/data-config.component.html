@@ -1,0 +1,127 @@
+<div class="ml-1 mt-2">
+  <div class="row page-dataconfig">
+    <!-- <div class="col-3">
+      <mat-card class="example-card">
+        <mat-card-header>
+          <mat-card-title>แหล่งข้อมูล</mat-card-title>
+          <mat-card-subtitle></mat-card-subtitle>
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content>
+          <mat-list *ngFor="let source of sourceList">
+            <mat-list-item style="cursor:pointer" matRipple class="mb-2" ng-class="active"
+              (click)="selectSource(source)" [ngClass]="{ourceActive: source.source.sourceCode == sourceActive}">
+              <h4 mat-line>{{source.source.sourceCode}} </h4>
+              <p mat-line> {{source.source.sourceName}} </p>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+      
+    </div> -->
+    <div class="col-12 mr-3">
+      <!-- <mat-progress-bar *ngIf="loadBar" mode="indeterminate"></mat-progress-bar>
+      <div class="row mr-2" *ngIf="divCpa">
+        <div class="col-12" *ngIf="!loadBar && dataConfigList.length !== 0"> -->
+
+          <div class="row mr-2 "> 
+            <div class="col-12" *ngIf="dataConfigOrder.length !== 0">
+          <mat-card>
+            <mat-card-title style="text-align-last: left;">
+              <span style="font: 16px;">{{sourceActive}}&nbsp;{{sourceNameActive}}</span>
+              <!-- <button (click)="getCapSource(pageEvent,sourceIdActive);getDataConfig(sourceIdActive)" class="ml-2"
+                style="float: right;" mat-raised-button color="accent">
+                <mat-icon>autorenew</mat-icon>&nbsp;โหลดซ้ำ
+              </button> -->
+<!-- 
+              <button [swal]="saveDataConfigSwal" style="float: right;" mat-raised-button color="primary">
+                <mat-icon>add_circle</mat-icon>&nbsp;บันทึก
+              </button> -->
+
+              <button (click)="onErrorSwal()" style="float: right;" mat-raised-button color="primary">
+                <mat-icon>add_circle</mat-icon>&nbsp;บันทึก
+              </button>
+            </mat-card-title>
+          </mat-card>
+        </div>
+        <!-- <div class="col-6 mt-3 mb-2">
+          <mat-card style="height: 550px; overflow-y: auto; width: 100%;">
+            <p>จำนวน : {{cpa.selectedOptions.selected.length}}
+              <a>
+                <mat-icon style="float:right;" [matMenuTriggerFor]="menu">filter_list</mat-icon>
+              </a>
+            </p>
+            <mat-menu #menu="matMenu">
+              <ng-container *ngFor="let filter of filterList">
+                <a *ngIf="filterType == filter.status" mat-menu-item (click)="filterChange(filter)">
+                  <mat-icon>fiber_manual_record</mat-icon><span>&nbsp;{{filter.name}}</span>
+                </a>
+                <a *ngIf="filterType != filter.status" mat-menu-item (click)="filterChange(filter)">
+                  <mat-icon style="color: white;">fiber_manual_record</mat-icon><span>&nbsp;{{filter.name}}</span>
+                </a>
+              </ng-container>
+            </mat-menu>
+            <mat-form-field appearance="outline" style="width: 100%;">
+              <input matInput placeholder="ค้นหา" [(ngModel)]="searchText" style="text-align-last: left">
+              <mat-icon style="cursor:pointer" (click)="searchFilter()" matSuffix>search</mat-icon>
+            </mat-form-field>
+            <mat-card-title style="text-align-last: left;">
+              <mat-selection-list (selectionChange)="selectionChange($event)" #cpa>
+                <mat-list-option checkboxPosition="before" *ngFor="let cpa of cpaListFilter" [selected]="cpa.seleted"
+                  [value]="cpa">
+                  <h4 mat-line>{{cpa.commodityCode}} </h4>
+                  <p mat-line> {{cpa.commodityName}}</p>
+                </mat-list-option>
+              </mat-selection-list>
+              <mat-paginator [length]="totalRecords" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 100]"
+                (page)="updatePagination($event)">
+              </mat-paginator>
+            </mat-card-title>
+          </mat-card>
+        </div> -->
+        <div class="col-12 mt-3 mb-2" *ngIf="dataConfigOrder.length !== 0">
+          <mat-card >
+            <div>
+            <p> จำนวนที่มีในระบบ : {{dataConfigList.length}}</p>
+            <mat-form-field appearance="outline" style="width: 100%; top:unset">
+              <input style="text-align-last: left;" class="mb-2" matInput placeholder="ค้นหา รหัส/ชื่อรายการ" [(ngModel)]="searchDataConfig"
+                (ngModelChange)="filterDataConfig($event)" >
+              <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+          </div>
+            <mat-list #result style="height: 550px; overflow-y: auto; width: 100%;">
+              <ng-container *ngFor="let type of dataConfigOrder">
+                <ng-container *ngIf="type.data.length !== 0">
+                <h1 mat-subheader style="color: blue;">{{type.typeName}}</h1>
+                <mat-list style="margin-top: -2%;">
+                  <mat-list-item style="text-align-last: left;" *ngFor="let result of type.data;let index = index;">
+                    <h4 mat-line>{{result.commodityCode}}&nbsp;{{result.commodityThName}}</h4>
+                    <!-- <p mat-line> {{result.commodityThName}}</p> -->
+                    <!-- <a class="red-button" (click)="delete(result)"><i class="far fa-trash-alt"></i></a> -->
+
+                    <a class="red-button" (click)="onErrorSwal()"><i class="far fa-trash-alt"></i></a>
+                  </mat-list-item>
+                </mat-list>
+                <mat-divider></mat-divider>
+              </ng-container>
+              </ng-container>
+            </mat-list>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<swal #saveDataConfigSwal title="คุณต้องการบันทึกข้อมูล ใช่หรือไม่?" [allowOutsideClick]="false"
+  [showCancelButton]="true" text="" type="info" [confirmButtonText]="'ตกลง'" [cancelButtonText]="'ยกเลิก'" (confirm)="onSaveCpa()"></swal>
+
+  <swal #successSaveSwal title="บันทึกข้อมูลสำเร็จ" [confirmButtonText]="'ตกลง'" [allowOutsideClick]="false"
+  (confirm)="getDataConfig(sourceIdActive)" text="" type="success"></swal>
+
+<swal #successSurveySwal title="บันทึกข้อมูลสำเร็จ" [confirmButtonText]="'ตกลง'" [allowOutsideClick]="false"
+  (confirm)="getDataConfig(sourceIdActive)" text="" type="success"></swal>
+
+<swal #deleteDataConfig title="คุณต้องการลบข้อมูล ใช่หรือไม่" text="" [confirmButtonText]="'ตกลง'" [cancelButtonText]="'ยกเลิก'" type="info" [showCancelButton]="true"></swal>
+<swal #errorSwal title="" text="" [confirmButtonText]="'ตกลง'" type="error"></swal>
+

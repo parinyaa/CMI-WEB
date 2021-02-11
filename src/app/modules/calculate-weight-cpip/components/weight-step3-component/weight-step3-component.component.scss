@@ -1,0 +1,25 @@
+table {
+    width: 95%;
+    table-layout: fixed;
+  }
+  th[mat-header-cell]{
+    text-align: center;
+    background-color:#269ee4;
+    font-size:20px;
+    color: white;
+  }
+  
+  td[mat-cell]{
+    text-align: center;
+  }
+
+  ::ng-deep.mat-tab-body-content {
+    height: 100%;
+    overflow: auto;
+    width: 100% !important;
+    // margin-left: -35.5px !important;
+  
+  }
+  .mat-select {
+    text-align-last: left;
+  }

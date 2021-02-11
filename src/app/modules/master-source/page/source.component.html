@@ -1,0 +1,130 @@
+<div class="page-main">
+    <section class="content-header">
+        <div class="section-header">
+            <div class="row">
+                <div class="col-6 col-sm-6">
+                    <label style="margin-top: 1%; font-size: 18px;">แหล่งข้อมูล <small>(Source Code)</small></label>
+                </div>
+                <div class="col-6 col-sm-6" style="text-align: right">
+                    <button class="mat-btn-tpso" mat-raised-button (click)="openDialog()">เพิ่ม</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="section-content">
+            <div class="row">
+                <div class="col-12">
+                    <mat-form-field style="float: right">
+                        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="ค้นหา">
+                    </mat-form-field>
+                </div>
+                <div class="col-12">
+                    <div class="mat-elevation-z8">
+                        <table mat-table [dataSource]="dataSource" matSort>
+                            
+                            <ng-container matColumnDef="sourceCode">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> รหัสแหล่งข้อมูล </th>
+                                <td mat-cell *matCellDef="let element"> {{element.sourceCode}} </td>
+                            </ng-container>
+
+                            
+                            <ng-container matColumnDef="surveyCode">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> รหัสผู้ให้ข้อมูล </th>
+                                <td mat-cell *matCellDef="let element"> {{element.surveyCode}} </td>
+                            </ng-container>
+
+                            
+                            <ng-container matColumnDef="sourceName">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> ชื่อแหล่งข้อมูล </th>
+                                <td mat-cell *matCellDef="let element" matTooltip="{{element.sourceName}}">
+                                    {{element.sourceName}} </td>
+                            </ng-container>
+
+                            
+                            <ng-container matColumnDef="sourcePhone">
+                                <th mat-header-cell *matHeaderCellDef> เบอร์โทรศัทพท์ </th>
+                                <td mat-cell *matCellDef="let element"> {{element.sourcePhone}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="action">
+                                <th mat-header-cell *matHeaderCellDef> ตั้งค่า </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <a><i class="far fa-edit" style="margin-right: 5%"></i></a>
+                                    <a [swal]="deleteSwalSource"><i class="far fa-trash-alt"></i></a>
+                                </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+                        <mat-paginator [length]="14" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+                        </mat-paginator>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="modal fade" id="modalSource">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">แหล่งให้ข้อมูล (Source)</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-2 text-right mt-1">
+                        <p>จังหวัด:</p>
+                    </div>
+                    <div class="col-10">
+                        <div class="form-group">
+                            <select class="form-control select2" style="width: 100%;">
+                                <option selected="selected">..กรุณาเลือกจังหวัด..</option>
+                                <option>แพร่</option>
+                                <option>เชียงใหม่</option>
+                                <option>ลพบุรี</option>
+                                <option>เชียงราย</option>
+                                <option>กาญจนบุรี</option>
+                                <option>นครปฐม</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-2 text-right mt-1">
+                        <p>อำเภอ:</p>
+                    </div>
+                    <div class="col-10">
+                        <div class="form-group">
+                            <select class="form-control select2" style="width: 100%;">
+                                <option selected="default">..กรุณาเลือกอำเภอ..</option>
+                                <option>แพร่</option>
+                                <option>เชียงใหม่</option>
+                                <option>ลพบุรี</option>
+                                <option>เชียงราย</option>
+                                <option>กาญจนบุรี</option>
+                                <option>นครปฐม</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-2 text-right mt-1">
+                        <p>ชื่อแหล่งข้อมูล:</p>
+                    </div>
+                    <div class="col-10">
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-primary btn-sm">บันทึกข้อมูล</button>
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">ปิด</button>
+            </div>
+        </div>
+    </div>
+</div>
+<swal #deleteSwalSource title="คุณต้องการลบข้อมูล ใช่หรือไม่?" text="" type="warning" [showCancelButton]="true"
+    [focusCancel]="true" (confirm)="deleteFile()">
+</swal>
+<swal #deleteSwalSourceSuccess title="ลบข้อมูลสำเร็จ" text="" type="success"></swal>

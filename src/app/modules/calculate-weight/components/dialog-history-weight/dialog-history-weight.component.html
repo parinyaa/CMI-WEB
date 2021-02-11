@@ -1,0 +1,39 @@
+<h1 mat-dialog-title>ประวัติการได้รับน้ำหนัก ({{listHistory[0].destination.description}})</h1>
+<div mat-dialog-content class="dialogConfig">
+  <table mat-table class="table-loaddata" [dataSource]="dataSource">
+
+    <ng-container matColumnDef="no">
+      <th mat-header-cell *matHeaderCellDef> ลำดับ </th>
+      <td mat-cell *matCellDef="let element;let i = index"> {{i+1}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="weightCode">
+      <th mat-header-cell *matHeaderCellDef> รหัส </th>
+      <td mat-cell *matCellDef="let element;"> {{element.weightStep.weightData.weightCode}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="weightSubcode">
+      <th mat-header-cell *matHeaderCellDef> รหัสย่อย </th>
+      <td mat-cell *matCellDef="let element;"> {{element.weightStep.weightData.weightSubcode}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="weight">
+      <th mat-header-cell *matHeaderCellDef class="text-right"> น้ำหนักที่ได้รับ </th>
+      <td mat-cell *matCellDef="let element;" class="text-right"> {{element.adjustedWeight | weight5Decimal}} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef> สถานะ </th>
+      <td mat-cell *matCellDef="let element"> {{element.weightStep.status}}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+</div>
+
+<div class="text-right mt-2">
+  <a style="font-size: 16px;">น้ำหนักปัจจุบัน : {{listHistory[0].destination.adjustedWeight | weight5Decimal}}</a>
+</div>

@@ -1,0 +1,71 @@
+<h1 mat-dialog-title>โครงสร้าง</h1>
+<div mat-dialog-content>
+    <div class="row">
+        <div class="col-4 text-right">
+            <p>รหัสสินค้า (Commodity Code): </p>
+        </div>
+        <div class="col-8">
+            <input type="text" class="form-control" placeholder="">
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-4 text-right">
+            <p>ชื่อสินค้า (ภาษาไทย): </p>
+        </div>
+        <div class="col-8">
+            <input type="text" class="form-control" placeholder="">
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-4 text-right">
+            <p>ชื่อสินค้า (ภาษาอังกฤษ): </p>
+        </div>
+        <div class="col-8">
+            <input type="text" class="form-control" placeholder="">
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-4 text-right">
+            <p>ความถี่ในการบันทึกข้อมูล: </p>
+        </div>
+        <div class="col-8">
+            <mat-select [(value)]="selected" class="form-control">
+                <mat-option [value]="1">รายสัปดาห์ (Weekly)</mat-option>
+                <mat-option [value]="2">รายปักษ์ (Fortnightly)</mat-option>
+                <mat-option [value]="3">รายเดือน (Monthly)</mat-option>
+            </mat-select>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-4 text-right">
+            <p>% อัตราการเปลี่ยนแปลงราคา: </p>
+        </div>
+        <div class="col-8">
+            <input type="text" class="form-control" placeholder="">
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-4 text-right">
+            <p>หน่วย : </p>
+        </div>
+        <div class="col-8">
+            <mat-select [(value)]="selected" class="form-control">
+                <mat-option [value]="1">กิโลกรัม / kg</mat-option>
+                <mat-option [value]="2">กรัม / t</mat-option>
+                <mat-option [value]="3">ตัน / Ton</mat-option>
+            </mat-select>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-4 text-right">
+            <p>จำนวนครั้งของราคาที่ไม่เปลี่ยนแปลงข้อมูล : </p>
+        </div>
+        <div class="col-8">
+            <input type="text" class="form-control" placeholder="">
+        </div>
+    </div>
+</div>
+<div mat-dialog-actions style="margin-top: 2%; float:right;">
+    <button type="submit" mat-raised-button color="primary">บันทึก</button>
+    <button mat-raised-button [mat-dialog-close]="data.animal" cdkFocusInitial>ยกเลิก</button>
+</div>

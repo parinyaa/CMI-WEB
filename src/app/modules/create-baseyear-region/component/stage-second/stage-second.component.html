@@ -1,0 +1,72 @@
+<section class="content mt-3">
+    <div class="col-12">
+        <fieldset class="border p-3">
+            <legend class="w-auto"> &nbsp; หา​น้ำหนักจากจุดเชื่อมถึงปีฐาน&nbsp; </legend>
+            <app-filter-data #wbar (onSearch)="onSearchGetWBar($event)"></app-filter-data>
+            <button (click)="exportWbar();" class="mt-2 btn-export" mat-raised-button color="primary">
+                <mat-icon>cloud_download</mat-icon> export
+            </button>
+            <button *ngIf="stepNo == 5.1 else nextTo" (click)="nextStep();" class="mt-2 mb-2 mr-2" style="float: right;"
+                mat-raised-button color="primary">Weight Calculation</button>
+            <ng-template #nextTo>
+                <button (click)="nextStage();" class="mt-2 mb-2 mr-2" style="float: right;" mat-raised-button
+                    color="primary">Next to ReWeight <mat-icon>chevron_right</mat-icon></button>
+            </ng-template>
+            <table class="wbar" mat-table [dataSource]="dataSource" matSort (matSortChange)="sortChangeWbar($event);">
+
+                <ng-container matColumnDef="0">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> ปี</th>
+                    <td mat-cell *matCellDef="let element" matTooltip="{{element.yearTerm}} ">
+                        {{element.yearTerm}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="1">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> เดือน</th>
+                    <td mat-cell *matCellDef="let element" matTooltip="{{element.monthTerm}} ">
+                        {{element.monthTerm}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="2">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> รหัสรายการ
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.commodityCode}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="3">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> ชื่อรายการ
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.commodityName}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="4">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> ระดับรายการ
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.commodityLevel}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="5">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> น้ำหนัก
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.weight}}
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            </table>
+            <mat-paginator #pageWbar [length]="length" [pageSize]="pageSize" [pageIndex]="pageIndex"
+                [pageSizeOptions]="pageSizeOptions" (page)="pageChange($event)">
+            </mat-paginator>
+        </fieldset>
+    </div>
+
+</section>

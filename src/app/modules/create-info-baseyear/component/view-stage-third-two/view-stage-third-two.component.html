@@ -1,0 +1,185 @@
+<div class="col-12">
+    <fieldset class="border p-3">
+        <legend class="w-auto"> &nbsp; หา​น้ำหนักจากจุดเชื่อมถึงปีฐาน &nbsp; </legend>
+        <app-filter-data #wbar (onSearch)="onSearch($event)"></app-filter-data>
+        <button (click)="export();" class="mt-2 btn-export" mat-raised-button color="primary">
+            <mat-icon>cloud_download</mat-icon> export
+        </button>
+        <button (click)="goNext()" class="mt-2 mr-2" mat-raised-button color="primary" style="float: right;"
+            *ngIf="stage40 === 5.32"> หา​น้ำหนักจากจุดเชื่อมถึงปีฐาน</button>
+        <button (click)="changeStage()" class="mt-2 mr-2" mat-raised-button color="primary" style="float: right;"
+            *ngIf="stage40 === 5.33">Re Weight<mat-icon>chevron_right</mat-icon></button>
+    <div class="col-12" style="overflow: scroll;">
+        <table class="wbar" mat-table [dataSource]="dataSource" matSort (matSortChange)="sortChangeWbar($event);">
+
+            <ng-container matColumnDef="commodityLevel">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> ระดับ <br>รายการ
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.commodityLevel}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="commodityCode">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> รหัสรายการ
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.commodityCode}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="commodityName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> ชื่อรายการ
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.commodityName}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="yearTerm">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> ปี</th>
+                <td mat-cell *matCellDef="let element" >
+                    {{element.yearTerm}}
+                </td>
+            </ng-container>
+
+            <!-- <ng-container matColumnDef="yearTerm">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> ปี</th>
+                <td mat-cell *matCellDef="let element" matTooltip="{{element.yearTerm}} ">
+                    {{element.yearTerm}}
+                </td>
+            </ng-container> -->
+<!-- 
+            <ng-container matColumnDef="1">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> เดือน</th>
+                <td mat-cell *matCellDef="let element" matTooltip="{{element.monthTerm}} ">
+                    {{element.monthTerm}}
+                </td>
+            </ng-container> -->
+
+    
+
+            <ng-container matColumnDef="weight01">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> น้ำหนัก <br> เดือนมกราคม
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{(element.weight01 === 0 || element.weight01 === null) ? null : element.weight01 | number:'1.5-5':'en-US'  }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="weight02">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> น้ำหนัก <br> เดือนกุมภาพันธ์
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{(element.weight02 === 0 || element.weight02 === null) ? null : element.weight02 | number:'1.5-5':'en-US'  }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="weight03">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> น้ำหนัก <br> เดือนมีนาคม
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{(element.weight03 === 0 || element.weight03 === null) ? null : element.weight03 | number:'1.5-5':'en-US'  }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="weight04">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> น้ำหนัก <br> เดือนเมษายน
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{(element.weight04 === 0 || element.weight04 === null) ? null : element.weight04 | number:'1.5-5':'en-US'  }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="weight05">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> น้ำหนัก <br> เดือนพฤษภาคม
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{(element.weight05 === 0 || element.weight05 === null) ? null : element.weight05 | number:'1.5-5':'en-US'  }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="weight06">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> น้ำหนัก <br> เดือนมิถุนายน
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{(element.weight06 === 0 || element.weight06 === null) ? null : element.weight06 | number:'1.5-5':'en-US'  }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="weight07">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> น้ำหนัก <br> เดือนกรกฎาคม
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{(element.weight07 === 0 || element.weight07 === null) ? null : element.weight07 | number:'1.5-5':'en-US'  }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="weight08">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> น้ำหนัก <br> เดือนสิงหาคม
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{(element.weight08 === 0 || element.weight08 === null) ? null : element.weight08 | number:'1.5-5':'en-US'  }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="weight09">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> น้ำหนัก <br> เดือนกันยายน
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{(element.weight09 === 0 || element.weight09 === null) ? null : element.weight09 | number:'1.5-5':'en-US'  }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="weight10">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> น้ำหนัก <br> เดือนตุลาคม
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{(element.weight10 === 0 || element.weight10 === null) ? null : element.weight10 | number:'1.5-5':'en-US'  }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="weight11">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> น้ำหนัก <br> เดือนพฤศจิกายน
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{(element.weight11 === 0 || element.weight11 === null) ? null : element.weight11 | number:'1.5-5':'en-US'  }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="weight12">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>น้ำหนัก <br> เดือนธันวาคม
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{(element.weight12 === 0 || element.weight12 === null) ? null : element.weight12 | number:'1.5-5':'en-US'  }}
+                </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="weightTotal">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> น้ำหนักรวม
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{(element.weightTotal === 0 || element.weightTotal === null) ? null : element.weightTotal | number:'1.5-5':'en-US'  }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="weightAvg">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> น้ำหนักเฉลี่ย
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{(element.weightAvg === 0 || element.weightAvg === null) ? null : element.weightAvg | number:'1.5-5':'en-US'  }}
+                </td>
+            </ng-container>
+
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        </table>
+        <mat-paginator [length]="length" [pageSize]="pageSize" [pageIndex]="pageIndex"
+            [pageSizeOptions]="pageSizeOptions" (page)="pageChange($event)">
+        </mat-paginator>
+    </div>
+    </fieldset>
+</div>

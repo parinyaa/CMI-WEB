@@ -1,0 +1,30 @@
+<div class="page-main">
+  <mat-drawer-container>
+    <mat-drawer mode="side" opened>
+      <div style="margin: 10px;" *ngIf="extendedPeriod">
+        <button class="mat-btn-tpso menu-button text-left" mat-raised-button type="button"
+          (click)="changeMode('extended')">
+          <mat-icon>date_range</mat-icon>&nbsp;ขยายเวลาการบันทึกราคา
+        </button>
+      </div>
+      <div style="margin: 10px;" *ngIf="reviewPrice">
+        <button class="mat-btn-tpso menu-button text-left" mat-raised-button type="button"
+          (click)="changeMode('price')">
+          <mat-icon>monetization_on</mat-icon>&nbsp;ตรวจสอบข้อมูลราคา
+        </button>
+      </div>
+      <div style="margin: 10px;" *ngIf="reviewRelative">
+        <button class="mat-btn-tpso menu-button text-left" mat-raised-button type="button"
+          (click)="changeMode('relative')">
+          <mat-icon>beenhere</mat-icon>&nbsp;ตรวจสอบข้อมูล Relative
+        </button>
+      </div>
+    </mat-drawer>
+    <mat-drawer-content>
+      <router-outlet></router-outlet>
+    </mat-drawer-content>
+  </mat-drawer-container>
+</div>
+
+<swal #insertWorkflowSuccess title="บันทึกคำขอขยายระยะเวลาสำเร็จ" text="" type="success" [focusCancel]="true"
+  (confirm)="refresh()"></swal>

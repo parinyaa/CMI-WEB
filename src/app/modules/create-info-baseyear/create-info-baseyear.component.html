@@ -1,0 +1,380 @@
+<div class="page-main">
+  <section class="content-header">
+    <div class="section-header">
+      <div class="row">
+        <div class="col-6 col-sm-6">
+          <label style="margin-top: 1%; font-size: 18px"
+            >3.3 จัดทำข้อมูลปีฐาน</label
+          ><br />
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="content mt-2">
+    <div class="section-content">
+      <mat-card>
+        <div class="row">
+          <div class="col-10">
+            <div class="row">
+              <div class="mt-3 ml-3 mr-5">
+                <span>ปีฐาน :&nbsp; {{ baseYear }}</span>
+              </div>
+              <div class="col-3 ml-2 mt-2">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">กลุ่มดัชนี :</span>
+                  </div>
+                  <input
+                    class="form-control"
+                    [formControl]="filterIndexGroupControl"
+                    [matAutocomplete]="auto"
+                    [(ngModel)]="indexGroup"
+                    [disabled]="checkdDisabled"
+                    (ngModelChange)="selectIndexGroup($event)"
+                  />
+                  <mat-autocomplete
+                    #auto="matAutocomplete"
+                    [displayWith]="displayFilterIndexGroup"
+                  >
+                    <mat-option
+                      *ngFor="let option of filterIndexGroupOptions | async"
+                      [value]="option"
+                    >
+                      {{ option.paramInfo }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </div>
+              </div>
+              <div class="col-4 mt-2 pb-2">
+                <div class="input-group mb-3" *ngIf="isShowRegionInput">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">ภูมิภาค :</span>
+                  </div>
+                  <input
+                    class="form-control"
+                    [formControl]="filterRegionControl"
+                    [matAutocomplete]="auto"
+                    [(ngModel)]="regionId"
+                    [disabled]="checkdDisabled"
+                  />
+                  <mat-autocomplete
+                    #auto="matAutocomplete"
+                    [displayWith]="displayFilterRegion"
+                  >
+                    <mat-option
+                      *ngFor="let option of filterRegionOptions | async"
+                      [value]="option"
+                      (onSelectionChange)="onSelectRegion($event)"
+                    >
+                      {{ option.regionName }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </div>
+                <div class="input-group mb-3" *ngIf="isShowProvinceInput">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">จังหวัด :</span>
+                  </div>
+
+                  <input
+                    class="form-control"
+                    [formControl]="filterProvinceControl"
+                    [matAutocomplete]="auto"
+                    [disabled]="checkdDisabled"
+                  />
+                  <mat-autocomplete
+                    #auto="matAutocomplete"
+                    [displayWith]="displayFilterProvince"
+                  >
+                    <mat-option
+                      *ngFor="let option of filterProvinceOptions | async"
+                      [value]="option"
+                      (onSelectionChange)="onSelectRegion($event)"
+                    >
+                      {{ option.provinceCode }}&nbsp;{{ option.provinceName }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </div>
+              </div>
+              <div
+                class="col-1 text-center"
+                *ngIf="checkdDisableProvince === true"
+              >
+                <button
+                  mat-mini-fab
+                  color="primary"
+                  style="margin-top: 5%"
+                  (click)="onSearch()"
+                >
+                  <mat-icon>search</mat-icon>
+                </button>
+              </div>
+
+              <div
+                class="col-1 text-center"
+                *ngIf="checkdDisabled && !checkdDisableProvince"
+              >
+                <button
+                  mat-mini-fab
+                  color="primary"
+                  style="margin-top: 5%"
+                  (click)="clearSearch()"
+                >
+                  <mat-icon>cached</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-2">
+            <div class="row mr-2">
+              <div
+                class="col-12 mt-2 text-right"
+                *ngIf="stage40 != 5.0 && stage40"
+              >
+                <button mat-raised-button color="warn" [swal]="infoSwl">
+                  ยกเลิกข้อมูลปีฐาน
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-12" *ngIf="searchActive" style="margin-top: -1.4%">
+            <mat-horizontal-stepper
+              linear
+              #stepper
+              (selectionChange)="selectionChange($event, null)"
+              [selectedIndex]="currentSelectedIndex"
+            >
+              <mat-step
+                [stepControl]="firstFormGroup"
+                [optional]="optionalCheckStage(5.1)"
+              >
+                <form [formGroup]="firstFormGroup">
+                  <ng-template matStepLabel>
+                    <span
+                      matTooltip="{{
+                        getParamsStep('NEW_BASE_YEAR_STEP', 'WEIGHT_BAR')
+                      }}"
+                    >
+                      {{ getParamsStep('NEW_BASE_YEAR_STEP', 'WEIGHT_BAR') }}
+                    </span>
+                  </ng-template>
+                  <app-view-stage-first
+                    [tabCurrent]="tabCurrent"
+                    [indexGroup]="indexGroup"
+                    [regionId]="regionId"
+                    [searchActive]="searchActive"
+                    [stage40]="stage40"
+                    [filterProvinceControl]="filterProvinceControl"
+                    [stepper]="stepper"
+                    (step)="goNext($event, 5.0)"
+                    (stage)="changeStage($event)"
+                    (stepStart)="getStep40()"
+                  ></app-view-stage-first>
+                  <div></div>
+                </form>
+              </mat-step>
+              <mat-step
+                [stepControl]="secondFormGroup"
+                [optional]="optionalCheckStage(5.2)"
+              >
+                <form [formGroup]="secondFormGroup">
+                  <ng-template matStepLabel>
+                    <span
+                      matTooltip="{{
+                        getParamsStep('NEW_BASE_YEAR_STEP', 'BASE_PRICE')
+                      }}"
+                    >
+                      {{ getParamsStep('NEW_BASE_YEAR_STEP', 'BASE_PRICE') }}
+                    </span>
+                  </ng-template>
+                  <app-view-stage-second
+                    [provinceId]="provinceId"
+                    (stage)="changeStage($event)"
+                    (step)="goNext($event, 5.1)"
+                    [indexGroup]="indexGroup"
+                    [regionId]="regionId"
+                    [stepper]="stepper"
+                    [filterProvinceControl]="filterProvinceControl"
+                    [stage40]="stage40"
+                  ></app-view-stage-second>
+                  <div></div>
+                </form>
+              </mat-step>
+              <mat-step
+                [stepControl]="thirdFormGroup"
+                [optional]="optionalCheckStage(5.31)"
+              >
+                <form [formGroup]="thirdFormGroup">
+                  <ng-template matStepLabel>
+                    <span
+                      matTooltip="{{
+                        getParamsStep('NEW_BASE_YEAR_STEP', 'PRICE_LIST')
+                      }}"
+                    >
+                      {{ getParamsStep('NEW_BASE_YEAR_STEP', 'PRICE_LIST') }}
+                    </span>
+                  </ng-template>
+                  <app-calculate-pt
+                    [provinceId]="provinceId"
+                    (stage)="changeStage($event)"
+                    (step)="goNext($event, 5.2)"
+                    [indexGroup]="indexGroup"
+                    [regionId]="regionId"
+                    [stepper]="stepper"
+                    [filterProvinceControl]="filterProvinceControl"
+                    [stage40]="stage40"
+                  ></app-calculate-pt>
+                  <div></div>
+                </form>
+              </mat-step>
+              <mat-step
+                [stepControl]="fourthFormGroup"
+                [optional]="optionalCheckStage(5.32)"
+              >
+                <form [formGroup]="fourthFormGroup">
+                  <ng-template matStepLabel>
+                    <span matTooltip="หาราคาเฉลี่ย ณ ปีฐาน">
+                      หาราคาเฉลี่ย ณ ปีฐาน
+                    </span>
+                  </ng-template>
+                  <app-view-stage-third
+                    [provinceId]="provinceId"
+                    (stage)="changeStage($event)"
+                    [indexGroup]="indexGroup"
+                    [regionId]="regionId"
+                    [stepper]="stepper"
+                    (step)="goNext($event, 5.31)"
+                    [filterProvinceControl]="filterProvinceControl"
+                    [stage40]="stage40"
+                  ></app-view-stage-third>
+                  <div></div>
+                </form>
+              </mat-step>
+              <mat-step
+                [stepControl]="fourthTwoFormGroup"
+                [optional]="optionalCheckStage(5.33)"
+              >
+                <form [formGroup]="fourthTwoFormGroup">
+                  <ng-template matStepLabel>
+                    <span matTooltip="หา​น้ำหนักจากจุดเชื่อมถึงปีฐาน">
+                      หา​น้ำหนักจากจุดเชื่อมถึงปีฐาน
+                    </span>
+                  </ng-template>
+                  <app-view-stage-third-two
+                    [provinceId]="provinceId"
+                    (stage)="changeStage($event)"
+                    [indexGroup]="indexGroup"
+                    [regionId]="regionId"
+                    [stepper]="stepper"
+                    (step)="goNext($event, 5.32)"
+                    [filterProvinceControl]="filterProvinceControl"
+                    [stage40]="stage40"
+                  ></app-view-stage-third-two>
+                  <div></div>
+                </form>
+              </mat-step>
+              <mat-step
+                [stepControl]="fifthFormGroup"
+                [optional]="optionalCheckStage(5.4)"
+              >
+                <form [formGroup]="fifthFormGroup">
+                  <ng-template matStepLabel>
+                    <span
+                      matTooltip="{{
+                        getParamsStep('NEW_BASE_YEAR_STEP', 'CALC_INDEX')
+                      }}"
+                    >
+                      {{ getParamsStep('NEW_BASE_YEAR_STEP', 'CALC_INDEX') }}
+                    </span>
+                  </ng-template>
+                  <app-view-stage-fouth
+                    [provinceId]="provinceId"
+                    (stage)="changeStage($event)"
+                    [indexGroup]="indexGroup"
+                    [regionId]="regionId"
+                    [stepper]="stepper"
+                    (step)="goNext($event, 5.33)"
+                    [filterProvinceControl]="filterProvinceControl"
+                    [stage40]="stage40"
+                  ></app-view-stage-fouth>
+                  <div></div>
+                </form>
+              </mat-step>
+              <mat-step
+                [stepControl]="sixthFormGroup"
+                [optional]="optionalCheckStage(5.5)"
+              >
+                <form [formGroup]="sixthFormGroup">
+                  <ng-template matStepLabel>
+                    <span matTooltip="Re base"> Re base </span>
+                  </ng-template>
+                  <app-view-stage-fifth
+                    [provinceId]="provinceId"
+                    (stage)="changeStage($event)"
+                    [indexGroup]="indexGroup"
+                    [regionId]="regionId"
+                    [stepper]="stepper"
+                    (step)="goNext($event, 5.4)"
+                    [filterProvinceControl]="filterProvinceControl"
+                    [stage40]="stage40"
+                  ></app-view-stage-fifth>
+                  <div></div>
+                </form>
+              </mat-step>
+
+              <mat-step
+                [stepControl]="seventhFormGroup"
+                [optional]="optionalCheckStage(5.6)"
+              >
+                <form [formGroup]="seventhFormGroup">
+                  <ng-template matStepLabel>
+                    <span
+                      matTooltip="{{
+                        getParamsStep('NEW_BASE_YEAR_STEP', 'PUBLIC_INDEX')
+                      }}"
+                    >
+                      {{ getParamsStep('NEW_BASE_YEAR_STEP', 'PUBLIC_INDEX') }}
+                    </span>
+                  </ng-template>
+                  <app-view-stage-sixth
+                    [provinceId]="provinceId"
+                    [indexGroup]="indexGroup"
+                    [regionId]="regionId"
+                    [stepper]="stepper"
+                    (step)="goNext($event, 5.5)"
+                    [filterProvinceControl]="filterProvinceControl"
+                    [stage40]="stage40"
+                  ></app-view-stage-sixth>
+                  <div></div>
+                </form>
+              </mat-step>
+            </mat-horizontal-stepper>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </section>
+</div>
+<swal
+  #systemCalculation
+  title="ระบบกำลังคำนวน"
+  [allowOutsideClick]="false"
+  text=""
+  type="success"
+></swal>
+
+<swal
+  #msgSwl
+  title=""
+  [allowOutsideClick]="false"
+  text=""
+  type="success"
+></swal>
+<swal
+  #infoSwl
+  title="คุณต้องการยกเลิกข้อมูลปีฐาน ใช่หรือไม่?"
+  [allowOutsideClick]="false"
+  text=""
+  type="info"
+  [showCancelButton]="true"
+  (confirm)="resetRebase()"
+></swal>

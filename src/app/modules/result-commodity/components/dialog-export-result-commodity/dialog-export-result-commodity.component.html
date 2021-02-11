@@ -1,0 +1,215 @@
+
+<div class="content-header-export-commoditty">
+    <div class="content-header">
+        <div class="row" style="margin-top: 2px; margin-bottom: 8px">
+          <div class="col-12 col-sm-12">
+            <label style="margin-top: 3%;font-size: 18px;">
+              <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item">
+                  <a style="font-size: 18px">{{dataCurrent.title}}&nbsp;(ดาวน์โหลด Excel)</a>
+                </li>
+              </ol>
+          </label>
+          </div>
+        </div>
+          <div class="row valign-select-export-commodity">
+          <div class="col-12 col-sm-12">
+            <form [formGroup]="fromData" (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div class="col-5">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" style="font-size: 12px">ภาค:</span>
+                    </div>
+                    <mat-select class="form-control" formControlName="region" 
+                    [disabled]="disabledProvince"
+                    (selectionChange)="selectRegion($event)" 
+                    [ngClass]="{'is-invalid': submitted && checkRegion}" 
+                    style="font-size: 12px">
+                    <mat-option  [value]="0" >
+                      ทั้งหมด
+                     </mat-option>
+                    <mat-option *ngFor="let region of regionList" [value]="region.cpipMsRegion"
+                     style="font-size: 12px">
+                     {{region.cpipMsRegion.regionName}}
+                      </mat-option>
+                    </mat-select>
+                    <div *ngIf="submitted && checkRegion" class="invalid-feedback col-12">
+                      <div *ngIf="checkRegion" class="text-danger help-block">
+                        กรุณาเลือกภาค หรือ จังหวัด อย่างใดอย่างหนึ่ง
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" style="font-size: 12px">จังหวัด:</span>
+                  </div>
+                  <input [readOnly]="disabledProvince"
+                     class="form-control" type="text" aria-label="จังหวัด"
+                    formControlName="province" [matAutocomplete]="auto1" 
+                    [ngClass]="{'is-invalid': submitted && checkRegion}" 
+                    style="font-size: 12px" placeholder="ทั้งหมด"/>
+                  <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayFilterProvince"
+                  (optionSelected)='selectionChangeProvice($event.option.value)'>
+                    <mat-option *ngFor="let option of filterProvinceOptions | async" [value]="option"
+                    style="font-size: 12px">
+                      {{option.provinceCode}}&nbsp;{{option.provinceName}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </div>
+              </div>
+                <div class="col-3">
+                  <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" style="font-size: 12px">ปีฐาน:</span>
+                  </div>
+                  <mat-select class="form-control" formControlName="baseYear" (selectionChange)="selectBaseYear($event.value)"
+                    [ngClass]="{'is-invalid': submitted && f.baseYear.errors}" 
+                    style="font-size: 12px">
+                    <mat-option *ngFor="let baseYear of baseYearList" [value]="baseYear"
+                    style="font-size: 12px">
+                      {{ baseYear.baseYear }}
+                    </mat-option>
+                  </mat-select>
+                  <div *ngIf="submitted && f.baseYear.errors" class="invalid-feedback">
+                    <div *ngIf="f.baseYear.errors.required" class="text-danger help-block">
+                      กรุณาเลือกปีฐาน
+                    </div>
+                  </div>
+                  </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+              <div class="col-3" style="padding-right: unset;">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" style="font-size: 12px">ตั้งแต่ ปี:</span>
+                      </div>
+              <mat-select class="form-control" formControlName="startYear"
+                [ngClass]="{'is-invalid': submitted && f.startYear.errors}" 
+                style="font-size: 12px">
+                <mat-option *ngFor="let startYear of yearList" [value]="startYear"
+                style="font-size: 12px">
+                  {{ startYear }}
+                </mat-option>
+              </mat-select>
+              <div *ngIf="submitted && f.startYear.errors" class="invalid-feedback">
+                <div *ngIf="f.startYear.errors.required" class="text-danger help-block">
+                  กรุณาเลือกปี
+                </div>
+              </div>
+            </div>
+            </div>
+            <div class="col-3" style="padding-left: unset;">
+              <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" style="font-size: 12px">เดือน:</span>
+              </div>
+              <mat-select class="form-control" formControlName="startMonth"
+                [ngClass]="{'is-invalid': submitted && f.startMonth.errors}" 
+                style="font-size: 12px">
+                <mat-option *ngFor="let startMonth of monthList" [value]="startMonth.paramInfo"
+                style="font-size: 12px">
+                  {{ startMonth.paramLocalMessage }}
+                </mat-option>
+              </mat-select>
+              <div *ngIf="submitted && f.startMonth.errors" class="invalid-feedback">
+                <div *ngIf="f.startMonth.errors.required" class="text-danger help-block">
+                  กรุณาเลือกเดือน
+                </div>
+              </div>
+              </div>
+            </div>
+
+              <div class="col-3" style="padding-right: unset;">
+                  <div class="input-group">
+                      <div class="input-group-prepend">
+                          <span class="input-group-text" style="font-size: 12px">ถึง ปี:</span>
+                        </div>
+                <mat-select class="form-control" formControlName="endYear"
+                  [ngClass]="{'is-invalid': submitted && f.endYear.errors}"
+                  style="font-size: 12px">
+                  <mat-option *ngFor="let endYear of yearList" [value]="endYear"
+                  style="font-size: 12px">
+                    {{ endYear }}
+                  </mat-option>
+                </mat-select>
+                <div *ngIf="submitted && f.endYear.errors" class="invalid-feedback">
+                  <div *ngIf="f.endYear.errors.required" class="text-danger help-block">
+                    กรุณาเลือกปี
+                  </div>
+                </div>
+              </div>
+              </div>
+              <div class="col-3" style="padding-left: unset;">
+                <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" style="font-size: 12px">เดือน:</span>
+                </div>
+                <mat-select class="form-control" formControlName="endMonth"
+                  [ngClass]="{'is-invalid': submitted && f.endMonth.errors}" 
+                  style="font-size: 12px">
+                  <mat-option *ngFor="let endMonth of monthList" [value]="endMonth.paramInfo"
+                  style="font-size: 12px">
+                    {{ endMonth.paramLocalMessage }}
+                  </mat-option>
+                </mat-select>
+                <div *ngIf="submitted && f.endMonth.errors" class="invalid-feedback">
+                  <div *ngIf="f.endMonth.errors.required" class="text-danger help-block">
+                    กรุณาเลือกเดือน
+                  </div>
+                </div>
+                </div>
+              </div>       
+          </div>
+
+            <div class="row mt-4">
+                <div class="col-7">
+                  <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" style="font-size: 12px">กลุ่มสินค้า:</span>
+                  </div>
+                    <mat-select class="form-control"  formControlName="groupCpip"
+                    style="font-size: 12px">
+                    <mat-option  [value]="'0'" >
+                      ทั้งหมด
+                    </mat-option>
+                    <mat-option
+                    *ngFor="let option of categoryList"
+                    [value]="option" style="font-size: 12px">
+                    {{ option.commodityCode }} | {{ option.commodityName }}
+                    </mat-option>  
+                    </mat-select>
+                  </div>
+                </div>           
+              <div class="col-5">
+                <div class="input-group test" >
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" style="font-size: 12px">รหัสสินค้า:</span>
+                  </div>
+                  <input type="text" class="form-control" formControlName= "commodityCode"  placeholder="ทั้งหมด"
+                  style="font-size: 12px;">
+                </div>
+              </div>
+            <div class="col-12 mt-4 text-center mb-2" style="margin-top: 2%;">
+              <button  class="mr-3" type="submit" color="primary" mat-raised-button>
+                ตกลง
+              </button>
+              <button mat-raised-button [mat-dialog-close]="" type="button" color="warn">
+                ยกเลิก
+            </button>
+            </div>
+            <!-- <div mat-dialog-actions align="center" class="col-12 mt-3 text-center mb-1">
+              <button mat-button type="submit" style="background-color: #3f51b5; color: #fff;"  >ตกลง</button>
+              <button mat-button type="button" [mat-dialog-close]="" style="background-color: #f44336; color: #fff;"   cdkFocusInitial>ยกเลิก</button>
+            </div> -->
+            </div>
+        </form>
+    </div>
+</div>
+<swal #warningSwal title="" text="" [confirmButtonText]="'ตกลง'"  type="warning"></swal>
+</div>
+</div>
+

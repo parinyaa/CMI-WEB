@@ -1,0 +1,59 @@
+<div class="page-main">
+  <section class="content-header">
+    <div class="section-header">
+      <div class="row">
+        <div class="col-6 col-sm-6" >
+          <h4>คำนวณน้ำหนักและดัชนี CPA</h4>
+        </div>
+        <div class="col-6 col-sm-6 text-right">
+
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="content">
+    <div class="section-content">
+      <div class="row">
+        <div class="col-12">
+          <mat-grid-list cols="4" rowHeight="80px">
+            <mat-grid-tile [colspan]="4" style="text-align: left;">
+              <button class="form-control mr-2" style="width: 5%;" (click)="back();">
+                <i class="fas fa-arrow-left"></i>
+              </button>
+              <input
+                class="form-control mr-2 ml-2"
+                style="width: 15%; font-size: 12px;"
+                type="text" placeholder="เดือน" aria-label="เดือน" [formControl]="filterMonthControl" [matAutocomplete]="auto2">
+              <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayFilterMonth">
+                <mat-option *ngFor="let item of filterMonthOptions | async" [value]="item">
+                  {{item.name}}
+                </mat-option>
+              </mat-autocomplete>
+              <input
+                class="form-control mr-2 ml-2"
+                style="width: 15%; font-size: 12px;"
+                type="text" placeholder="ปี" aria-label="ปี" [formControl]="filterYearControl" [matAutocomplete]="auto3">
+              <mat-autocomplete #auto3="matAutocomplete" [displayWith]="displayFilterYear">
+                <mat-option *ngFor="let item of filterYearOptions | async" [value]="item">
+                  {{item}}
+                </mat-option>
+              </mat-autocomplete>
+              <input
+                class="form-control mr-2 ml-2"
+                style="width: 15%; font-size: 12px;"
+                type="text" placeholder="ปีฐาน" aria-label="ปีฐาน" [formControl]="filterBaseYearControl" [matAutocomplete]="auto1">
+              <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayFilterBaseYear()">
+                <mat-option *ngFor="let option of filterBaseYearOptions | async" [value]="option.baseYear">
+                  {{option.baseYear}}
+                </mat-option>
+              </mat-autocomplete>
+              <button class="form-control mr-2" style="width: 5%;" (click)="calculateIndexAndWeight();">
+                <i class="fas fa-calculator"></i>
+              </button>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,338 @@
+<div class="page-main">
+    <section class="content-header">
+
+    </section>
+    <section class="content">
+        <div class="section-content">
+            <mat-tab-group class="tabHead" (selectedTabChange)="selectedTabChange($event)">
+                <mat-tab label="3.1 คำชี้แจงปีฐาน">
+                    <div class="row ml-4 mr-4  mt-3" *ngIf="step == 1">
+                        <div class="mt-1 mr-2">
+                          <p>ปีฐาน:</p>
+                        </div>
+                        <div class="col-2">
+                            <input   class="form-control" [formControl]="filterBaseYearControl"  [matAutocomplete]="auto">
+                            <mat-autocomplete #auto="matAutocomplete">
+                              <mat-option *ngFor="let option of filterBaseYearOptions | async" [value]="option.baseYear">
+                                {{option.baseYear}}
+                              </mat-option>
+                            </mat-autocomplete>
+                          </div>
+                        <div class="col-1" >
+                            <span class="input-group-addon">
+                               <button  (click)="onChangeBaseYear($event)" mat-mini-fab color="primary">
+                                    <mat-icon class="ml-1">search</mat-icon>
+                                </button>
+                            </span>
+                        </div>
+                      </div>
+                      <div class="row ml-4 mr-4  mt-3" *ngIf="step != 1">
+                        <div class="col-1 ">
+                          <p>ปีฐาน: </p>
+                        </div>
+                        <div class="col-2">
+                          <p>{{filterBaseYearControl.value}} </p>
+                        </div>
+                      </div>
+                    <mat-horizontal-stepper class="mt-1" labelPosition="bottom" #stepper (selectionChange)="onStepChange($event)" >
+                        <!-- <div  *ngFor="let item of processSeqType; let i = index"> -->
+                            <mat-step [stepControl]=""  *ngFor="let item of processSeqType; let i = index">
+                                <ng-template matStepLabel>
+                                    <span matTooltip="{{item.paramLocalMessage}}">
+                                        {{item.paramLocalMessage}}
+                                    </span>
+                                </ng-template>
+                                <app-form-process [typePageId]="i+1" [currentBaseYear]="currentBaseYear"
+                                    [baseYearMs] = "baseYearMs" [filterBaseYearControl] = "filterBaseYearControl"
+                                     *ngIf="step === i+1"
+                                ></app-form-process>
+
+                                <div class="row mt-4">
+                                    <div class="col-12" *ngIf="step === 1">
+                                        <button style="float: right;" mat-raised-button color="primary"
+                                            matStepperNext>Next</button>
+                                    </div>
+                                    <div class="col-12" *ngIf="step !== 1">
+                                        <button style="float: left;" mat-raised-button color="primary"
+                                            matStepperPrevious>Back</button>
+                                        <button style="float: right;" mat-raised-button color="primary"
+                                            matStepperNext>Next</button>
+                                    </div>
+                                </div>
+                            </mat-step>
+
+                        <!-- </div> -->
+
+                        <!-- <mat-step [stepControl]="">
+                            <ng-template matStepLabel>
+                                <span matTooltip="{{getParamsProcess('PROCESS_SEQ_TYPE','PROCESS_SEQ_02')}}">
+                                    {{getParamsProcess('PROCESS_SEQ_TYPE','PROCESS_SEQ_02')}}
+                                </span>
+                            </ng-template>
+                            <app-form-process [typePageId]="2" [currentBaseYear]="currentBaseYear" [baseYearMs] = "baseYearMs" [filterBaseYearControl] = "filterBaseYearControl" *ngIf="step == 2"></app-form-process>
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <button style="float: left;" mat-raised-button color="primary"
+                                        matStepperPrevious>Back</button>
+                                    <button style="float: right;" mat-raised-button color="primary"
+                                        matStepperNext>Next</button>
+                                </div>
+                            </div>
+                        </mat-step> -->
+                        <!-- <app-form-process [typePageId]="1" [currentBaseYear]="currentBaseYear"
+                        [baseYearMs] = "baseYearMs" [filterBaseYearControl] = "filterBaseYearControl"
+                        *ngIf="step === 1 && showFrom"
+                        ></app-form-process> -->
+                        
+                        <!-- <mat-step [stepControl]="" >
+                            <ng-template matStepLabel>
+                                <span matTooltip="{{getParamsProcess('PROCESS_SEQ_TYPE','PROCESS_SEQ_01')}}">
+                                    {{getParamsProcess('PROCESS_SEQ_TYPE','PROCESS_SEQ_01')}}
+                                </span>
+                            </ng-template>
+                            <app-form-process [typePageId]="1" [currentBaseYear]="currentBaseYear"
+                                              [baseYearMs] = "baseYearMs" [filterBaseYearControl] = "filterBaseYearControl"
+                                              *ngIf="step == 1"
+                                              ></app-form-process>
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <button style="float: right;" mat-raised-button color="primary"
+                                        matStepperNext>Next</button>
+                                </div>
+                            </div>
+                        </mat-step>
+                        <mat-step [stepControl]="">
+                            <ng-template matStepLabel>
+                                <span matTooltip="{{getParamsProcess('PROCESS_SEQ_TYPE','PROCESS_SEQ_02')}}">
+                                    {{getParamsProcess('PROCESS_SEQ_TYPE','PROCESS_SEQ_02')}}
+                                </span>
+                            </ng-template>
+                            <app-form-process [typePageId]="2" [currentBaseYear]="currentBaseYear" [baseYearMs] = "baseYearMs" [filterBaseYearControl] = "filterBaseYearControl" *ngIf="step == 2"></app-form-process>
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <button style="float: left;" mat-raised-button color="primary"
+                                        matStepperPrevious>Back</button>
+                                    <button style="float: right;" mat-raised-button color="primary"
+                                        matStepperNext>Next</button>
+                                </div>
+                            </div>
+                        </mat-step>
+                        <mat-step [stepControl]="">
+                            <ng-template matStepLabel>
+                                <span matTooltip="{{getParamsProcess('PROCESS_SEQ_TYPE','PROCESS_SEQ_03')}}">
+                                    {{getParamsProcess('PROCESS_SEQ_TYPE','PROCESS_SEQ_03')}}
+                                </span>
+                            </ng-template>
+                            <app-form-process [typePageId]="3" [currentBaseYear]="currentBaseYear"  [baseYearMs] = "baseYearMs" [filterBaseYearControl] = "filterBaseYearControl" *ngIf="step == 3"></app-form-process>
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <button style="float: left;" mat-raised-button color="primary"
+                                        matStepperPrevious>Back</button>
+                                    <button style="float: right;" mat-raised-button color="primary"
+                                        matStepperNext>Next</button>
+                                </div>
+                            </div>
+                        </mat-step>
+                        <mat-step [stepControl]="">
+                            <ng-template matStepLabel>
+                                <span matTooltip="{{getParamsProcess('PROCESS_SEQ_TYPE','PROCESS_SEQ_04')}}">
+                                    {{getParamsProcess('PROCESS_SEQ_TYPE','PROCESS_SEQ_04')}}
+                                </span>
+                            </ng-template>
+                            <app-form-process [typePageId]="4" [currentBaseYear]="currentBaseYear" [baseYearMs] = "baseYearMs" [filterBaseYearControl] = "filterBaseYearControl" *ngIf="step == 4"></app-form-process>
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <button style="float: left;" mat-raised-button color="primary"
+                                        matStepperPrevious>Back</button>
+                                    <button style="float: right;" mat-raised-button color="primary"
+                                        matStepperNext>Next</button>
+                                </div>
+                            </div>
+                        </mat-step>
+                        <mat-step [stepControl]="">
+                            <ng-template matStepLabel>
+                                <span matTooltip="{{getParamsProcess('PROCESS_SEQ_TYPE','PROCESS_SEQ_05')}}">
+                                    {{getParamsProcess('PROCESS_SEQ_TYPE','PROCESS_SEQ_05')}}
+                                </span>
+                            </ng-template>
+                            <app-form-process [typePageId]="5" [currentBaseYear]="currentBaseYear" [baseYearMs] = "baseYearMs" [filterBaseYearControl] = "filterBaseYearControl" *ngIf="step == 5"></app-form-process>
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <button style="float: left;" mat-raised-button color="primary"
+                                        matStepperPrevious>Back</button>
+                                    <button style="float: right;" mat-raised-button color="primary"
+                                        matStepperNext>Next</button>
+                                </div>
+                            </div>
+                        </mat-step>
+                        <mat-step [stepControl]="">
+                            <ng-template matStepLabel>
+                                <span matTooltip="{{getParamsProcess('PROCESS_SEQ_TYPE','PROCESS_SEQ_06')}}">
+                                    {{getParamsProcess('PROCESS_SEQ_TYPE','PROCESS_SEQ_06')}}
+                                </span>
+                            </ng-template>
+                            <app-form-process [typePageId]="6" [currentBaseYear]="currentBaseYear" [baseYearMs] = "baseYearMs" [filterBaseYearControl] = "filterBaseYearControl" *ngIf="step == 6"></app-form-process>
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <button style="float: left;" mat-raised-button color="primary"
+                                        matStepperPrevious>Back</button>
+                                    <button style="float: right;" mat-raised-button color="primary"
+                                        matStepperNext>Next</button>
+                                </div>
+                            </div>
+                        </mat-step>
+                        <mat-step [stepControl]="">
+                            <ng-template matStepLabel>
+                                <span matTooltip="{{getParamsProcess('PROCESS_SEQ_TYPE','PROCESS_SEQ_07')}}">
+                                    {{getParamsProcess('PROCESS_SEQ_TYPE','PROCESS_SEQ_07')}}
+                                </span>
+                            </ng-template>
+                            <app-form-process [typePageId]="7" [currentBaseYear]="currentBaseYear" [baseYearMs] = "baseYearMs" [filterBaseYearControl] = "filterBaseYearControl" *ngIf="step == 7"></app-form-process>
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <button style="float: left;" mat-raised-button color="primary"
+                                        matStepperPrevious>Back</button>
+                                    <button style="float: right;" mat-raised-button color="primary"
+                                        matStepperNext>Next</button>
+                                </div>
+                            </div>
+                        </mat-step>
+                        <mat-step [stepControl]="">
+                            <ng-template matStepLabel>
+                                <span matTooltip="{{getParamsProcess('PROCESS_SEQ_TYPE','PROCESS_SEQ_08')}}">
+                                    {{getParamsProcess('PROCESS_SEQ_TYPE','PROCESS_SEQ_08')}}
+                                </span>
+                            </ng-template>
+                            <app-form-process [typePageId]="8" [currentBaseYear]="currentBaseYear" [baseYearMs] = "baseYearMs" [filterBaseYearControl] = "filterBaseYearControl" *ngIf="step == 8"></app-form-process>
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <button style="float: left;" mat-raised-button color="primary"
+                                        matStepperPrevious>Back</button>
+                                    <button style="float: right;" mat-raised-button color="primary"
+                                        matStepperNext>Next</button>
+                                </div>
+                            </div>
+                        </mat-step>
+                        <mat-step [stepControl]="">
+                            <ng-template matStepLabel>
+                                <span matTooltip="{{getParamsProcess('PROCESS_SEQ_TYPE','PROCESS_SEQ_09')}}">
+                                    {{getParamsProcess('PROCESS_SEQ_TYPE','PROCESS_SEQ_09')}}
+                                </span>
+                            </ng-template>
+                            <app-form-process [typePageId]="9" [currentBaseYear]="currentBaseYear" [baseYearMs] = "baseYearMs" [filterBaseYearControl] = "filterBaseYearControl" *ngIf="step == 9"></app-form-process>
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <button style="float: left;" mat-raised-button color="primary"
+                                        matStepperPrevious>Back</button>
+                                    <button style="float: right;" mat-raised-button color="primary"
+                                        matStepperNext>Next</button>
+                                </div>
+                            </div>
+                        </mat-step>
+                        <mat-step [stepControl]="">
+                            <ng-template matStepLabel>
+                                <span matTooltip="{{getParamsProcess('PROCESS_SEQ_TYPE','PROCESS_SEQ_10')}}">
+                                    {{getParamsProcess('PROCESS_SEQ_TYPE','PROCESS_SEQ_10')}}
+                                </span>
+                            </ng-template>
+                            <app-form-process [typePageId]="10" [currentBaseYear]="currentBaseYear" [baseYearMs] = "baseYearMs" [filterBaseYearControl] = "filterBaseYearControl" *ngIf="step == 10"></app-form-process>
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <button style="float: left;" mat-raised-button color="primary"
+                                        matStepperPrevious>Back</button>
+                                    <button style="float: right;" mat-raised-button color="primary"
+                                        matStepperNext>Next</button>
+                                </div>
+                            </div>
+                        </mat-step>
+                        <mat-step [stepControl]="">
+                            <ng-template matStepLabel>
+                                <span matTooltip="{{getParamsProcess('PROCESS_SEQ_TYPE','PROCESS_SEQ_11')}}">
+                                    {{getParamsProcess('PROCESS_SEQ_TYPE','PROCESS_SEQ_11')}}
+                                </span>
+                            </ng-template>
+                            <app-form-process [typePageId]="11" [currentBaseYear]="currentBaseYear" [baseYearMs] = "baseYearMs" [filterBaseYearControl] = "filterBaseYearControl" *ngIf="step == 11"></app-form-process>
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <button style="float: left;" mat-raised-button color="primary"
+                                        matStepperPrevious>Back</button>
+                                    <button style="float: right;" mat-raised-button color="primary"
+                                        matStepperNext>Next</button>
+                                </div>
+                            </div>
+                        </mat-step>
+                        <mat-step [stepControl]="">
+                            <ng-template matStepLabel>
+                                <span matTooltip="{{getParamsProcess('PROCESS_SEQ_TYPE','PROCESS_SEQ_12')}}">
+                                    {{getParamsProcess('PROCESS_SEQ_TYPE','PROCESS_SEQ_12')}}
+                                </span>
+                            </ng-template>
+                            <app-form-process [typePageId]="12" (btnResetStep)="resetStep($event)" [currentBaseYear]="currentBaseYear" [baseYearMs] = "baseYearMs" [filterBaseYearControl] = "filterBaseYearControl" *ngIf="step == 12"></app-form-process>
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <button style="float: left;" mat-raised-button color="primary"
+                                        matStepperPrevious>Back</button>
+                                </div>
+                            </div>
+                        </mat-step> -->
+                    </mat-horizontal-stepper>
+                </mat-tab>
+                <!-- <mat-tab label="ประวัติ">
+                    <div class="row mt-4">
+                        <div class="col-1 mt-1">
+                            <p>ปีฐาน : </p>
+                        </div>
+                        <div class="col-3">
+                            <form [formGroup]="yearForm">
+                                <mat-select class="form-control" formControlName="year" placeholder="เลือกปีฐาน"
+                                    (selectionChange)="selectionChange($event)" *ngIf="flagYear">
+                                    <mat-option *ngFor="let option of yearList" [value]="option">
+                                        {{option}}
+                                    </mat-option>
+                                </mat-select>
+                            </form>
+                        </div>
+                    </div>
+                    <table class="table-source  mt-2" mat-table [dataSource]="dataSource" matSort style="width: 100%"
+                        *ngIf="showTable">
+                       
+                        <ng-container matColumnDef="year">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> ลำดับ </th>
+                            <td mat-cell *matCellDef="let element; let i = index">{{i+1}}</td>
+                        </ng-container>
+
+                        
+                        <ng-container matColumnDef="content">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> ขั้นตอน </th>
+                            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                        </ng-container>
+
+                      
+                        <ng-container matColumnDef="description">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> รายละเอียด </th>
+                            <td mat-cell *matCellDef="let element" matTooltip="{{element.description}}">
+                                {{element.description}} </td>
+                        </ng-container>
+
+                        
+                        <ng-container matColumnDef="file">
+                            <th mat-header-cell *matHeaderCellDef> ไฟล์/url </th>
+                            <td mat-cell *matCellDef="let element">
+                                    
+                                            <a  (click)="openDialogFile(element)">
+                                                <mat-icon  style="font-size: 35px;color:#269ee4">folder_shared</mat-icon>
+                                            </a>
+                               
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+
+                </mat-tab> -->
+            </mat-tab-group>
+
+        </div>
+    </section>
+</div>

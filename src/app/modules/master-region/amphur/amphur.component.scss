@@ -1,0 +1,28 @@
+a {
+    color:black;
+}
+.dropdown {
+    position: relative;
+    display: inline-block;
+    height: 20px;
+}
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+.dropdown-menu {
+    margin: 0;
+}
+.textHeader{
+    color: #3e89ebb8;
+}
+.card-button {
+    color: #48484861;
+}
+.font-count{
+    font-size: 35px;
+}
+.font-size{
+    font-size: 20px;
+}
+
+

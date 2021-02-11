@@ -1,0 +1,32 @@
+table {
+    width: 95%;
+    table-layout: fixed;
+  }
+  th[mat-header-cell]{
+    text-align: center;
+    background-color:#269ee4;
+    font-size:20px;
+    color: white;
+  }
+  
+  td[mat-cell]{
+    text-align: center;
+  }
+  
+  .chip-red {
+    background-color: #b21212;
+    color: white;
+    font-size: 11px;
+  }
+  
+  .chip-green {
+    background-color: green;
+    color: white;
+    font-size: 11px;
+  }
+  
+  .chip-yellow {
+    background-color: #ffd10c;
+    color: white;
+    font-size: 11px;
+  }

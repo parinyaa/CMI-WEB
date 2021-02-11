@@ -1,0 +1,79 @@
+
+<div class="page-main">
+    <section class="content-header">
+      <div class="section-header">
+        <div class="row">
+          <div class="col-6 col-sm-6">
+            <label style="margin-top: 1%; font-size: 18px;">4.1 ดึงข้อมูลราคาสินค้า</label>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="content">
+      <div class="section-content">
+        <div class="div-search">
+          <mat-card style="text-align-last: left;">
+            <div class="row">
+              <div class="col-3">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">จังหวัด :</span>
+                  </div>
+                  
+                  <!-- <mat-select class="form-control" [(ngModel)]= "listUserProfile"  [disabled]="checkProvinceId===true">
+                    <mat-option [value]="0">ทั้งหมด</mat-option>
+                    <mat-option *ngFor="let item of listProvince" [value]="item.provinceId" >
+                      {{item.provinceName}}
+                    </mat-option>
+                  </mat-select> -->
+
+                  <input class="form-control" [formControl]="filterProvinceControl" [matAutocomplete]="auto"
+                  [disabled]="checkProvinceId">
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFilterProvince">
+                  <mat-option *ngFor="let option of filterProvinceOptions | async" [value]="option">
+                    {{option.provinceCode}}&nbsp;{{option.provinceName}}
+                  </mat-option>
+                </mat-autocomplete>
+                </div>
+              </div>     
+              <div class="col-2">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">ปี :</span>
+                  </div>
+                
+                  <!-- <input type="text" class="form-control" [(ngModel)]="yearData" disabled> -->
+                  <mat-select [disabled]="true" class="form-control" [(ngModel)]= "yearData">
+                    <mat-option *ngFor="let item of year" [value]="item.value" style="margin-top: auto; margin-bottom: auto">
+                      {{item.year}}
+                    </mat-option>
+                  </mat-select>
+                  
+                
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">เดือน :</span>
+                  </div>
+                  <!-- <input type="text" class="form-control" [(ngModel)]="nameMonth" disabled> -->
+                  <mat-select [disabled]="true" class="form-control" [(ngModel)]= "nameMonth">
+                    <mat-option *ngFor="let item of month" [value]="item.value" style="margin-top: auto; margin-bottom: auto">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                  
+                </div>
+              </div>
+              <div class="col-1 text-center">
+                <button mat-raised-button class="mat-btn-tpso" (click)="onSave()">
+                  ดึงข้อมูล
+                </button>
+              </div>
+            </div>
+          </mat-card>
+        </div>
+      </div>
+    </section>
+</div>

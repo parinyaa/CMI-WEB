@@ -1,0 +1,27 @@
+<h1 mat-dialog-title>ยืนยันยกเลิกขั้นตอนแก้ไขน้ำหนัก </h1>
+<form [formGroup]="cancelWeightStepForm" (ngSubmit)="onSubmit()">
+  <div mat-dialog-content>
+    <div class="row">
+      <div class="col-12 text-left mt-1">
+        <mat-form-field style="width: 100%;">
+          <textarea formControlName="cancelNote" matInput matAutosizeMinRows=4
+            placeholder="บันทึกการลบ (ไม่จำเป็นต้องกรอก)" matTextareaAutosize>
+                </textarea>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions style="float: right;">
+    <button type="submit" mat-button  style="background-color: #00b3ea;">ตกลง</button>
+    <button mat-raised-button [mat-dialog-close]="">ยกเลิก</button>
+  </div>
+</form>
+
+  <swal #deleteSwal title="คุณต้องการยกเลิกขั้นตอนการแก้ไข ใช่หรือไม่?"
+  [confirmButtonText]="'ตกลง'" [cancelButtonText]="'ยกเลิก'" 
+  text="" type="warning" [showCancelButton]="true"
+  [focusCancel]="true" (confirm)="deleteWeightData()" >
+</swal>
+<swal #succussSwal title="แก้ไขข้อมูลสำเร็จ"  [confirmButtonText]="'ตกลง'" 
+[allowOutsideClick]="false" (confirm)="closeDialog()" text="" type="success"></swal>
+<swal #errorSwal title="" text="" [confirmButtonText]="'ตกลง'" type="error"></swal>

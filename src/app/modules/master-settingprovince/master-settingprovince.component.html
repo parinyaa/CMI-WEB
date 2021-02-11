@@ -1,0 +1,77 @@
+<div class="page-main">
+    <section class="content-header">
+        <div class="section-header">
+            <div class="row">
+                <div class="col-6 col-sm-6">
+                    <label style="margin-top: 1%; font-size: 18px;">ตั้งค่าข้อมูลระดับจังหวัด
+                        <small>(Commodity,Survey,Source)</small></label>
+                </div>
+                <div class="col-6 col-sm-6" style="text-align: right;">
+                    <button class="mat-btn-tpso" mat-raised-button type="button"
+                        (click)="openAddDialog()">เพิ่ม</button>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="section-content">
+            <div class="row">
+                <div class="col-12">
+                    <mat-form-field style="float: right">
+                        <input matInput  placeholder="ค้นหาจังหวัด">
+                    </mat-form-field>
+                </div>
+                <div class="col-12">
+                    <div class="mat-elevation-z8">
+                        <table mat-table [dataSource]="dataSource" matSort>
+                            <ng-container matColumnDef="no">
+                                <th mat-header-cell *matHeaderCellDef> ลำดับที่ </th>
+                                <td mat-cell *matCellDef="let element: let i = index"> {{i + 1}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="provinceName">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> จังหวัด </th>
+                                <td mat-cell *matCellDef="let element"> {{element.provinceName}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="surveyCode">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> รหัสผู้ให้ข้อมูล </th>
+                                <td mat-cell *matCellDef="let element"> {{element.surveyCode}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="sourceCode">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> รหัสแหล่งข้อมูล </th>
+                                <td mat-cell *matCellDef="let element"> {{element.sourceCode}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="commodityCode">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> รหัสดัชนี PPI</th>
+                                <td mat-cell *matCellDef="let element"> {{element.commodityCode}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="action">
+                                <th mat-header-cell *matHeaderCellDef> ตั้งค่า </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <a><i (click)="openEditDialog(element)" class="far fa-edit"
+                                            style="margin-right: 5%"></i></a>
+                                    <a [swal]="deleteSwal"><i class="far fa-trash-alt"></i></a>
+                                    <swal #deleteSwal title="คุณต้องการลบข้อมูล ใช่หรือไม่" text="" type="info"
+                                        [showCancelButton]="true" (confirm)="onDeleteData(element)"></swal>
+                                </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+                            <div class="noDataSource" *ngIf="dataSource.filteredData.length == 0">ไม่พบข้อมูล</div>
+                        <mat-paginator [length]="dataSource.filteredData.length" [pageSize]="10"
+                            [pageSizeOptions]="[5, 10, 25, 100]">
+                        </mat-paginator>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<swal #deleteSuccessSwal title="ลบข้อมูลสำเร็จ" [allowOutsideClick]="false" (confirm)="onViewData()" text=""
+    type="success"></swal>

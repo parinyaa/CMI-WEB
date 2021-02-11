@@ -1,0 +1,110 @@
+table {
+    width: 100%;
+    table-layout: fixed;
+}
+input{
+  width: -webkit-fill-available;
+  font-size: 12px;
+}
+.tableSource{
+  margin-top: 20px;
+}
+.mat-column-productCode{
+  width: 7%;
+}
+.mat-column-surveyName{
+  width: 7%;
+}
+.table-source  tr {
+  border: 1px solid rgba(0,0,0,.12);
+}
+.mat-column-pricePrevious{
+  width: 4%;
+  text-align: center;
+  padding: 3px;
+}
+.mat-column-price1{
+  width: 4%;
+  padding: 3px;
+}
+.mat-column-price2{
+  width: 4%;
+  padding: 3px;
+}
+.mat-column-price3{
+  width: 4%;
+  padding: 3px;
+}
+.mat-column-price4{
+  width: 4%;
+  padding: 3px;
+}
+.mat-column-currentPrice{
+  width: 3%;
+  text-align: center;
+  padding: 3px;
+}
+.mat-column-priceNot{
+  width: 2%;
+  text-align: center;
+  padding: 3px;
+}
+.mat-column-priceRel{
+  width: 3%;
+  text-align: center;
+}
+.mat-column-productStatus{
+  width: 8%;
+}
+.mat-column-action{
+  width: 3%;
+  text-align: center;
+}
+.mat-header-cell{
+  text-align: center;
+}
+.mat-grid-list{
+  background-color: white;
+  border-bottom: 1px solid  rgba(0,0,0,.12);;
+}
+
+.make-AnswerN {
+  background-color: #f7b2b2;
+}
+
+.make-AnswerY {
+  background-color: gold;
+}
+
+.make-RequestY {
+  background-color: #f7b2b2;
+}
+.example-full-width {
+  width: 100%;
+}
+.make-notSavePrice{
+  background-color: #f7b2b2;
+}
+::ng-deep .mat-sort-header-container {
+  display:flex;
+  justify-content:center;
+}
+::ng-deep .mat-grid-tile .mat-figure {
+  justify-content: flex-start !important ;
+}
+
+::ng-deep .mat-select-trigger {
+  margin-top: 3.5px;
+}
+
+::ng-deep .search-dataenty .mr-2, .mx-2 {
+  margin-right: .0rem!important;
+}
+
+// .year-autocomplete-dataenty {
+  ::ng-deep .mat-autocomplete-panel {
+    min-width: unset !important;
+  // }
+}
+
+

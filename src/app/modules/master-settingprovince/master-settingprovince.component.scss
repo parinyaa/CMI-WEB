@@ -1,0 +1,26 @@
+table {
+    width: 100%;
+    table-layout: fixed;
+}  
+.mat-column-no{
+    width: 10%;
+}
+.mat-column-provinc{
+    width: 20%;
+}
+.mat-column-survey{
+    width: 20%;
+}
+.mat-column-source{
+    width: 20%;
+}
+.mat-column-commodity{
+    width: 20%;
+}
+.mat-column-action{
+    width: 10%;
+}
+.table-source tr{
+    border: 1px solid rgba(0,0,0,.12);
+}
+  

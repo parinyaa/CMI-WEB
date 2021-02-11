@@ -1,0 +1,53 @@
+<h1 mat-dialog-title>แก้ไขข้อมูลจังหวัด</h1>
+<form [formGroup]="editProvinceForm" (ngSubmit)="onSubmit()">
+  <div mat-dialog-content>
+    <div class="row">
+      <div class="col-2 text-right mt-1">
+        <p>รหัสจังหวัด:</p>
+      </div>
+      <div class="col-10">
+        <input class="form-control" formControlName="provinceCode" pattern="[0-9]*" minlength="2" maxlength="2"
+          [ngClass]="{'is-invalid': submitted && f.provinceCode.errors}" readonly>
+        <div *ngIf="submitted && f.provinceCode.errors" class="invalid-feedback">
+          <div *ngIf="f.provinceCode.errors.required" class="text-danger help-block">
+            กรุณากรอกรหัสจังหวัด
+          </div>
+          <div *ngIf="f.provinceCode.errors.pattern" class="text-danger help-block">
+            กรุณากรอกเป็นตัวเลข
+          </div>
+          <div *ngIf="f.provinceCode.errors.minlength" class="text-danger help-block">
+            กรุณากรอกเป็นตัวเลข 2 หลัก
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-2 text-right mt-1">
+        <p>ชื่อจังหวัด:</p>
+      </div>
+      <div class="col-10">
+        <input class="form-control" formControlName="provinceName" (keypress)="inputUtils.characterOnly($event)"
+          pattern="^[^\s].+[^\s]$" [ngClass]="{'is-invalid': submitted && f.provinceName.errors}">
+        <div *ngIf="submitted && f.provinceName.errors" class="invalid-feedback">
+          <div *ngIf="f.provinceName.errors.required || f.provinceName.errors.whitespace"
+            class="text-danger help-block">
+            กรุณากรอกชื่อจังหวัด
+          </div>
+          <div *ngIf="f.provinceName.errors.pattern" class="text-danger help-block">
+            กรุณากรอกเป็นตัวอักษร
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div mat-dialog-actions style="float: right;">
+    <button type="submit" mat-button>บันทึก</button>
+    <a mat-button (click)="onNoClick()">ยกเลิก</a>
+  </div>
+</form>
+<swal #updataProvinceSwal title="คุณต้องการเปลี่ยนแปลงข้อมูล <br>ใช่หรือไม่" text="" type="info"
+  [showCancelButton]="true" (confirm)="editProvince()"></swal>
+<swal #succussProvinceSwal title="เปลี่ยนแปลงข้อมูลสำเร็จ" [allowOutsideClick]="false" (confirm)="closeDialog()" text=""
+  type="success"></swal>
+<swal #errorProvinceSwal title="" text="" type="error"></swal>

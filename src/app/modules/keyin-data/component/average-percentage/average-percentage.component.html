@@ -1,0 +1,90 @@
+
+<h1 mat-dialog-title>ค่าเฉลี่ยการเปลี่ยนแปลง</h1>
+<div mat-dialog-content>
+  <table  mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="productCode">
+      <th mat-header-cell *matHeaderCellDef> รหัสสินค้า /<br>รายละเอียด </th>
+      <td mat-cell *matCellDef="let element" matTooltip="{{element.productDetail}} ">
+        {{element.parentCommodityCode}}
+        <br>
+        {{element.parentCommodityThName}}
+        <br>
+        ({{getCurrencyLabel(element.currencyUnit)}})
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="surveyName">
+      <th mat-header-cell *matHeaderCellDef> ผู้ให้ข้อมูล /<br>แหล่งข้อมูล
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.surveyName}}<br>
+        {{element.sourceName}}
+
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="previousAdjustedPrice">
+      <th mat-header-cell *matHeaderCellDef> ราคาปรับแก้<br>ก่อนหน้า </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.previousAdjustedPrice}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="previousCalculatedPrice">
+      <th mat-header-cell *matHeaderCellDef> ราคาคำนวน<br>ก่อนหน้า </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.previousCalculatedPrice}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="previousPrice">
+      <th mat-header-cell *matHeaderCellDef> ราคา<br>ก่อนหน้า </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.previousPrice}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="currentAdjustedPrice">
+      <th mat-header-cell *matHeaderCellDef> ราคาปรับแก้<br>ปัจจุบัน </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.currentAdjustedPrice}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="currentCalculatedPrice">
+      <th mat-header-cell *matHeaderCellDef> ราคาคำนวณ<br>ปัจจุบัน </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.currentCalculatedPrice}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="currentPrice">
+      <th mat-header-cell *matHeaderCellDef> ราคา<br>ปัจจุบัน </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.currentPrice}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="rel">
+      <th mat-header-cell *matHeaderCellDef> rel </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.rel | number: '1.2-2'}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef> Selected </th>
+      <td mat-cell *matCellDef="let element">
+        <mat-checkbox
+          [(ngModel)]="element.neighborHoodChecked"
+          (change)="itemToggle($event, element)"
+          [checked]="element.neighborHoodChecked"
+        >
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  Average % Change = {{rel | number: '1.2-2'}}
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onNoClick()">ยกเลิก</button>
+  <button mat-button (click)="selectPrice()">เลือก</button>
+</div>

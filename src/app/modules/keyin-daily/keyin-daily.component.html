@@ -1,0 +1,147 @@
+<div class="page-main">
+    <section class="content">
+        <div class="div-content">
+            <div class="row">
+                <div class="col-12">
+                    <mat-card class="example-card">
+                        <mat-card-header>
+                            <mat-card-title>ประจำเดือน {{month[currentMonth]}}</mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <mat-accordion displayMode="flat" multi class="multi-mat-table">
+                                <section matSort class="multi mat-elevation-z2 mat-header-row">
+                                    <span class="multi mat-header-cell" mat-sort-header="cpaName">รหัสสินค้า /
+                                        รายละเอียด</span>
+                                    <span class="multi mat-header-cell" mat-sort-header="surveyName">ผู้ให้ข้อมูล</span>
+                                    <span class="multi mat-header-cell" mat-sort-header="sourceName">แหล่งข้อมูล</span>
+                                </section>
+                                <ng-container *ngFor="let element of dataHeader ;let i = index;">
+                                    <mat-expansion-panel #matExpansionPanel (afterExpand)="afterExpand(element)"
+                                        [expanded]="step == i" (opened)="setStep(i)">
+                                        <mat-expansion-panel-header>
+                                            <span class="mat-cell mt-2 expandPanel">
+                                                {{element.dataMatrix.dataConfig.ppiMsCpa.commodityCode}}<br>
+                                                {{element.dataMatrix.dataConfig.ppiMsCpa.commodityThName}}
+                                            </span>
+                                            <span class="mat-cell mt-2 expandPanel">
+                                                {{element.dataMatrix.dataConfig.ppiMsSource.survey.surveyName}}
+                                            </span>
+                                            <span class="mat-cell mt-2 expandPanel">
+                                                {{element.dataMatrix.dataConfig.ppiMsSource.sourceName}}
+                                            </span>
+                                        </mat-expansion-panel-header>
+
+                                        <table class="table-source mt-3" mat-table [dataSource]="dataSummary"
+                                            *ngIf="dataSummary">
+
+                                            <ng-container matColumnDef="cpaName">
+                                                <th mat-header-cell *matHeaderCellDef> รหัสสินค้า / รายละเอียด </th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    {{element.dataMatrix.dataConfig.ppiMsCpa.commodityCode}}<br>
+                                                    {{element.dataMatrix.dataConfig.ppiMsCpa.commodityThName}}
+                                                </td>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="previousPrice">
+                                                <th mat-header-cell *matHeaderCellDef> ราคาก่อนหน้า </th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    <input type="text" class="form-control" style="text-align: center;"
+                                                        [(ngModel)]="element.previousPrice" readonly>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="currentPrice">
+                                                <th mat-header-cell *matHeaderCellDef> ราคาปัจจุบัน </th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    <input type="text" class="form-control"
+                                                        [ngModel]="element.currentPrice | number: '1.2-2'"
+                                                        [disabled]="element.toggles.currentPriceFlag || typeUser == 2">
+                                                </td>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="priceNot">
+                                                <th mat-header-cell *matHeaderCellDef> ไม่<br>สามารถ<br>หาราคา </th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    <mat-checkbox [ngModel]="priceFlag(element.priceFlag)"
+                                                        (ngModelChange)="onCheckPriceNot($event,element);">
+                                                    </mat-checkbox>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="rel">
+                                                <th mat-header-cell *matHeaderCellDef> Rel </th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    <input type="text" class="form-control" style="text-align: center;"
+                                                        [ngModel]="element.rel | number: '1.2-2'" readonly>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="remark">
+                                                <th mat-header-cell *matHeaderCellDef> ภาวะ </th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    <input type="text" class="form-control"
+                                                        style="text-align-last: left;" [(ngModel)]="element.remark"
+                                                        value="{{element.remark}}" [disabled]="typeUser == 2">
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="action">
+                                                <th mat-header-cell *matHeaderCellDef> Action </th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    <a (click)="onCancelImputation()" *ngIf="typeUser != 2">
+                                                        <mat-icon *ngIf="element.imputationFlag != null"
+                                                            style="color: #ef5555;">cancel_presentation</mat-icon>
+                                                        &nbsp;
+                                                    </a>
+                                                    <a (click)="openDialogComment(element)">
+                                                        <mat-icon *ngIf="element.requestCommentFlag == 'Y' && element.answerCommentFlag == 'N' && element.commentFlag == 'Y'"
+                                                        style="color: #e40218;" matBadge="!" matBadgeColor="warn">comment</mat-icon>
+                                                        <mat-icon *ngIf="element.requestCommentFlag == 'Y' && element.answerCommentFlag == 'Y' && element.commentFlag == 'Y'" style="color: #e40218;"  matBadge="!" matBadgeColor="warn">comment</mat-icon>
+                                                        <mat-icon *ngIf="element.requestCommentFlag == 'N' && element.answerCommentFlag == 'N' && element.commentNote && element.commentFlag == 'Y'" style="color: #00e418;" matBadgeColor="warn">comment</mat-icon>
+                                                    </a>
+                                                </td>
+                                            </ng-container>
+
+                                            <tr mat-header-row *matHeaderRowDef="displayedColumnsSummary"></tr>
+                                            <tr mat-row [ngClass]="{
+                                    'make-AnswerN':typeUser == 1 && row.requestCommentFlag == 'Y' && row.answerCommentFlag == 'N',
+                                    'make-AnswerY':typeUser == 2 && row.requestCommentFlag == 'Y' && row.answerCommentFlag == 'Y',
+                                    'make-RequestY':typeUser == 2 && row.requestCommentFlag == 'Y' && row.answerCommentFlag == 'N'
+                                }" *matRowDef="let row; columns: displayedColumnsSummary;"></tr>
+                                        </table>
+                                        <br>
+
+                                        <br>
+                                        <div class="row" *ngIf="inputKeyDaily">
+                                            <div class="keyin-daily-col-1 price-font" style="padding: 3px;"
+                                                *ngFor="let d of dataKey">
+                                                <p>วัน {{d.dayLabel}} ที่ {{d.day}}</p>
+                                                <input type="text" class="form-control" *ngIf="d.holiday"
+                                                    [disabled]="typeUser == 2 || d.holiday">
+                                                <input type="text" myNumberOnly class="form-control" *ngIf="!d.holiday"
+                                                    [(ngModel)]="inputKeyDaily['price'+d.day]"
+                                                    [disabled]="typeUser == 2 || d.holiday || disablePrice1"
+                                                    [id]="'price'+d.day" (ngModelChange)="setPrice($event)">
+                                            </div>
+                                        </div>
+                                        <div class="row mt-5">
+                                            <div class="col-6 col-sm-6">
+                                            </div>
+                                            <div class="col-6 col-sm-6">
+                                                <button (click)="clickSave();" class="mat-btn-tpso"
+                                                    style="float: right;" mat-raised-button type="button">
+                                                    <mat-icon>save</mat-icon>&nbsp;บันทึก
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </mat-expansion-panel>
+                                </ng-container>
+                            </mat-accordion>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<swal #saveDailySwal title="คุณต้องการบันทึกข้อมูล ใช่หรือไม่?" [allowOutsideClick]="false" [showCancelButton]="true"
+    text="" type="info" (confirm)="onValidateDaily();"></swal>
+<swal #sucesssaveDataSwal title="บันทึกข้อมูลสำเร็จ" [allowOutsideClick]="false" text="" type="success"
+    (confirm)="getDataDaily(parentId)"></swal>
+<swal #validateDataSwal title="" [allowOutsideClick]="false" text="" type="warning"></swal>

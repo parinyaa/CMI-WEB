@@ -1,0 +1,48 @@
+<div class="page-main">
+    <section class="content-header">
+        <div class="container ">
+        </div>
+    </section>
+    <section class="content">
+        <div class="container section-content">
+            <div class="row">
+                <label class="mt-1">ปี :</label>
+                <div class="col-2 form-group">
+                   <input class="form-control">
+                </div>
+                <div class="col-12 form-group">
+                    <table mat-table class="table-loaddata" [dataSource]="dataSource">
+
+                        <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef> รหัส </th>
+                            <td mat-cell *matCellDef="let element;"> {{element.amphurId}} </td>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="weight">
+                            <th mat-header-cell *matHeaderCellDef> น้ำหนัก </th>
+                            <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="code">
+                            <th mat-header-cell *matHeaderCellDef> Commodity Code<br>ระดับรายการ </th>
+                            <td mat-cell *matCellDef="let element"> {{element.province}} </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                </div>
+                <div class="col-12 button-row button form-group">
+                    <button class="mr-2" style="float: right;" [routerLink]="['/calculateweight']"  mat-raised-button>ยกเลิก</button>
+                    <button style="float: right;" [swal]="saveWeight" mat-raised-button color="primary">บันทึก</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<swal #saveWeight title="คุณต้องการบันทึกข้อมูล ใช่หรือไม่?" text="" type="info" [showCancelButton]="true"
+    [focusCancel]="true" (confirm)="onSaveWeight()">
+</swal>
+<swal #saveWeightSuccess title="บันทึกข้อมูลสำเร็จ" text="" type="success" [showCancelButton]="true">
+</swal>

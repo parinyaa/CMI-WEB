@@ -1,0 +1,72 @@
+<h1 mat-dialog-title>เพิ่ม พารามิเตอร์</h1>
+<form [formGroup]="addParamsInfoForm" (ngSubmit)="onSubmit()">
+    <div mat-dialog-content>
+        <div class="row">
+            <div class="col-3 text-right mt-1">
+                <p>รหัสพารามิเตอร์:</p>
+            </div>
+            <div class="col-9">
+                <input class="form-control" formControlName="paramCode"
+                    [ngClass]="{'is-invalid': submitted && f.paramCode.errors}">
+                <div *ngIf="submitted && f.paramCode.errors" class="invalid-feedback">
+                    <div *ngIf="f.paramCode.errors.required || f.paramCode.errors.whitespace" class="text-danger help-block">
+                        กรุณากรอกรหัสพารามิเตอร์
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3 text-right mt-1">
+                <p>รายละเอียดภาษาไทย:</p>
+            </div>
+            <div class="col-9">
+                <input class="form-control" formControlName="paramInfoNameTh"
+                    [ngClass]="{'is-invalid': submitted && f.paramInfoNameTh.errors}">
+                <div *ngIf="submitted && f.paramInfoNameTh.errors" class="invalid-feedback">
+                    <div *ngIf="f.paramInfoNameTh.errors.required || f.paramInfoNameTh.errors.whitespace" class="text-danger help-block">
+                        กรุณากรอกรายละเอียดภาษาไทย
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3 text-right mt-1">
+                <p>รายละเอียดภาษาอังกฤษ:</p>
+            </div>
+            <div class="col-9">
+                <input class="form-control" formControlName="paramInfoNameEn"
+                    [ngClass]="{'is-invalid': submitted && f.paramInfoNameEn.errors}">
+                <div *ngIf="submitted && f.paramInfoNameEn.errors" class="invalid-feedback">
+                    <div *ngIf="f.paramInfoNameEn.errors.required || f.paramInfoNameEn.errors.whitespace" class="text-danger help-block">
+                        กรุณากรอกรายละเอียดภาษาอังกฤษ
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3 text-right mt-1">
+                <p>วัตถุประสงค์พิเศษ</p>
+            </div>
+            <div class="col-9">
+                <input class="form-control" formControlName="specialPurpose">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3 text-right mt-1">
+                <p>วิธีเรียงลำดับ:</p>
+            </div>
+            <div class="col-9">
+                <input class="form-control" formControlName="sortingOrder">
+            </div>
+        </div>
+
+    </div>
+    <div mat-dialog-actions style="float: right;">
+        <button type="submit" mat-raised-button color="primary">บันทึก</button>
+        <button mat-raised-button [mat-dialog-close]="">ยกเลิก</button>
+    </div>
+</form>
+<swal #addParamInfoSwal title="คุณต้องการบันทึกข้อมูล <br>ใช่หรือไม่" text="" 
+    [confirmButtonText]="'ตกลง'" [cancelButtonText]="'ยกเลิก'" type="info" [showCancelButton]="true"
+    (confirm)="onSaveParamInfo()"></swal>
+<swal #succussParamInfoSwal title="บันทึกข้อมูลสำเร็จ" [confirmButtonText]="'ตกลง'"  [allowOutsideClick]="false"  (confirm)="closeDialog()" text="" type="success"></swal>

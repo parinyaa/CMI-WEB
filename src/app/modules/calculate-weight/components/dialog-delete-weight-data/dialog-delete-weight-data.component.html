@@ -1,0 +1,25 @@
+<h1 mat-dialog-title>ยืนยันการลบข้อมูลน้ำหนัก ({{weightData.description}})</h1>
+<form [formGroup]="deleteWeightDataForm" (ngSubmit)="onSubmit()">
+  <div mat-dialog-content>
+    <div class="row">
+      <div class="col-12 text-left mt-1">
+        <mat-form-field style="width: 100%;">
+          <textarea formControlName="deletedNote" matInput matAutosizeMinRows=4
+            placeholder="บันทึกการลบ (ไม่จำเป็นต้องกรอก)" matTextareaAutosize>
+                </textarea>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions style="float: right;">
+    <button type="submit" mat-button>ลบ</button>
+    <button mat-raised-button [mat-dialog-close]="">ยกเลิก</button>
+  </div>
+</form>
+
+<swal #deleteSwal title="คุณต้องการลบสาขา ใช่หรือไม่?" text="" type="warning" [showCancelButton]="true"
+  [focusCancel]="true" (confirm)="deleteWeightData()">
+</swal>
+<swal #succussSwal title="ลบข้อมูลสำเร็จ" [allowOutsideClick]="false" (confirm)="closeDialog()" text="" type="success">
+</swal>
+<swal #errorSwal title="" text="" type="error"></swal>

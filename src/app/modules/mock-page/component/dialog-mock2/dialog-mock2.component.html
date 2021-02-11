@@ -1,0 +1,68 @@
+<h1 mat-dialog-title>SOP</h1>
+<div mat-dialog-content *ngIf="type == 1">
+    <div class="row mt-2">
+        <div class="col-4 text-right">
+            <p>รหัสสินค้า (SOP): </p>
+        </div>
+        <div class="col-8">
+            <input type="text" class="form-control" placeholder="">
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-4 text-right">
+            <p>ชื่อรายการ (ภาษาไทย): </p>
+        </div>
+        <div class="col-8">
+            <input type="text" class="form-control" placeholder="">
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-4 text-right">
+            <p>ชื่อรายการ (ภาษาอังกฤษ): </p>
+        </div>
+        <div class="col-8">
+            <input type="text" class="form-control" placeholder="">
+        </div>
+    </div>
+</div>
+<div mat-dialog-content *ngIf="type == 2">
+    <div class="row mt-2">
+        <div class="col-4 text-right">
+            <p>รหัสสินค้า (CPA): </p>
+        </div>
+        <div class="col-8">
+            <!-- <input type="text" class="form-control" placeholder=""> -->
+            <select class="form-control">
+                <option></option>
+            </select>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-4 text-right">
+            <p>ชื่อรายการ (ภาษาไทย): </p>
+        </div>
+        <div class="col-8">
+            <input type="text" class="form-control" placeholder="" readonly>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-4 text-right">
+            <p>ชื่อรายการ (English): </p>
+        </div>
+        <div class="col-8">
+            <input type="text" class="form-control" placeholder="" readonly>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-4 text-right">
+            <p>รหัสสินค้า (SOP): </p>
+        </div>
+        <div class="col-8">
+            <input type="text" class="form-control" placeholder="" >
+        </div>
+    </div>
+</div>
+<div mat-dialog-actions style="margin-top: 2%; float:right;">
+    <button type="submit" mat-raised-button color="primary">บันทึก</button>
+    <button mat-raised-button [mat-dialog-close]="data.animal" cdkFocusInitial>ยกเลิก</button>
+</div>

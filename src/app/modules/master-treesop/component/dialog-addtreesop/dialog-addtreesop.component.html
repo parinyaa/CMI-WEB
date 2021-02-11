@@ -1,0 +1,134 @@
+<h1 mat-dialog-title>SOP</h1>
+<form [formGroup]="addSopForm" (ngSubmit)="onSubmit()" *ngIf="typeSop">
+    <div mat-dialog-content>
+        <div class="row mt-2">
+            <div class="col-4 text-right">
+                <p>รหัสสินค้า (SOP): </p>
+            </div>
+            <div class="col-8">
+                <input type="text" class="form-control" placeholder="" formControlName="sopCode" minlength="16" maxlength="16"
+                pattern="[0-9]*" [ngClass]="{'is-invalid': submitted && f.sopCode.errors}"> 
+                <div *ngIf="submitted && f.sopCode.errors" class="invalid-feedback">
+                    <div *ngIf="f.sopCode.errors.required" class="text-danger help-block">
+                        กรุณากรอกรหัส
+                    </div>
+                    <div *ngIf="f.sopCode.errors.minlength" class="text-danger help-block">
+                        กรุณากรอกรหัส 16 หลัก
+                    </div>
+                    <div *ngIf="f.sopCode.errors.pattern" class="text-danger help-block">
+                        กรุณากรอกรหัสเป็นตัวเลข
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-4 text-right">
+                <p>ชื่อรายการ (ภาษาไทย): </p>
+            </div>
+            <div class="col-8">
+                <input type="text" class="form-control" placeholder="" formControlName="sopThName" 
+                [ngClass]="{'is-invalid': submitted && f.sopThName.errors}">
+                <div *ngIf="submitted && f.sopThName.errors" class="invalid-feedback">
+                    <div *ngIf="f.sopThName.errors.required" class="text-danger help-block">
+                        กรุณากรอกรหัส
+                    </div>
+                    <div *ngIf="f.sopThName.errors.whitespace" class="text-danger help-block">
+                        กรุณากรอกรหัส
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-4 text-right">
+                <p>ชื่อรายการ (ภาษาอังกฤษ): </p>
+            </div>
+            <div class="col-8">
+                <input type="text" class="form-control" placeholder="" formControlName="sopEnName" 
+                [ngClass]="{'is-invalid': submitted && f.sopEnName.errors}">
+                <div *ngIf="submitted && f.sopEnName.errors" class="invalid-feedback">
+                    <div *ngIf="f.sopEnName.errors.required" class="text-danger help-block">
+                        กรุณากรอกรหัส
+                    </div>
+                    <div *ngIf="f.sopEnName.errors.whitespace" class="text-danger help-block">
+                        กรุณากรอกรหัส
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div mat-dialog-actions style="margin-top: 2%; float:right;">
+        <button type="submit" mat-raised-button color="primary">บันทึก</button>
+        <button mat-raised-button [mat-dialog-close]="data.animal" cdkFocusInitial>ยกเลิก</button>
+    </div>
+</form>
+<form [formGroup]="addSopForm" (ngSubmit)="onSubmit()" *ngIf="!typeSop">
+    <div mat-dialog-content>
+        <div class="row mt-2">
+            <div class="col-4 text-right">
+                <p>รหัสสินค้า (CPA): </p>
+            </div>
+            <div class="col-8">
+                <input type="text" class="form-control" formControlName="cpaCode" matInput [formControl]="myControl"
+                    [matAutocomplete]="auto" [ngClass]="{'is-invalid': submitted && f.cpaCode.errors}" minlength="16" maxlength="16">
+                    <div *ngIf="submitted && f.cpaCode.errors" class="invalid-feedback">
+                        <div *ngIf="f.cpaCode.errors.required" class="text-danger help-block">
+                            กรุณากรอกรหัส
+                        </div>
+                        <div *ngIf="f.cpaCode.errors.whitespace" class="text-danger help-block">
+                            กรุณากรอกรหัส
+                        </div>
+                    </div>
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="optionSelected($event)">
+                    <mat-option *ngFor="let option of options" [value]="option">
+                        {{option.commodityCode}}  -  {{option.commodityThName}}
+                    </mat-option>
+                </mat-autocomplete>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-4 text-right">
+                <p>ชื่อรายการ (ภาษาไทย): </p>
+            </div>
+            <div class="col-8">
+                <input type="text" class="form-control" placeholder="" formControlName="cpaThName" readonly>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-4 text-right">
+                <p>ชื่อรายการ (ภาษาอังกฤษ): </p>
+            </div>
+            <div class="col-8">
+                <input type="text" class="form-control" placeholder="" formControlName="cpaEnName" readonly>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-4 text-right">
+                <p>รหัสสินค้า (SOP): </p>
+            </div>
+            <div class="col-8">
+                <input type="text" class="form-control" placeholder="" formControlName="sopCodeMap"  minlength="16" maxlength="16"
+                pattern="[0-9]*" [ngClass]="{'is-invalid': submitted && f.sopCodeMap.errors}" >
+                <div *ngIf="submitted && f.sopCodeMap.errors" class="invalid-feedback">
+                    <div *ngIf="f.sopCodeMap.errors.required" class="text-danger help-block">
+                        กรุณากรอกรหัส SOP
+                    </div>
+                    <div *ngIf="f.sopCodeMap.errors.minlength" class="text-danger help-block">
+                        กรุณากรอกรหัส 16 หลัก
+                    </div>
+                    <div *ngIf="f.sopCodeMap.errors.pattern" class="text-danger help-block">
+                        กรุณากรอกรหัสเป็นตัวเลข
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div mat-dialog-actions style="margin-top: 2%; float:right;">
+        <button type="submit" mat-raised-button color="primary">บันทึก</button>
+        <button mat-raised-button [mat-dialog-close]="data.animal" cdkFocusInitial>ยกเลิก</button>
+    </div>
+</form>
+<swal #saveSopTreeSwal title="คุณต้องการบันทึกข้อมูล ใช่หรือไม่?" [allowOutsideClick]="false" [showCancelButton]="true"
+    text="" type="info" (confirm)="onCreateSopTree()"></swal>
+
+<swal #sucessSopTreeSwal title="บันทึกข้อมูลสำเร็จ" [allowOutsideClick]="false" text="" type="success"
+    (confirm)="closeDialog()"></swal>

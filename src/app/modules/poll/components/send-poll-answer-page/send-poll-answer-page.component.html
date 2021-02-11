@@ -1,0 +1,75 @@
+<div class="main">
+  <!-- <h1 style="margin-top:14px;">TPSO</h1> -->
+  <mat-card style="margin-top:12px;">
+    <h4>แบบสอบถาม{{versionDesc}} ({{versionCode}})</h4>
+  </mat-card>
+  <mat-card>
+    <mat-card-content>
+      <div *ngFor="let question of dataQuestion; let i=index" class="row"
+        style="margin-bottom: 12px; text-align-last: left; text-align: -webkit-left;">
+        <div class="col-12">
+          <a style="font-size: 20px;">{{i+1}}. {{question.description}}</a>
+          <ng-container *ngIf="question.questionType.paramCode == 'ONE_CHOICE'">
+            <br />
+            <mat-radio-group color="primary">
+              <mat-radio-button class="example-radio-button" *ngFor="let answer of question.listAnswer"
+                [value]="answer.answerId" (change)="onRadioChange($event,question,answer)">
+                <ng-container *ngIf="answer.otherFlag == 'Y'; else elseTemplateRadio">
+                  <input class="form-control" placeholder="{{answer.description}}" id="input{{answer.answerId}}">
+                </ng-container>
+                <ng-template #elseTemplateRadio>
+                  {{answer.description}}
+                </ng-template>
+              </mat-radio-button>
+            </mat-radio-group>
+          </ng-container>
+          <ng-container *ngIf="question.questionType.paramCode == 'MULTI_CHOICE'">
+            <section>
+              <mat-checkbox color="primary" class="example-margin" *ngFor="let answer of question.listAnswer" [value]="answer.answerId"
+                (change)="onCheckChange($event,answer)">
+                <ng-container *ngIf="answer.otherFlag == 'Y'; else elseTemplateCheckbox">
+                  <input style="margin-left: 12px;" class="form-control" placeholder="{{answer.description}}"
+                    id="input{{answer.answerId}}">
+                </ng-container>
+                <ng-template #elseTemplateCheckbox>
+                  {{answer.description}}
+                </ng-template>
+              </mat-checkbox>
+            </section>
+          </ng-container>
+          <ng-container *ngIf="question.questionType.paramCode == 'TEXT_INPUT'">
+            <br />
+            <div *ngFor="let answer of question.listAnswer">
+              <mat-form-field class="example-margin">
+                <textarea class="example-full-width" matInput matAutosizeMinRows=4 placeholder="ความคิดเห็น"
+                  matTextareaAutosize id="input{{answer.answerId}}"
+                  (blur)="createTextAreaDataRequire(answer.answerId,question.questionId)"></textarea>
+              </mat-form-field>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="question.questionType.paramCode == 'OPTIONAL_TEXT_INPUT'">
+            <br />
+            <div *ngFor="let answer of question.listAnswer">
+              <mat-form-field class="example-margin">
+                <textarea class="example-full-width" matInput matAutosizeMinRows=4
+                  placeholder="ความคิดเห็น (ไม่จำเป็นต้องกรอก)" matTextareaAutosize id="input{{answer.answerId}}"
+                  (blur)="createTextAreaData(answer.answerId)"></textarea>
+              </mat-form-field>
+            </div>
+          </ng-container>
+        </div>
+      </div> 
+    </mat-card-content>
+    <mat-card-actions style="text-align-last: right; text-align: -webkit-right">
+      <button class="mat-btn-tpso" mat-raised-button type="submit" (click)="onSubmit()">
+        <mat-icon>send</mat-icon>&nbsp;บันทึก
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+
+<swal #addSwal title="คุณต้องการบันทึกข้อมูล <br>ใช่หรือไม่" text="" type="info" [showCancelButton]="true"
+  (confirm)="savePollData()"></swal>
+<swal #invalidSwal title="" text="" type="warning"></swal>
+<swal #succussSwal title="บันทึกข้อมูลสำเร็จ" [allowOutsideClick]="false" text="" type="success"></swal>
+<swal #errorSwal title="" text="" type="error"></swal>

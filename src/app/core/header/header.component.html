@@ -1,0 +1,51 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <a [routerLink]="['/']" routerLinkActive="router-link-active" class="navbar-brand">
+      <img class="brand-logo" src="assets/img/CPIP-Logo-Final-04.png">
+    </a>
+
+    <ng-container *ngFor="let item of navMenu">
+      <ng-container *ngIf="item.objects.length > 0; else elseTemplate1">
+        <a mat-button [matMenuTriggerFor]="menu">
+          {{item.objectName}}
+          <mat-menu #menu="matMenu">
+            <ng-container *ngFor="let item2 of item.objects">
+              <ng-container *ngIf="item2.objects.length > 0; else elseTemplate2">
+                <a class="menu" [matMenuTriggerFor]="tree" mat-menu-item>
+                  {{item2.objectName}}
+                  <mat-menu #tree="matMenu">
+                    <a class="menu" mat-menu-item *ngFor="let items of item2.objects">
+                      <a class="menu" mat-menu-item (click)="route(items.objectUrl);" >{{items.objectName}}</a>
+                    </a>
+                  </mat-menu>
+                </a>
+              </ng-container>
+              <ng-template #elseTemplate2>
+                <a class="menu" mat-menu-item (click)="route(item2.objectUrl);" >{{item2.objectName}}</a>
+              </ng-template>
+            </ng-container>
+          </mat-menu>
+        </a>
+      </ng-container>
+      <ng-template #elseTemplate1>
+        <a mat-button (click)="route(item.objectUrl);" >
+          {{item.objectName}}
+        </a>
+      </ng-template>
+    </ng-container>
+
+
+    <span class="example-spacer"></span>
+    <a class="example-icon" mat-button [matMenuTriggerFor]="menu3">
+      <span class="aligned-with-icon">{{userCodeCurrent}}</span>
+      <mat-icon>account_circle</mat-icon>
+    </a>
+    <mat-menu #menu3="matMenu">
+      <a (click)="signOut()" class="menu" mat-menu-item>ออกจากระบบ</a>
+    </mat-menu>
+
+  </mat-toolbar-row>
+
+</mat-toolbar>
+<swal #saveDataSwal [title]="alertSaveMessage" [allowOutsideClick]="false"  confirmButtonText="ตกลง" type="warning"></swal>
+<!--<swal #saveDataSwal title="คุณยังไม่ได้บันทึกข้อมูล" [allowOutsideClick]="false" ></swal>-->

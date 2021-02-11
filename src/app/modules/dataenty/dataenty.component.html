@@ -1,0 +1,48 @@
+<div class="page-main">
+  <section class="content-header">
+    <div class="section-header">
+      <div class="row">
+        <div class="col-6 col-sm-6">
+          <label style="margin-top: 1%; font-size: 18px">4.2 บันทึกราคาสินค้า</label>
+        </div>
+        <div class="col-6 col-sm-6 text-right">
+          <!-- <button
+            class="mat-btn-tpso"
+            mat-raised-button
+            type="button"
+            *ngIf="isCreate && isCreateWorkflow"
+            (click)="openCreateFlowDialog()"
+          >
+            <mat-icon>add_circle</mat-icon>&nbsp;สร้างคำขอ
+          </button> -->
+          <button *ngIf="
+              frequency == 'MONTHLY' ||
+              (frequency == 'WEEKLY' && userType == 'PROVINCE_USER')
+            " (click)="onExport()" class="mat-btn-tpso ml-2" mat-raised-button type="button">
+            <mat-icon>cloud_download</mat-icon>&nbsp; export
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="content">
+    <div class="section-content" *ngIf="!divNoDataEntry">
+      <mat-tab-group (selectedTabChange)="selectedTabChange($event)" [(selectedIndex)]="tabIndex" #tabFrequency>
+        <ng-container *ngFor="let item of frequencyList">
+          <mat-tab *ngIf="item.use" label="{{ item.paramLocalMessage }}">
+          </mat-tab>
+        </ng-container>
+      </mat-tab-group>
+    </div>
+    <app-keyin-page [ngStyle]="{
+        display: showRoute && frequency !== 'DAILY' ? 'block' : 'none'
+      }" (changeTabEvent)="changeTabEvent($event)" (onSearch)="onSearch($event)"></app-keyin-page>
+    <div *ngIf="divNoDataEntry" style="text-align: center">
+      <p>ไม่พบข้อมูลราคาตั้งต้นจากระบบ CPI. กรุณาติดต่อเจ้าหน้าส่วนกลาง</p>
+    </div>
+  </section>
+</div>
+<swal #saveDataSwal [title]="alertSaveMessage" [allowOutsideClick]="false" confirmButtonText="ตกลง"
+  cancelfirmButtonText="ยกเลิก" [showCancelButton]="true" type="warning">
+</swal>
+<swal #dataEntyNoData title="" [allowOutsideClick]="false" text="" type="error"></swal>

@@ -1,0 +1,107 @@
+<div class="page-main">
+    <section class="content-header">
+        <div class="section-header">
+            <div class="row">
+                <div class="col-6 col-sm-6">
+                    <label style="margin-top: 1%; font-size: 18px;">2.5 ข้อมูลความสัมพันธ์ระหว่างดัชนี
+                        และภูมิภาค/จังหวัด</label>
+                </div>
+                <!-- <div class="col-6 col-sm-6 text-right">
+                    <button class="mat-btn-tpso" mat-raised-button type="button"
+                        (click)="openDialogAddCpipMsIndexMatrix(null)">
+                        <mat-icon>add_circle</mat-icon>&nbsp;เพิ่ม
+                    </button>
+                </div> -->
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="section-content">
+            <div class="div-search">
+                <mat-card style="margin-top: 1%;">
+                    <div class="row">
+                        <div class="col-3">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">กลุ่มดัชนี :</span>
+                                </div>
+                                <mat-select class="form-control" [(ngModel)]="indexGroup"
+                                    (ngModelChange)="selectIndexGroup()" style="text-align-last: left;">
+                                    <mat-option *ngFor="let item of listIndexGroup" [value]="item.paramId">
+                                        {{item.paramLocalMessage}}
+                                    </mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+                        <div class="col-1 text-center">
+                            <button mat-mini-fab color="primary" *ngIf="isShowSearch"
+                                (click)="searchCpipMsIndexMatrixByIndexGroupId()">
+                                <mat-icon>search</mat-icon>
+                            </button>
+                        </div>
+                        <div class="col-1 text-center">
+                            <button class="mat-btn-tpso" mat-raised-button type="button" *ngIf="isShowAdd" style="text-align-last: left;"
+                                (click)="openDialogAddCpipMsIndexMatrix(indexGroup)">
+                                <mat-icon>add_circle</mat-icon>&nbsp;เพิ่ม
+                            </button>
+                        </div>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+    </section>
+    <section class="content " style="max-width: 100%;" *ngIf="isShowTable">
+        <div class="section-content">
+            <div class="row mt-2">
+                <div class="col-12">
+                    <mat-card style="text-align: -webkit-center;">
+                        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 table1" style="width: 75%;">
+
+                            <ng-container matColumnDef="indexGroup">
+                                <th mat-header-cell *matHeaderCellDef style="width: 20%;"> กลุ่มดัชนี </th>
+                                <td mat-cell *matCellDef="let row" >
+                                    {{row.indexGroup.paramCode}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="region">
+                                <th mat-header-cell *matHeaderCellDef style="width: 60%;"> ภูมิภาค </th>
+                                <td mat-cell *matCellDef="let row" style="text-align-last: left; padding-left: 80px;"> {{row.region.regionName}} ( {{row.region.regionNameEn}} )
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="province">
+                                <th mat-header-cell *matHeaderCellDef style="width: 60%;"> จังหวัด </th>
+                                <td mat-cell *matCellDef="let row" style="text-align-last: left; padding-left: 80px;">
+                                    {{row.province.provinceName}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="edit">
+                                <th mat-header-cell *matHeaderCellDef style="width: 10%;"> แก้ไข </th>
+                                <td mat-cell *matCellDef="let row">
+                                    <a (click)="openDialogAddCpipMsIndexMatrix(row)" *ngIf="isShowEdit" ><mat-icon style="color: cornflowerblue;">edit</mat-icon></a>
+                                    <a (click)="null" *ngIf="!isShowEdit" ><mat-icon style="color: darkgrey;">edit</mat-icon></a>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="delete">
+                                <th mat-header-cell *matHeaderCellDef style="width: 10%;"> ลบข้อมูล </th>
+                                <td mat-cell *matCellDef="let row">
+                                    <a (click)="onSubmit(row.indexMatrixId)"><mat-icon style="color: red;">delete</mat-icon></a>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="element-header"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="element-row"></tr>
+                        </table>
+                        <mat-paginator  [length]="length" [pageSize]="pageSize" [pageIndex]="pageIndex"
+                            [pageSizeOptions]="pageSizeOptions" (page)="pageEvent = pageChange($event)" style="width: 75%;"></mat-paginator>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<swal #deleteIndexMatrixSwal title="คุณต้องการลบข้อมูล <br>ใช่หรือไม่" text="" type="info" [showCancelButton]="true"
+    (confirm)="onDelete()"></swal>
+<swal #succussDeleteIndexMatrixSwal title="ลบข้อมูลสำเร็จ" [allowOutsideClick]="false" (confirm)="closeDialog()" text=""
+    type="success"></swal>

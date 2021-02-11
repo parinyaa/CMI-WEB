@@ -1,0 +1,32 @@
+input {
+  text-align-last: left;
+}
+table {
+  width: 100%;
+}
+th[mat-header-cell] {
+  text-align: center;
+  background-color: #269ee4;
+  font-size: 20px;
+  color: white;
+}
+.data-empty {
+  padding: 3%;
+  text-align: center;
+}
+.mat-column-action {
+  text-align: center;
+}
+.mat-icon {
+  cursor: pointer;
+}
+
+.deleted-icon {
+  color: red;
+}
+.edit-icon {
+  color: #269ee4;
+}
+.mat-column-action {
+  text-align: right;
+}

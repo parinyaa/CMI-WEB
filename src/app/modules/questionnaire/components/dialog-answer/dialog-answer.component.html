@@ -1,0 +1,75 @@
+<div mat-dialog-title>
+  <span>
+    <a style="font-size: 20px;">ตั้งค่าคำตอบ</a>
+    <button class="mat-btn-tpso" mat-icon-button type="button" style="float: right;" (click)="addAnswer()">
+      <mat-icon>add_circle</mat-icon>
+    </button>
+  </span>
+</div>
+<ng-container *ngIf="!isLoading; else elseTemplate">
+  <form [formGroup]="addAnswerForm" (ngSubmit)="onSubmit()">
+    <div mat-dialog-content>
+      <div formArrayName="listAnswer" *ngFor="let item of formData.controls; let i = index;let last = last;">
+        <div [formGroupName]=" i">
+          <!-- <div class="text-right mt-1">
+            <input formControlName="answerNo" placeholder="เลขที่คำตอบ" style="margin-right:12px;">
+            <input formControlName="description" placeholder="รายละเอียดคำตอบ" style="width:50%;">
+            <button mat-icon-button color="warn" (click)="removeGroup(i)" style="margin-left:4px; margin-right: 4px; ">
+              <mat-icon>delete_forever</mat-icon>
+            </button>
+            <mat-slide-toggle color="primary" formControlName="otherFlag">คำตอบประเภทอื่นๆ
+            </mat-slide-toggle>
+          </div> -->
+          <div class="row mt-2">
+            <div class="col-2">
+              <input class="form-control" formControlName="answerNo" type="number" min="1" max="99" size="1" maxlength="2"
+                placeholder="เลขที่คำตอบ"
+                [ngClass]="{'is-invalid': submitted && formData.controls[i].get('answerNo').errors}"
+                pattern="[1-9]?[0-9]" (keypress)="inputUtils.moreThanZero($event)">
+              <div *ngIf="submitted && formData.controls[i].get('answerNo').errors" class="invalid-feedback">
+                <div *ngIf="formData.controls[i].get('answerNo').errors.required" class="text-danger help-block">
+                  กรุณากรอกเลขที่คำตอบ
+                </div>
+                <div *ngIf="formData.controls[i].get('answerNo').errors.pattern" class="text-danger help-block">
+                  กรุณากรอกเลข 1-99
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <input class="form-control" formControlName="description" placeholder="รายละเอียดคำตอบ"
+                [ngClass]="{'is-invalid': submitted && formData.controls[i].get('description').errors}">
+              <div *ngIf="submitted && formData.controls[i].get('description').errors" class="invalid-feedback">
+                <div *ngIf="formData.controls[i].get('description').errors.required" class="text-danger help-block">
+                  กรุณากรอกรายละเอียดคำตอบ
+                </div>
+              </div>
+            </div>
+            <button mat-icon-button color="warn" (click)="removeGroup(i)" style="margin-left:4px; margin-right: 4px; ">
+              <mat-icon>delete_forever</mat-icon>
+            </button>
+            <div class="col-3 text-right" *ngIf="last">
+              <mat-slide-toggle color="primary" formControlName="otherFlag"
+                (change)="changeFlag($event,formData.controls[i])">คำตอบประเภทอื่นๆ
+              </mat-slide-toggle>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div mat-dialog-actions style="float: right;">
+      <button type="submit" mat-button *ngIf="!isActive">บันทึก</button>
+      <button mat-raised-button [mat-dialog-close]="">ยกเลิก</button>
+    </div>
+  </form>
+</ng-container>
+<ng-template #elseTemplate>
+  <div mat-dialog-content class="main">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>
+<swal #addSwal title="คุณต้องการบันทึกข้อมูล <br>ใช่หรือไม่" text="" type="info" [showCancelButton]="true"
+  (confirm)="saveAnswer()"></swal>
+<swal #succussSwal title="บันทึกข้อมูลสำเร็จ" [allowOutsideClick]="false" (confirm)="closeDialog()" text=""
+  type="success"></swal>
+<swal #errorSwal title="" text="" type="error"></swal>
+<swal #invalidSwal title="กรอกข้อมูลให้ครบถ้วน" text="" type="warning"></swal>

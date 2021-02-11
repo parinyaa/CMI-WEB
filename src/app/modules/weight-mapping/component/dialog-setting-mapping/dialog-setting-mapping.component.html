@@ -1,0 +1,67 @@
+<h1 mat-dialog-title>{{data ? 'แก้ไข' :'เพิ่ม'}}</h1>
+<div mat-dialog-content>
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+        <div class="row">
+            <div class="col-2 text-right mt-1">
+                <p>รหัส :</p>
+            </div>
+            <div class="col-4">
+                <input #input class="form-control" formControlName="weightCode"
+                    (input)="forceUppercaseConditionally('weightCode', $event);"
+                    [ngClass]="{'is-invalid': submitted && formControl.weightCode.errors}">
+                <div *ngIf="submitted && formControl.weightCode.errors" class="invalid-feedback">
+                    <div *ngIf="formControl.weightCode.errors.required" class="text-danger help-block">
+                        กรุณากรอกรหัส
+                    </div>
+                </div>
+            </div>
+            <div class="col-2 text-right mt-1">
+                <p>รายการ :</p>
+            </div>
+            <div class="col-4">
+                <input class="form-control" formControlName="weightName"
+                    [ngClass]="{'is-invalid': submitted && formControl.weightName.errors}">
+                <div *ngIf="submitted && formControl.weightName.errors" class="invalid-feedback">
+                    <div *ngIf="formControl.weightName.errors.required" class="text-danger help-block">
+                        กรุณากรอกรายการ
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-2 text-right mt-1">
+                <p>Commodity Code :</p>
+            </div>
+            <div class="col-4">
+                <input type="text" class="form-control" [matAutocomplete]="auto" formControlName="commodityCode"
+                    color="primary" [ngClass]="{'is-invalid': submitted && formControl.commodityCode.errors}">
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
+                    (optionSelected)="selectCPA($event)">
+                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                        {{option.commodityCode}}
+                    </mat-option>
+                </mat-autocomplete>
+                <div *ngIf="submitted && formControl.commodityCode.errors" class="invalid-feedback">
+                    <div *ngIf="formControl.commodityCode.errors.required" class="text-danger help-block">
+                        กรุณากรอกCommodity Code
+                    </div>
+                </div>
+            </div>
+            <div class="col-2 text-right mt-1">
+                <p>Commodity Name :</p>
+            </div>
+            <div class="col-4">
+                <input formControlName="commodityName" disabled class="form-control">
+            </div>
+        </div>
+    </form>
+</div>
+<div class="mt-4" mat-dialog-actions style="float: right;">
+    <button class="mat-btn-tpso" mat-button (click)="onSubmit()">บันทึก</button>
+    <button mat-button [mat-dialog-close]="" cdkFocusInitial>ยกเลิก</button>
+</div>
+<swal #addSwal title="คุณต้องการบันทึกข้อมูล <br>ใช่หรือไม่" text="" type="info" [showCancelButton]="true"
+    (confirm)="onUpdate()"></swal>
+<swal #succussSwal title="บันทึกข้อมูลสำเร็จ" [allowOutsideClick]="false" (confirm)="closeDialog()" text=""
+    type="success"></swal>
+<swal #errorAmphurSwal title="" text="" type="error"></swal>

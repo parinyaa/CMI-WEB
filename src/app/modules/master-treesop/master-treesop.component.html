@@ -1,0 +1,25 @@
+<div class="page-main">
+    <section class="content-header">
+        <div class="section-header">
+            <div class="row">
+                <div class="col-6 col-sm-6">
+                    <h3 class="textHeader">ผังข้อมูลรหัสดัชนีผู้ผลิต
+                        <small>(SOP)</small></h3>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="section-content page-tree">
+            <div class="row">
+                <div class="col-12 col-sm-12">
+                    <app-tree-node [nodes]="nodes" (clickViewChildNode)="viewChildNode($event)" 
+                    (clickHideChildNode)="hideChildNode($event)" (addChildNode)="addNode($event)"
+                     (deletedChildNode)="deleteNode($event)" (editChildNode)="editNode($event)"></app-tree-node>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<swal #succussDeleteSwal title="ลบข้อมูลสำเร็จ" (confirm)="refreshNode()"  [allowOutsideClick]="false" text="" type="success"></swal>
+<swal #errorSwal title="" text="" type="error"></swal>

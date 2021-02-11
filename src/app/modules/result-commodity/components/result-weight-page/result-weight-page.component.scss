@@ -1,0 +1,130 @@
+//displayedColumns: string[] = ['position', 'result', 'noOfData',
+// 'minCurrentPrice', 'maxCurrentPrice', 'cvCurrentPrice', 'avgArCurrentPrice',
+// 'avgArPreviousAdjustPrice', 'avgArRelative', 'avgGmCurrentPrice', 'avgGmPreviousAdjustPrice',
+//'avgGmRelative', 'weightValue', 'indexValue'];
+.example-container {
+  height: 550px;
+  width: 100%;
+  overflow: auto;
+}
+
+table {
+  width: 150%;
+}
+
+th[mat-header-cell] {
+  // text-align: center; 269ee4 45b5f5d6
+  background-color: #269ee4;
+  // font-size:20px;
+  color: white;
+}
+
+.mat-table-sticky:first-child {
+  border-right: 1px solid #e0e0e0;
+}
+
+td,
+th {
+  border-right: 1px solid #e0e0e0;
+}
+
+th.mat-header-cell {
+  text-align: center;
+}
+
+td.mat-column-result {
+  padding-left: 8px;
+  width: 25% !important;
+}
+
+.mat-column-avgGmCurrentPrice {
+  width: 6% !important;
+  text-align: right;
+}
+.mat-column-avgGmRelative {
+  width: 5% !important;
+  text-align: right;
+}
+
+.mat-column-baseWeightValue {
+  width: 5% !important;
+  text-align: right;
+}
+
+.mat-column-prevWeightValue {
+  width: 5% !important;
+  text-align: right;
+}
+
+.mat-column-prevWeightProportion {
+  width: 5% !important;
+  text-align: right;
+}
+
+.mat-column-curWeightValue {
+  width: 5% !important;
+  text-align: right;
+}
+
+.mat-column-curWeightProportion {
+  width: 5% !important;
+  text-align: right;
+}
+
+.mat-column-prevIndexValue {
+  width: 5% !important;
+  text-align: right;
+}
+
+.mat-column-curIndexValue {
+  width: 5% !important;
+  text-align: right;
+}
+
+.mat-column-changeMom {
+  width: 5% !important;
+  text-align: right;
+}
+
+.mat-column-changeYoy {
+  width: 5% !important;
+  text-align: right;
+}
+
+.mat-column-changeAoa {
+  width: 5% !important;
+  text-align: right;
+}
+
+.mat-column-cMom {
+  width: 5% !important;
+  text-align: right;
+}
+
+.mat-column-cYoy {
+  width: 5% !important;
+  text-align: right;
+}
+
+.mat-column-cAoa {
+  width: 5% !important;
+  text-align: right;
+}
+
+.taglink {
+  text-decoration: underline !important;
+  color: blue !important;
+}
+
+.show-div {
+  // display: block;
+}
+
+.hidden-div {
+  display: none;
+}
+
+::ng-deep .custom-dialog-container .mat-dialog-container {
+  padding-top: unset;
+  padding-bottom: unset;
+  }

@@ -1,0 +1,38 @@
+.main {
+  text-align: -webkit-center;
+}
+
+mat-card {
+  width: 70%;
+  margin-bottom: 18px;
+  border: 3px solid #269ee4;
+}
+
+
+.example-radio-button {
+  margin: 5px 5px 5px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.example-section {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  height: 60px;
+}
+
+.example-margin {
+  margin: 5px 5px 5px 20px;
+  display: flex;
+}
+
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.example-full-width {
+  width: 100%;
+}

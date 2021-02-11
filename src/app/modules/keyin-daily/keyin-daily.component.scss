@@ -1,0 +1,145 @@
+table {
+    width: 100%;
+}
+.table-source  tr {
+  border: 1px solid rgba(0,0,0,.12);
+}
+.page-main{
+  margin-bottom: 5%;
+}
+.mat-column-day {
+  width: 50%;
+  text-align: center;
+}
+.mat-column-dailyName{
+  width: 50%;
+  text-align: center;
+}
+.div-content{
+  margin-left: 4%;
+  margin-right: 4%;
+}
+.mat-column-cpaName{
+  width: 20%;
+  text-align: center;
+}
+.mat-column-previousPrice{
+  width: 10%;
+  text-align: center;
+}
+.mat-column-currentPrice{
+  width: 10%;
+  text-align: center;
+  padding: 5px;
+}
+.mat-column-priceNot{
+  width: 5%;
+  text-align: center;
+  padding: 5px;
+}
+// .mat-column-link{
+//   width: 3%;
+//   text-align: center;
+//   padding: 3px;
+// }
+// .mat-column-previousAdjustedPrice{
+//   width: 5%;
+//   text-align: center;
+//   padding: 3px;
+// }
+.mat-column-rel{
+  width: 10%;
+  text-align: center;
+  padding: 5px;
+}
+.mat-column-remark{
+  width: 20%;
+}
+.mat-column-action{
+  width: 5%;
+  text-align: center;
+}
+
+.make-AnswerN{
+  background-color: #f7b2b2;
+}
+.make-AnswerY{
+  background-color: gold;
+}
+
+.make-RequestY{
+  background-color: #f7b2b2;
+}
+
+.price-font {
+  font-family: Roboto,"Helvetica Neue",sans-serif;
+}
+
+.keyin-daily-col-1 {
+  flex: 0 0 14.2857142857%;
+  max-width: 14.2857142857%;
+}
+
+//new table
+.mat-accordion .mat-header-row {
+  padding-left: 1.5rem;
+  padding-right: 2rem;
+  border-bottom: none;
+}
+
+.mat-expansion-panel-header.mat-row {
+  border-bottom: none;
+}
+
+$mat-header-row-height: 60px;
+$mat-row-height: 78px;
+$mat-row-horizontal-padding: 24px;
+
+.multi-mat-table {
+  display: block;
+}
+
+.mat-header-row {
+  min-height: $mat-header-row-height;
+}
+
+.mat-row {
+  min-height: $mat-row-height;
+}
+
+.mat-row, .mat-header-row {
+  display: flex;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  align-items: center;
+  padding: 0 $mat-row-horizontal-padding;
+  box-sizing: border-box;
+  text-align: center;
+  &::after {
+    display: inline-block;
+    min-height: inherit;
+    content: '';
+  }
+}
+
+.mat-cell, .mat-header-cell {
+  flex: auto;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+.mat-cel{
+  margin-top: 5%;
+}
+
+::ng-deep .mat-sort-header-container {
+    display:flex;
+    justify-content:center;
+}
+td.mat-cell, td.mat-footer-cell, th.mat-header-cell {
+  border-bottom-width: 0px;
+  border-bottom-style: unset;
+}
+
+.mat-expansion-panel-header{
+  height: $mat-row-height;
+}

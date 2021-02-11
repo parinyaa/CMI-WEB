@@ -1,0 +1,221 @@
+<h1 mat-dialog-title>ผู้ให้ข้อมูล</h1>
+<form [formGroup]="addSurveyForm" (ngSubmit)="onSubmit()">
+    <div mat-dialog-content>
+        <fieldset class="border p-3">
+            <legend class="w-auto">ข้อมูลพื้นฐาน</legend>
+            <div class="row">
+                <div class="col-2 text-right mt-1">
+                    <p>ชื่อผู้ให้ข้อมูล :</p>
+                </div>
+                <div class="col-4">
+                    <input type="text" class="form-control" placeholder="" formControlName="surveyName"
+                        [ngClass]="{'is-invalid': submitted && f.surveyName.errors}">
+                    <div *ngIf="submitted && f.surveyName.errors" class="invalid-feedback">
+                        <div *ngIf="f.surveyName.errors.required" class="text-danger help-block">
+                            กรุณากรอกชื่อผู้ให้ข้อมูล
+                        </div>
+                        <div *ngIf="f.surveyName.errors.whitespace" class="text-danger help-block">
+                            กรุณากรอกชื่อผู้ให้ข้อมูล
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3 text-right mt-1">
+                    <p>เลขประจำตัวผู้เสียภาษี :</p>
+                </div>
+                <div class="col-3">
+                    <input type="text" class="form-control" placeholder="" formControlName="surveyTaxNo" maxlength="20"
+                        pattern="[0-9]*" [ngClass]="{'is-invalid': submitted && f.surveyTaxNo.errors}">
+                    <div *ngIf="submitted && f.surveyTaxNo.errors" class="invalid-feedback">
+                        <div *ngIf="f.surveyTaxNo.errors.required" class="text-danger help-block">
+                            กรุณากรอกหมายเลขประจำตัวผู้เสียภาษี
+                        </div>
+                        <div *ngIf="f.surveyTaxNo.errors.whitespace" class="text-danger help-block">
+                            กรุณากรอกหมายเลขประจำตัวผู้เสียภาษี
+                        </div>
+                        <div *ngIf="f.surveyTaxNo.errors.pattern" class="text-danger help-block">
+                            กรุณากรอกเป็นตัวเลข
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2 text-right mt-1">
+                    <p>รหัสไปรษณีย์ :</p>
+                </div>
+                <div class="col-2">
+                    <input type="text" class="form-control" placeholder="" formControlName="surveyPostCode"
+                        pattern="[0-9]*" maxlength="5" #postCodeSearchInput
+                        [ngClass]="{'is-invalid': submitted && f.surveyPostCode.errors}">
+                    <div *ngIf="submitted && f.surveyPostCode.errors" class="invalid-feedback">
+                        <div *ngIf="f.surveyPostCode.errors.required" class="text-danger help-block">
+                            กรุณากรอกรหัสไปรษณีย์
+                        </div>
+                        <div *ngIf="f.surveyPostCode.errors.pattern" class="text-danger help-block">
+                            กรุณากรอกเป็นตัวเลข
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2 text-right mt-1">
+                    <p>จังหวัด,อำเภอ,ตำบล :</p>
+                </div>
+                <div class="col-4">
+                    <div class="input-group">
+                        <input type="text" class="form-control" aria-label="Assignee" [matAutocomplete]="auto"
+                            #automatAutocomplete formControlName="surveyAddr"
+                            [ngClass]="{'is-invalid': submitted && f.surveyAddr.errors}">
+                        <div class="input-group-append" *ngIf="searchLoading">
+                            <span class="input-group-text"><i class="fa fa-spinner fa-spin"></i></span>
+                        </div>
+                        <div *ngIf="submitted && f.surveyAddr.errors" class="invalid-feedback">
+                            <div *ngIf="f.surveyAddr.errors.required" class="text-danger help-block">
+                                กรุณากรอกข้อมูลที่อยู่
+                            </div>
+                        </div>
+                    </div>
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                        <mat-option *ngFor="let option of options" (onSelectionChange)="onSelectAddr($event)"
+                            [value]="option">
+                            {{option.addrName}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2 text-right mt-1">
+                    <p>ที่อยู่ :</p>
+                </div>
+                <div class="col-6 mb-2">
+                    <textarea type="text" rows="5" class="form-control" placeholder="" formControlName="surveyAddress1"
+                        [ngClass]="{'is-invalid': submitted && f.surveyAddress1.errors}"></textarea>
+                    <div *ngIf="submitted && f.surveyAddress1.errors" class="invalid-feedback">
+                        <div *ngIf="f.surveyAddress1.errors.required  || f.surveyAddress1.errors.whitespace"
+                            class="text-danger help-block">
+                            กรุณากรอกที่อยู่
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="border p-3 mt-3">
+            <legend class="w-auto">บุคคลที่สามารถติดต่อ</legend>
+            <div formArrayName="contact" *ngFor="let creds of contactForms.controls; let i = index">
+                <div class="row">
+                    <ng-container [formGroupName]="i">
+                        <div class="col">
+                            <div class="text-left ml-2">
+                                <p>ชื่อผู้ให้ข้อมูล :</p>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" placeholder=""
+                                    formControlName="surveyContactName"
+                                    [ngClass]="{'is-invalid': submitted && contactForms.controls[i].get('surveyContactName').errors}">
+                                <div *ngIf="submitted && contactForms.controls[i].get('surveyContactName').errors"
+                                    class="invalid-feedback">
+                                    <div *ngIf="contactForms.controls[i].get('surveyContactName').errors.required || contactForms.controls[i].get('surveyContactName').errors.whitespace"
+                                        class="text-danger help-block">
+                                        กรุณากรอกชื่อผู้ให้ข้อมูล
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="text-left ml-2">
+                                <p>เบอร์โทรศัพท์ :</p>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" placeholder=""
+                                    formControlName="surveyContactPhone"
+                                    [ngClass]="{'is-invalid': submitted && contactForms.controls[i].get('surveyContactPhone').errors}">
+                                <div *ngIf="submitted && contactForms.controls[i].get('surveyContactPhone').errors"
+                                    class="invalid-feedback">
+                                    <div *ngIf="contactForms.controls[i].get('surveyContactPhone').errors.required || contactForms.controls[i].get('surveyContactPhone').errors.whitespace"
+                                        class="text-danger help-block">
+                                        กรุณากรอกเบอร์โทรศัพท์
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="text-left ml-2">
+                                <p>Fax :</p>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" placeholder=""
+                                    formControlName="surveyContactFaxNo">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="text-left ml-2">
+                                <p>เบอร์มือถือ :</p>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" placeholder=""
+                                    formControlName="surveyContactMobileNo" pattern="[0-9]*"
+                                    [ngClass]="{'is-invalid': submitted && contactForms.controls[i].get('surveyContactMobileNo').errors}">
+                                <div *ngIf="submitted && contactForms.controls[i].get('surveyContactMobileNo').errors"
+                                    class="invalid-feedback">
+                                    <div *ngIf="contactForms.controls[i].get('surveyContactMobileNo').errors.required"
+                                        class="text-danger help-block">
+                                        กรุณากรอกเบอร์มือถือ
+                                    </div>
+                                    <div *ngIf="contactForms.controls[i].get('surveyContactMobileNo').errors.pattern"
+                                        class="text-danger help-block">
+                                        กรุณากรอกเป็นตัวเลข
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="text-left ml-2">
+                                <p>Email :</p>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" placeholder="" pattern="^(.+)@(.+)$|^\s*$"
+                                    formControlName="surveyContactEmail"
+                                    [ngClass]="{'is-invalid': submitted && contactForms.controls[i].get('surveyContactEmail').errors}">
+                                <div *ngIf="submitted && contactForms.controls[i].get('surveyContactEmail').errors"
+                                    class="invalid-feedback">
+                                    <div *ngIf="contactForms.controls[i].get('surveyContactEmail').errors.pattern"
+                                        class="text-danger help-block">
+                                        กรุณากรอกอีเมล์ให้ถูกต้อง
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-1" *ngIf="i == 0">
+                            <div class="col mt-5" style="align-self:center;">
+                                <a (click)="addContact()">
+                                    <mat-icon style="font-size: 35px; color: #20c997;">group_add</mat-icon>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-1" *ngIf="i > 0">
+                            <div class="col mt-5" style="align-self:center;">
+                                <a (click)="removeGroup(i)">
+                                    <mat-icon style="font-size: 35px; color: red;">delete_forever</mat-icon>
+                                </a>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+                <mat-divider class="mb-3"></mat-divider>
+            </div>
+        </fieldset>
+    </div>
+    <div mat-dialog-actions style="margin-top: 2%; float:right;">
+        <button type="submit" mat-raised-button color="primary">บันทึก</button>
+        <button mat-raised-button [mat-dialog-close]="data.animal" cdkFocusInitial>ยกเลิก</button>
+    </div>
+</form>
+<swal #saveSurveySwal title="คุณต้องการบันทึกข้อมูล ใช่หรือไม่?" [allowOutsideClick]="false" [showCancelButton]="true"
+    text="" type="info" [confirmButtonText]="'ตกลง'" [cancelButtonText]="'ยกเลิก'" (confirm)="createSurvey()"></swal>
+<swal #saveDefaultSourceSwal title="คุณต้องการสร้างแหล่งข้อมูลอัตโนมัติ หรือไม่?" [allowOutsideClick]="false"
+    [showCancelButton]="true" text="" type="info" [confirmButtonText]="'ตกลง'" [cancelButtonText]="'ยกเลิก'"
+    (confirm)="createDefaultSource()" (cancel)="onNoClick()"></swal>
+<swal #successSurveySwal title="บันทึกข้อมูลสำเร็จ" [confirmButtonText]="'ตกลง'" [allowOutsideClick]="false" (confirm)="addDefaultSource()" text=""
+    type="success"></swal>
+<swal #successSourceSwal title="บันทึกข้อมูลสำเร็จ" [confirmButtonText]="'ตกลง'" [allowOutsideClick]="false" (confirm)="onNoClick()" text=""
+    type="success"></swal>
+<swal #errorSurveySwal title="" text="" [confirmButtonText]="'ตกลง'" type="error"></swal>

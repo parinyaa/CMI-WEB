@@ -1,0 +1,90 @@
+.div-search {
+  margin-bottom: 18px;
+}
+
+.div-content {
+  text-align: -webkit-center;
+  margin-bottom: 18px;
+}
+
+#drop {
+  border: 2px dashed #bbb;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  padding: 5%;
+  text-align: center;
+  font: 20pt bold, "Vollkorn";
+  color: #bbb;
+}
+
+.uploadfilecontainer {
+  background-repeat: no-repeat;
+  background-size: 100px;
+  background-position: center;
+  height: 160px;
+  width: 80%;
+  margin: 20px auto;
+  border: 2px dashed #1C8ADB;
+  border-radius: 10px;
+}
+
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.btn {
+  border: 2px solid gray;
+  color: gray;
+  background-color: white;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.upload-btn-wrapper input[type=file] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+
+
+.file-field.big .file-path-wrapper {
+  height: 3.2rem;
+}
+
+.file-field.big .file-path-wrapper .file-path {
+  height: 3rem;
+}
+
+table {
+  width: 100%;
+  table-layout: fixed;
+}
+th[mat-header-cell]{
+  text-align: center;
+  background-color:#269ee4;
+  font-size:20px;
+  color: white;
+}
+
+td[mat-cell]{
+  text-align: center;
+}
+
+.readonly-wrapper {
+  cursor: not-allowed;
+}
+
+.readonly-wrapper .readonly-block {
+  pointer-events: none;
+}
+
+.mat-select-disabled {
+  background-color: #e9ecef;
+}

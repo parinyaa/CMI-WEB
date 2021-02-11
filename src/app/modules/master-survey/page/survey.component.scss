@@ -1,0 +1,228 @@
+table {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  min-width: 500px;
+}
+// th.mat-header-cell {
+//   text-align: left;
+//   max-width: 300px;
+// }
+.mat-column-surveyCode {
+  width: 10%;
+}
+
+.mat-dialog-content {
+  max-height: unset;
+  padding-top: 5%;
+}
+
+.mat-column-surveyName {
+  width: 20%;
+}
+
+.mat-column-surveyAddr {
+  width: 20%;
+}
+
+.mat-column-surveyContactName {
+  width: 15%;
+}
+
+.mat-column-surveyContact {
+  width: 15%;
+}
+
+.mat-column-view {
+  width: 5%;
+  text-align: center;
+}
+
+.mat-column-deleted {
+  width: 5%;
+  text-align: center;
+}
+
+th,
+td {
+  overflow: hidden;
+  width: auto;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.col-form-label {
+  font-size: 14px;
+  font-weight: inherit !important;
+}
+
+.mat-column-sourceCode {
+  width: 10%;
+}
+
+.mat-column-sourceName {
+  width: 15%;
+  text-align: left;
+}
+
+.mat-column-taxId {
+  width: 12%;
+  text-align: center;
+}
+
+.mat-column-address {
+  width: 22%;
+  padding-left: 5px;
+  padding-right: 5px;
+  white-space: normal;
+  text-align: left;
+}
+
+// .mat-column-sourceContact {
+//     width: 20%;
+//     padding-left: 5px;
+//     padding-right: 5px;
+//     white-space: normal;
+// }
+
+// .mat-column-objectiveSource {
+//     width: 20%;
+//     padding-left: 5px;
+//     padding-right: 5px;
+// }
+
+.mat-column-countCpa {
+  width: 9%;
+  text-align: right;
+}
+
+.mat-column-editSource {
+  width: 10%;
+  text-align: center;
+}
+
+.mat-column-tambol {
+  width: 7%;
+  text-align: left;
+}
+
+.mat-column-amphur {
+  width: 8%;
+  text-align: left;
+}
+
+.mat-column-province {
+  width: 10%;
+  text-align: left;
+}
+
+.mat-column-edit {
+  width: 3.5%;
+  text-align: center;
+}
+
+.mat-column-delete {
+  width: 3.5%;
+  text-align: center;
+}
+
+// .mat-icon {
+//     padding: 10%;
+// }
+
+.mat-column-deletedSource {
+  width: 10%;
+  text-align: center;
+}
+
+.table-source tr {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+td[mat-cell] {
+  white-space: normal;
+}
+
+th[mat-header-cell] {
+  padding-left: 5px;
+  padding-right: 5px;
+  white-space: normal;
+}
+
+td[mat-cell][data] {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+:host ::ng-deep {
+  .mat-column-surveyContact .mat-sort-header-container .mat-sort-header-button,
+  .mat-column-surveyName .mat-sort-header-container .mat-sort-header-button,
+  .mat-column-sourceName .mat-sort-header-container .mat-sort-header-button,
+  .mat-column-sourceContact .mat-sort-header-container .mat-sort-header-button,
+  .mat-column-objectiveSource .mat-sort-header-container .mat-sort-header-button {
+    text-align: left;
+  }
+}
+
+.divTabSource {
+  padding: 2%;
+}
+
+::ng-deep .mat-column-action .mat-sort-header-container {
+  display: flex;
+  justify-content: center;
+}
+
+::ng-deep .mat-column-actionSource .mat-sort-header-container {
+  display: flex;
+  justify-content: center;
+}
+
+.icon-contact {
+  font-size: 14px;
+}
+
+.mat-column-contactName {
+  width: 19%;
+}
+
+.mat-column-contactPhone {
+  width: 19%;
+}
+
+.mat-column-contactFax {
+  width: 19%;
+}
+
+.mat-column-contactMobile {
+  width: 19%;
+}
+
+.mat-column-contactEmail {
+  width: 19%;
+}
+
+.mat-column-action {
+  width: 5;
+  text-align: center;
+}
+
+.inputContact {
+  width: 40px;
+}
+
+::ng-deep .row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: 0px;
+  margin-left: -7.5px;
+}
+
+::ng-deep .mat-grid-tile .mat-figure {
+  justify-content:unset !important;
+}
+
+::ng-deep .content-data-config .mat-tab-body-content {
+  overflow: hidden;
+
+}

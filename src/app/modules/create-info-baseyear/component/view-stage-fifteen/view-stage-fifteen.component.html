@@ -1,0 +1,71 @@
+<div class="col-12">
+  <fieldset class="border p-3">
+    <legend class="w-auto"> &nbsp; Sop Index (SOP) &nbsp; </legend>
+    <app-filter-data (onSearch)="onSearch($event)"></app-filter-data>
+    <button (click)="export();" class="mt-2 btn-export" mat-raised-button color="primary">
+      <mat-icon>cloud_download</mat-icon> export
+    </button>
+    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortChange($event);">
+
+      <ng-container matColumnDef="0">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ปี</th>
+        <td mat-cell *matCellDef="let element" matTooltip="{{element.yearTerm}} ">
+          {{element.yearTerm}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="1">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> เดือน</th>
+        <td mat-cell *matCellDef="let element" matTooltip="{{element.monthTerm}} ">
+          {{element.monthTerm}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="2">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> รหัสรายการ
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.commodityCode}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="3">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ชื่อรายการ
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.commodityName}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="4">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ระดับรายการ
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.commodityLevel}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="5">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ดัชนี
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.indexValue}}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="6">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ดัชนี ฐาน
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.baseIndex}}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+    <mat-paginator [length]="length" [pageSize]="pageSize" [pageIndex]="pageIndex" [pageSizeOptions]="pageSizeOptions"
+      (page)="pageEvent = pageChange($event)">
+    </mat-paginator>
+  </fieldset>
+</div>

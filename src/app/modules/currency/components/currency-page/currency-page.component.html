@@ -1,0 +1,135 @@
+<div class="page-main">
+  <div class="content-header">
+    <div class="section-header">
+      <div class="row">
+        <div class="col-6 col-sm-6">
+          <ol class="breadcrumb float-sm-left">
+            <li class="breadcrumb-item"><a style="font-size: 18px;">อัตราแลกเปลี่ยนค่าเงินต่างประเทศ</a></li>
+          </ol>
+        </div>
+        <div class="col-6 col-sm-6">
+          <form [formGroup]="inquiryData" (ngSubmit)="onSubmit()">
+            <div class="row">
+              <div class="col-4">
+              </div>
+              <div class="col-3">
+                <mat-select class="form-control" formControlName="year"
+                  [ngClass]="{'is-invalid': submitted && f.year.errors}" placeholder="เลือกปี">
+                  <mat-option *ngFor="let year of yearList" [value]="year">
+                    {{year}}
+                  </mat-option>
+                </mat-select>
+                <div *ngIf="submitted && f.year.errors" class="invalid-feedback">
+                  <div *ngIf="f.year.errors.required" class="text-danger help-block">
+                    กรุณาเลือกปี
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+                <mat-select class="form-control" formControlName="month"
+                  [ngClass]="{'is-invalid': submitted && f.month.errors}" placeholder="เลือกเดือน">
+                  <mat-option *ngFor="let month of monthList" [value]="month.paramInfo">
+                    {{month.paramLocalMessage}}
+                  </mat-option>
+                </mat-select>
+                <div *ngIf="submitted && f.month.errors" class="invalid-feedback">
+                  <div *ngIf="f.month.errors.required" class="text-danger help-block">
+                    กรุณาเลือกเดือน
+                  </div>
+                </div>
+              </div>
+              <div class="col-1">
+                <button type="submit" mat-mini-fab color="primary">
+                  <mat-icon>search</mat-icon>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="content" *ngIf="showContent">
+    <div class="section-content box-content">
+      <div class="row" *ngIf="!noData">
+        <div class="col-12 col-sm-12 mb-3" style="text-align: right;" *ngIf="isShowSave">
+          <button class="mat-btn-tpso" mat-raised-button type="button" (click)="beforeInsertData()">
+            <mat-icon>save</mat-icon>&nbsp;
+            <span>บันทึก</span>
+          </button>
+        </div>
+        <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          <ng-container matColumnDef="position" >
+            <mat-header-cell *matHeaderCellDef> ลำดับ </mat-header-cell>
+            <mat-cell *matCellDef="let element;let i = index;"> {{i+1}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="currency">
+            <mat-header-cell *matHeaderCellDef> สกุลเงิน </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.currencyKey.currencyUnit.paramCode}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="name" >
+            <mat-header-cell *matHeaderCellDef> ชื่อ </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.currencyKey.currencyUnit.paramLocalDescription}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="exchange">
+            <mat-header-cell *matHeaderCellDef> อัตราแลกเปลี่ยน </mat-header-cell>
+            <mat-cell *matCellDef="let element;let i = index;">
+              <ng-container *ngIf="element.exchangeRate != null; else elseTemplate">
+                <ng-container *ngIf="element.mode == 'edit'; else elseTemplate2">
+                  {{element.exchangeRate}}
+                </ng-container>
+                <ng-template #elseTemplate2>
+                  <input type="number" value="{{element.exchangeRate}}" class="text-right" min="0" step="0.1"
+                    id="input{{i}}">
+                </ng-template>
+              </ng-container>
+              <ng-template #elseTemplate>
+                ยังไม่ได้ตั้งค่า
+              </ng-template>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="action">
+            <mat-header-cell *matHeaderCellDef style="justify-content: center;"> แก้ไข </mat-header-cell>
+            <mat-cell *matCellDef="let element;let i = index;" style="justify-content: center;">
+              <ng-container *ngIf="isShowSave">
+                <ng-container *ngIf="element.mode == 'edit'; else elseTemplate1">
+                  <button type="button" mat-mini-fab color="primary" (click)="editElementCurrency(element)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                </ng-container>
+                <ng-template #elseTemplate1>
+                  <button type="button" mat-mini-fab style="background-color: green;"
+                    (click)="saveElementCurrency(element,i)">
+                    <mat-icon>check</mat-icon>
+                  </button>
+                  &nbsp;&nbsp;
+                  <button type="button" mat-mini-fab style="background-color: darkred;"
+                    (click)="cancelElementCurrency(element)">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </ng-template>
+              </ng-container>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+      </div>
+      <div class="row noDataResult" *ngIf="noData">
+        <div class="col-12">
+          <div style="text-align: center;">ไม่พบข้อมูล</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<swal #addSwal title="คุณต้องการบันทึกข้อมูล <br>ใช่หรือไม่" text="" type="info" [showCancelButton]="true"
+  (confirm)="insertData()"></swal>
+<swal #invalidSwal title="" text="" type="warning"></swal>
+<swal #succussSwal title="บันทึกข้อมูลสำเร็จ" [allowOutsideClick]="false" text="" type="success"></swal>
+<swal #errorSwal title="" text="" type="error"></swal>

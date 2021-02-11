@@ -1,0 +1,436 @@
+<div class="page-main">
+  <section class="content">
+    <div class="section-content">
+      <div class="row search-dataenty" style="font-size: 15px">
+        <div class="col-2 mt-2 mr-2 ml-2">จังหวัด</div>
+        <div class="col-1 mt-2 mr-2">ปี</div>
+        <div class="col-2 mt-2 mr-2">เดือน</div>
+        <div class="col-2 mt-2 mr-2">กลุ่มข้อมูล</div>
+        <div class="col-2 mt-2 mr-2 ">รหัสสินค้า</div>
+        <div class="col-2 mt-2 mr-2 ">ชื่อแหล่งข้อมูล</div>
+        <!-- <div class="col-1 mt-2 mr-2 "></div> -->
+      </div>
+      <div class="row">
+        <div class="col-2 search-dataenty">
+          <input [readOnly]="checkProvinceId" class="form-control mr-2 ml-2" type="text" placeholder="จังหวัด"
+            aria-label="จังหวัด" [formControl]="filterProvinceControl" [matAutocomplete]="auto1" />
+          <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayFilterProvince"
+            (optionSelected)='inquireGroupList($event.option.value)'>
+            <mat-option *ngFor="let option of filterProvinceOptions | async" [value]="option" style="font-size: 12px;">
+              {{option.provinceCode}}&nbsp;{{option.provinceName}}
+            </mat-option>
+          </mat-autocomplete>
+        </div>
+        <div class="col-1 search-dataenty">
+          <input
+            class="form-control mr-2"
+            style="font-size: 12px"
+            type="text"
+            placeholder="ปี"
+            aria-label="ปี"
+            [formControl]="filterYearControl"
+            [matAutocomplete]="auto3"
+          />
+          <mat-autocomplete
+            #auto3="matAutocomplete"
+            [displayWith]="displayFilterYear"
+          >
+            <mat-option
+              *ngFor="let item of filterYearOptions | async"
+              [value]="item"
+              style="font-size: 12px"
+            >
+              {{ item }}
+            </mat-option>
+          </mat-autocomplete>
+        </div>
+        <div class="col-2 search-dataenty">
+          <mat-select
+            [(ngModel)]="monthSelect"
+            [(value)]="currentMonth"
+            class="form-control mr-2"
+            style="font-size: 12px"
+          >
+            <mat-option
+              *ngFor="let item of month"
+              [value]="item.value"
+              style="margin-top: auto; margin-bottom: auto"
+            >
+              {{ item.name }}
+            </mat-option>
+          </mat-select>
+        </div>
+        <div class="col-2 search-dataenty">
+          <mat-select
+            [(ngModel)]="groupCurrent"
+            placeholder="ทั้งหมด"
+            class="form-control mr-2"
+            style="font-size: 12px"
+          >
+            <mat-option *ngFor="let item of groupList" [value]="item">
+              {{
+                item.groupName === 'ทั้งหมด'
+                  ? item.groupName
+                  : item.groupCode + ' : ' + item.groupName
+              }}
+            </mat-option>
+          </mat-select>
+        </div>
+        <div class="col-2 search-dataenty">
+          <input
+            type="text"
+            class="form-control mr-2"
+            placeholder="รหัสสินค้า"
+            maxlength="250"
+            [(ngModel)]="filterProductCode"
+          />
+        </div>
+        <div class="col-2">
+          <input
+            type="text"
+            class="form-control mr-2"
+            placeholder="ชื่อแหล่งข้อมูล"
+            maxlength="250"
+            [(ngModel)]="filterSurveyName"
+          />
+        </div>
+        <div class="col-1 search-dataenty">
+          <span class="input-group-addon">
+            <button (click)="filterData()" mat-mini-fab color="primary">
+              <mat-icon class="ml-1">search</mat-icon>
+            </button>
+          </span>
+        </div>
+        <div class="col-12 mt-2">
+          <table
+            mat-table
+            [dataSource]="dataSource"
+            matSort
+            (matSortChange)="onSortData($event)"
+          >
+            <ng-container matColumnDef="productCode">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                รหัสสินค้า /<br />ชื่อสินค้า
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let element"
+                matTooltip="{{ element.productDetail }} "
+              >
+                {{ element.commodityCode }}
+                <br />
+                {{ element.commodityName }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="surveyName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                แหล่งข้อมูล
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.sourceName }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="pricePrevious">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                ราคาเดือน<br />ที่ผ่านมา
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <input
+                  type="text"
+                  class="form-control"
+                  style="text-align: right"
+                  [(ngModel)]="element.previousPrice"
+                  readonly
+                />
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="price1">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                [ngStyle]="{display: displayPrice1 ? 'table-cell' : 'none'}"
+              >
+                {{ labelPrice1 }}
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let element"
+                [ngStyle]="{display: displayPrice1 ? 'table-cell' : 'none'}"
+              >
+                <input
+                  type="text"
+                  myNumberOnly
+                  class="form-control"
+                  style="text-align: right"
+                  [(ngModel)]="element.price1"
+                  appTwodigitdecimaldirective
+                  [disabled]="
+                    isDisablePrice(element.relativeStatus, disablePrice1)
+                  "
+                  (ngModelChange)="calculateRel(element); setIsEditing()"
+                />
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="price2">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                [ngStyle]="{display: displayPrice2 ? 'table-cell' : 'none'}"
+              >
+                {{ labelPrice2 }}
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let element"
+                [ngStyle]="{display: displayPrice2 ? 'table-cell' : 'none'}"
+              >
+                <input
+                  type="text"
+                  myNumberOnly
+                  class="form-control"
+                  style="text-align: right"
+                  [(ngModel)]="element.price2"
+                  [disabled]="
+                    isDisablePrice(element.relativeStatus, disablePrice2)
+                  "
+                  (ngModelChange)="calculateRel(element); setIsEditing()"
+                />
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="price3">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                [ngStyle]="{display: displayPrice3 ? 'table-cell' : 'none'}"
+              >
+                {{ labelPrice3 }}
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let element"
+                [ngStyle]="{display: displayPrice3 ? 'table-cell' : 'none'}"
+              >
+                <input
+                  type="text"
+                  myNumberOnly
+                  class="form-control"
+                  style="text-align: right"
+                  [(ngModel)]="element.price3"
+                  [disabled]="
+                    isDisablePrice(element.relativeStatus, disablePrice3)
+                  "
+                  (ngModelChange)="calculateRel(element); setIsEditing()"
+                />
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="price4">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                [ngStyle]="{display: displayPrice4 ? 'table-cell' : 'none'}"
+              >
+                {{ labelPrice4 }}
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let element"
+                [ngStyle]="{display: displayPrice4 ? 'table-cell' : 'none'}"
+              >
+                <input
+                  type="text"
+                  myNumberOnly
+                  class="form-control"
+                  style="text-align: right"
+                  [(ngModel)]="element.price4"
+                  [disabled]="
+                    isDisablePrice(element.relativeStatus, disablePrice4)
+                  "
+                  (ngModelChange)="calculateRel(element); setIsEditing()"
+                />
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="currentPrice">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                [ngStyle]="{
+                  display: displayCurrentPrice ? 'table-cell' : 'none'
+                }"
+              >
+                ราคาปัจจุบัน
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let element"
+                [ngStyle]="{
+                  display: displayCurrentPrice ? 'table-cell' : 'none'
+                }"
+              >
+                <!-- {{element.currentPrice | number: '1.2-2'}} -->
+                <input
+                  type="text"
+                  class="form-control"
+                  style="text-align: right"
+                  [ngModel]="element.currentPrice | number: '1.2-2'"
+                  readonly
+                />
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="priceRel">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Rel</th>
+              <td mat-cell *matCellDef="let element">
+                <input
+                  type="text"
+                  class="form-control"
+                  style="text-align: right"
+                  [ngModel]="element.rel | number: '1.2-2'"
+                  readonly
+                />
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="productStatus">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>ภาวะ</th>
+              <td mat-cell *matCellDef="let element">
+                <input
+                  type="text"
+                  class="form-control ml-2"
+                  [(ngModel)]="element.remark"
+                  (ngModelChange)="setIsEditing()"
+                  [disabled]="
+                    element.relativeStatus != 'NEW' || disabledKeyin()
+                  "
+                />
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef>Action</th>
+              <td mat-cell *matCellDef="let element">
+                <a *ngIf="!disableInput" (click)="openDialogComment(element)">
+                  <mat-icon
+                    *ngIf="
+                      element.requestCommentFlag == 'Y' &&
+                      element.answerCommentFlag == 'N' &&
+                      element.commentFlag == 'Y'
+                    "
+                    style="color: #e40218"
+                    matBadge="!"
+                    matBadgeColor="warn"
+                  >
+                    comment</mat-icon
+                  >
+                  <mat-icon
+                    *ngIf="
+                      element.requestCommentFlag == 'Y' &&
+                      element.answerCommentFlag == 'Y' &&
+                      element.commentFlag == 'Y'
+                    "
+                    style="color: #e40218"
+                    matBadge="!"
+                    matBadgeColor="warn"
+                    >comment</mat-icon
+                  >
+                  <mat-icon
+                    *ngIf="
+                      element.requestCommentFlag == 'N' &&
+                      element.answerCommentFlag == 'N' &&
+                      element.commentNote &&
+                      element.commentFlag == 'Y'
+                    "
+                    style="color: #00e418"
+                    matBadgeColor="warn"
+                    >comment</mat-icon
+                  >
+                </a>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr
+              mat-row
+              [ngClass]="{
+                'make-AnswerN':
+                  row.requestCommentFlag == 'Y' && row.answerCommentFlag == 'N',
+                'make-notSavePrice': row.notSavePrice
+              }"
+              *matRowDef="let row; columns: displayedColumns"
+            ></tr>
+          </table>
+          <div class="noDataSource" *ngIf="dataSource.filteredData.length == 0">
+            ไม่พบข้อมูล
+          </div>
+          <mat-paginator
+            #paginator
+            [length]="length"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="pageSizeOptions"
+            (page)="pageEvent = pageChange($event)"
+          >
+          </mat-paginator>
+        </div>
+      </div>
+    </div>
+    <div class="section-header">
+      <div class="row">
+        <div class="col-6 col-sm-6"></div>
+        <div class="col-6 col-sm-6 text-right">
+          <button
+            *ngIf="!getIsSaved"
+            (click)="clickSave()"
+            class="mat-btn-tpso"
+            mat-raised-button
+            type="button"
+            [disabled]="disableInput"
+          >
+            <mat-icon>save</mat-icon>&nbsp;บันทึก
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<swal
+  #saveDataSwal
+  title="คุณต้องการบันทึกข้อมูล ใช่หรือไม่?"
+  [allowOutsideClick]="false"
+  [showCancelButton]="true"
+  text=""
+  [confirmButtonText]="'ตกลง'"
+  [cancelButtonText]="'ยกเลิก'"
+  type="info"
+  (confirm)="onSaveShared()"
+></swal>
+<swal
+  #sucesssaveDataSwal
+  title="บันทึกข้อมูลสำเร็จ"
+  [allowOutsideClick]="false"
+  text=""
+  [confirmButtonText]="'ตกลง'"
+  type="success"
+></swal>
+<swal
+  #alertDataSwal
+  title="คุณยังไม่ได้บันทึกข้อมูล"
+  [confirmButtonText]="'ตกลง'"
+  [allowOutsideClick]="false"
+></swal>
+<swal
+  #alertCurrencySwal
+  title="ยังไม่มี CurrentRate คุณต้องการบันทึกข้อมูลหรือไม่?"
+  [allowOutsideClick]="false"
+  [confirmButtonText]="'ตกลง'"
+  [showCancelButton]="true"
+></swal>

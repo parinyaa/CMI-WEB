@@ -1,0 +1,45 @@
+table {
+  width: 100%;
+  table-layout: auto;
+}
+
+.mat-column-0{
+  width: 8%;
+  text-align: center;
+}
+.mat-column-1{
+  width: 8%;
+  text-align: center;
+}
+.mat-column-2{
+  width: 20%;
+  text-align: center;
+}
+.mat-column-3{
+  width: 20%;
+  text-align: left;
+}
+.mat-column-4{
+  width: 6%;
+  text-align: center;
+}
+.mat-column-5{
+  width: 10%;
+  text-align: right;
+}
+.mat-column-6{
+  width: 10%;
+  text-align: right;
+}
+.mat-column-7{
+  width: 10%;
+  text-align: right;
+}
+.mat-column-8{
+  width: 10%;
+  text-align: right;
+}
+
+th.mat-header-cell {
+  text-align: center !important;
+}

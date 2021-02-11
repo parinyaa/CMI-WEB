@@ -1,0 +1,103 @@
+<h1 mat-dialog-title>เพิ่มคำถาม</h1>
+<form [formGroup]="addQuestionForm" (ngSubmit)="onSubmit()">
+  <div mat-dialog-content>
+    <div class="row">
+      <div class="col-2 mt-1">
+        <p>ข้อที่:</p>
+      </div>
+      <div class="col-7 mt-1">
+        <p>คำถาม:</p>
+      </div>
+      <div class="col-3 mt-1">
+        <p>ประเภทคำถาม:</p>
+      </div>
+      <!-- <div class="col-9">
+        <input class="form-control" type="number" formControlName="questionNo" pattern="[0-9]*"
+          [ngClass]="{'is-invalid': submitted && f.questionNo.errors}">
+        <div *ngIf="submitted && f.questionNo.errors" class="invalid-feedback">
+          <div *ngIf="f.questionNo.errors.required" class="text-danger help-block">
+            กรุณากรอกเลขข้อ
+          </div>
+          <div *ngIf="f.questionNo.errors.pattern" class="text-danger help-block">
+            กรุณากรอกเป็นตัวเลข
+          </div>
+        </div>
+      </div> -->
+    </div>
+    <div class="row mt-1">
+      <div class="col-2">
+        <input class="form-control" type="number" min="1" max="99" size="1" maxlength="2" formControlName="questionNo"
+          pattern="[1-9]?[0-9]" [ngClass]="{'is-invalid': submitted && f.questionNo.errors}"
+          (keypress)="inputUtils.moreThanZero($event)">
+        <div *ngIf="submitted && f.questionNo.errors" class="invalid-feedback">
+          <div *ngIf="f.questionNo.errors.required" class="text-danger help-block">
+            กรุณากรอกเลขข้อ
+          </div>
+          <div *ngIf="f.questionNo.errors.pattern" class="text-danger help-block">
+            กรุณากรอกเลข 1-99
+          </div>
+        </div>
+      </div>
+      <div class="col-7">
+        <textarea class="form-control" rows="1" formControlName="questionDesc"
+          [ngClass]="{'is-invalid': submitted && f.questionDesc.errors}" maxlength="500"></textarea>
+        <div *ngIf="submitted && f.questionDesc.errors" class="invalid-feedback">
+          <div *ngIf="f.questionDesc.errors.required" class="text-danger help-block">
+            กรุณากรอกคำถาม
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <mat-select class="form-control" formControlName="questionType"
+          [ngClass]="{'is-invalid': submitted && f.questionType.errors}">
+          <mat-option *ngFor="let type of questionType" [value]="type.paramId">
+            {{type.paramLocalMessage}}
+          </mat-option>
+        </mat-select>
+        <div *ngIf="submitted && f.questionType.errors" class="invalid-feedback">
+          <div *ngIf="f.questionType.errors.required" class="text-danger help-block">
+            กรุณาเลือกประเภทคำถาม
+          </div>
+        </div>
+      </div>
+      <!-- <div class="col-3 text-right mt-1">
+        <p>คำถาม:</p>
+      </div>
+      <div class="col-9">
+        <input class="form-control" formControlName="questionDesc"
+          [ngClass]="{'is-invalid': submitted && f.questionDesc.errors}">
+        <div *ngIf="submitted && f.questionDesc.errors" class="invalid-feedback">
+          <div *ngIf="f.questionDesc.errors.required" class="text-danger help-block">
+            กรอกคำถาม
+          </div>
+        </div>
+      </div> -->
+    </div>
+    <!-- <div class="row mt-1">
+      <div class="col-3 text-right mt-1">
+        <p>ประเภทคำถาม:</p>
+      </div>
+      <div class="col-9">
+        <mat-form-field>
+          <mat-select formControlName="questionType">
+            <mat-option *ngFor="let type of questionType" [value]="type.paramId">
+              {{type.paramLocalMessage}}
+            </mat-option>
+          </mat-select>
+          <mat-error>
+            <strong>* กรุณาเลือกประเภทคำถาม</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div> -->
+  </div>
+  <div mat-dialog-actions style="float: right;">
+    <button type="submit" mat-button>บันทึก</button>
+    <button mat-raised-button [mat-dialog-close]="">ยกเลิก</button>
+  </div>
+</form>
+<swal #addSwal title="คุณต้องการบันทึกข้อมูล <br>ใช่หรือไม่" text="" type="info" [showCancelButton]="true"
+  (confirm)="addQuestion()"></swal>
+<swal #succussSwal title="บันทึกข้อมูลสำเร็จ" [allowOutsideClick]="false" (confirm)="closeDialog()" text=""
+  type="success"></swal>
+<swal #errorSwal title="" text="" type="error"></swal>

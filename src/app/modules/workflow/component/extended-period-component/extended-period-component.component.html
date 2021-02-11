@@ -1,0 +1,326 @@
+<section class="content-header">
+  <div class="section-header">
+    <div class="row">
+      <div class="col-6 col-sm-6">
+        <ol class="breadcrumb float-sm-left">
+          <li class="breadcrumb-item">
+            <a style="color: black">คำขอขยายระยะเวลาบันทึกข้อมูล</a>
+          </li>
+        </ol>
+      </div>
+      <div class="col-6 col-sm-6" style="text-align: right"></div>
+    </div>
+  </div>
+</section>
+<section class="section-content box-content" style="margin-bottom: 18px">
+  <div class="row mb-3">
+    <div class="col-3">วันเริ่มต้น</div>
+    <div class="col-3">วันสิ้นสุด</div>
+    <div class="col-3">สถานะ</div>
+    <div class="col-3">ผู้สร้างคำขอ</div>
+  </div>
+  <form [formGroup]="inquiryWorkflowForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <div class="col-3">
+        <div class="input-group suffix">
+          <input
+            class="form-control"
+            [matDatepicker]="picker1"
+            placeholder="กรุณาเลือกวัน"
+            formControlName="startDate"
+            readonly
+          />
+          <span class="input-group-addon">
+            &nbsp;<mat-datepicker-toggle
+              matSuffix
+              [for]="picker1"
+            ></mat-datepicker-toggle>
+          </span>
+        </div>
+        <mat-datepicker #picker1></mat-datepicker>
+        <div *ngIf="submitted && f.startDate.errors" class="invalid-feedback">
+          <div
+            *ngIf="f.startDate.errors.required"
+            class="text-danger help-block"
+          >
+            กรุณาเลือกวันที่
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="input-group suffix">
+          <input
+            class="form-control"
+            [matDatepicker]="picker2"
+            placeholder="กรุณาเลือกวัน"
+            formControlName="endDate"
+            readonly
+          />
+          <span class="input-group-addon">
+            &nbsp;<mat-datepicker-toggle
+              matSuffix
+              [for]="picker2"
+            ></mat-datepicker-toggle>
+          </span>
+        </div>
+        <mat-datepicker #picker2></mat-datepicker>
+        <div *ngIf="submitted && f.endDate.errors" class="invalid-feedback">
+          <div *ngIf="f.endDate.errors.required" class="text-danger help-block">
+            กรุณาเลือกวันที่
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <mat-select
+          class="form-control"
+          formControlName="status"
+          [ngClass]="{'is-invalid': submitted && f.status.errors}"
+        >
+          <mat-option *ngFor="let type of statusList" [value]="type">
+            {{ type }}
+          </mat-option>
+        </mat-select>
+        <div *ngIf="submitted && f.status.errors" class="invalid-feedback">
+          <div *ngIf="f.status.errors.required" class="text-danger help-block">
+            กรุณาเลือกสถานะ
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="input-group suffix" *ngIf="isApprove || isBoth">
+          <mat-select
+            class="form-control"
+            formControlName="createBy"
+            [ngClass]="{'is-invalid': submitted && f.createBy.errors}"
+          >
+            <mat-option *ngFor="let type of createByList" [value]="type">
+              {{ type }}
+            </mat-option>
+          </mat-select>
+          <span class="input-group-addon">
+            &nbsp;&nbsp;<button type="submit" mat-mini-fab color="primary">
+              <mat-icon>search</mat-icon>
+            </button>
+          </span>
+          <div *ngIf="submitted && f.createBy.errors" class="invalid-feedback">
+            <div
+              *ngIf="f.createBy.errors.required"
+              class="text-danger help-block"
+            >
+              กรุณาเลือกผู้สร้างคำขอ
+            </div>
+          </div>
+        </div>
+        <div class="input-group suffix" *ngIf="isCreate">
+          <input
+            class="form-control"
+            [value]="userProfile.userCode"
+            formControlName="createBy"
+            readonly
+          />
+          <span class="input-group-addon">
+            &nbsp;&nbsp;<button type="submit" mat-mini-fab color="primary">
+              <mat-icon>search</mat-icon>
+            </button>
+          </span>
+        </div>
+      </div>
+    </div>
+  </form>
+</section>
+<section class="section-content box-content">
+  <div *ngIf="!noData">
+    <table
+      mat-table
+      [dataSource]="dataSource"
+      matSort
+      class="mat-elevation-z8"
+      (matSortChange)="onSortData($event)"
+    >
+      <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef>ลำดับ</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          {{ index + i + 1 }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="frequency">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>ความถี่</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.frequency.paramLocalDescription }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="durationCode">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>ช่วงเวลา</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.durationCode.durationCode }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          วันที่สร้างคำขอ
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.createdDate | thaiDatePipe }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdBy">
+        <th mat-header-cell *matHeaderCellDef>ผู้สร้างคำขอ</th>
+        <td mat-cell *matCellDef="let element">{{ element.createdBy }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="extendDate">
+        <th mat-header-cell *matHeaderCellDef>วันที่ขอขยายเวลา</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.extendedDate | thaiDatePipe }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>สถานะ</th>
+        <td mat-cell *matCellDef="let element">
+          <span style="color: green" *ngIf="element.status == 'APPROVE'">{{
+            element.status
+          }}</span>
+          <span *ngIf="element.status == 'NEW'">{{ element.status }}</span>
+          <span style="color: red" *ngIf="element.status == 'REJECT'">{{
+            element.status
+          }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="note">
+        <th mat-header-cell *matHeaderCellDef>เหตุผล</th>
+        <td mat-cell *matCellDef="let element" matTooltip="{{ element.note }}">
+          {{ element.note | subStringDescription }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef style="text-align: center">
+          Action
+        </th>
+        <td mat-cell *matCellDef="let element" style="text-align: center">
+          <ng-container *ngIf="isCreate">
+            <ng-container *ngIf="element.status == 'NEW'; else elseTemplate">
+              <button
+                mat-icon-button
+                (click)="openEditCreateFlowDialog(element)"
+                matTooltip="แก้ไขคำขอ"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+              &nbsp;
+              <button
+                mat-icon-button
+                matTooltip="ลบคำขอ"
+                (click)="deleteWorkflow(element)"
+              >
+                <mat-icon style="color: red">delete</mat-icon>
+              </button>
+            </ng-container>
+            <ng-template #elseTemplate>
+              <button
+                mat-icon-button
+                matTooltip="ผลการอนุมัติ"
+                (click)="openResultCreateFlowDialog(element)"
+              >
+                <mat-icon>assignment_turned_in</mat-icon>
+              </button>
+            </ng-template>
+          </ng-container>
+          <ng-container *ngIf="isApprove">
+            <button
+              mat-icon-button
+              (click)="openMakeDecisionDialog(element)"
+              matTooltip="อนุมัติคำขอ"
+              *ngIf="element.status == 'NEW'"
+            >
+              <mat-icon>feedback</mat-icon>
+            </button>
+          </ng-container>
+          <ng-container *ngIf="isBoth">
+            <ng-container
+              *ngIf="
+                userProfile.userCode == element.createdBy;
+                else elseTemplate2
+              "
+            >
+              <ng-container *ngIf="element.status == 'NEW'; else elseTemplate3">
+                <button
+                  mat-icon-button
+                  (click)="openEditCreateFlowDialog(element)"
+                  matTooltip="แก้ไขคำขอ"
+                >
+                  <mat-icon>edit</mat-icon>
+                </button>
+                &nbsp;
+                <button
+                  mat-icon-button
+                  matTooltip="ลบคำขอ"
+                  (click)="deleteWorkflow(element)"
+                >
+                  <mat-icon style="color: red">delete</mat-icon>
+                </button>
+              </ng-container>
+              <ng-template #elseTemplate3>
+                <button
+                  mat-icon-button
+                  matTooltip="ผลการอนุมัติ"
+                  (click)="openResultCreateFlowDialog(element)"
+                >
+                  <mat-icon>assignment_turned_in</mat-icon>
+                </button>
+              </ng-template>
+            </ng-container>
+            <ng-template #elseTemplate2>
+              <button
+                mat-icon-button
+                (click)="openMakeDecisionDialog(element)"
+                matTooltip="อนุมัติคำขอ"
+                *ngIf="element.status == 'NEW'"
+              >
+                <mat-icon>feedback</mat-icon>
+              </button>
+            </ng-template>
+          </ng-container>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <mat-paginator
+      color="primary"
+      [length]="length"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="pageEvent = pageChange($event)"
+    >
+    </mat-paginator>
+  </div>
+  <div class="row noDataResult" *ngIf="noData">
+    <div class="col-12">
+      <div style="text-align: center">ไม่พบข้อมูลคำขอ</div>
+    </div>
+  </div>
+</section>
+<swal
+  #succussDeleteSwal
+  title="ลบข้อมูลสำเร็จ"
+  [allowOutsideClick]="false"
+  text=""
+  type="success"
+></swal>
+<swal
+  #deleteWorkflowSwal
+  title=""
+  text=""
+  type="warning"
+  [confirmButtonText]="'ยืนยัน'"
+  [cancelButtonText]="'ยกเลิก'"
+  [showCancelButton]="true"
+></swal>

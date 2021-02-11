@@ -1,0 +1,193 @@
+<div class="page-main">
+  <div class="content-header">
+    <div class="section-header">
+      <div class="row">
+        <div class="col-12">
+          <label style="margin-top: 2%; font-size: 18px;">
+            <ol class="breadcrumb float-sm-left">
+              <li class="breadcrumb-item">
+                <a >5.4 สอบถามข้อมูลดัชนี CPIP</a>
+              </li>
+            </ol>
+        </label>
+         
+        </div>
+      </div>
+        <form [formGroup]="inquiryData" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-2 mr-2">
+              <input [readOnly]="
+                  userProfile && userProfile.userTypeCode
+                    ? userProfile.userTypeCode === 'PROVINCE_USER'
+                    : false
+                " class="form-control" type="text" placeholder="จังหวัด" aria-label="จังหวัด"
+                [formControl]="filterProvinceControl" [ngClass]="{
+                  'is-invalid': submitted && filterProvinceControl.errors
+                }" [matAutocomplete]="auto1"style="width: 105%;" />
+              <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayFilterProvince">
+                <mat-option *ngFor="let option of filterProvinceOptions | async" [value]="option">
+                  {{option.provinceCode}}&nbsp;{{option.provinceName}}
+                </mat-option>
+              </mat-autocomplete>
+            </div>
+            <div class="col-1" style="margin-right: 2.95rem;">
+              <mat-select class="form-control" formControlName="baseYear" (selectionChange)="selecBaseYear($event)"
+                [ngClass]="{'is-invalid': submitted && f.baseYear.errors}" placeholder="เลือกปีฐาน"
+                style="width: 160%;">
+                <mat-option *ngFor="let baseYear of baseYearList" [value]="baseYear.baseYearId">
+                  {{ baseYear.baseYear }}
+                </mat-option>
+              </mat-select>
+              <div *ngIf="submitted && f.baseYear.errors" class="invalid-feedback" style="width: 160%;">
+                <div *ngIf="f.baseYear.errors.required" class="text-danger help-block">
+                  กรุณาเลือกปีฐาน
+                </div>
+              </div>
+            </div>
+            <div class="col-1" style="margin-right: 1.2rem;">
+              <mat-select class="form-control" formControlName="year"
+                [ngClass]="{'is-invalid': submitted && f.year.errors}" placeholder="เลือกปี"
+                style="width: 125%;">
+                <mat-option *ngFor="let year of yearList" [value]="year">
+                  {{ year }}
+                </mat-option>
+              </mat-select>
+              <div *ngIf="submitted && f.year.errors" class="invalid-feedback">
+                <div *ngIf="f.year.errors.required" class="text-danger help-block">
+                  กรุณาเลือกปี
+                </div>
+              </div>
+            </div>
+            <div class="col-2">
+              <mat-select class="form-control" formControlName="month"
+                [ngClass]="{'is-invalid': submitted && f.month.errors}" placeholder="เลือกเดือน">
+                <mat-option *ngFor="let month of monthList" [value]="month.paramInfo">
+                  {{ month.paramLocalMessage }}
+                </mat-option>
+              </mat-select>
+              <div *ngIf="submitted && f.month.errors" class="invalid-feedback">
+                <div *ngIf="f.month.errors.required" class="text-danger help-block">
+                  กรุณาเลือกเดือน
+                </div>
+              </div>
+            </div>
+            <div class="col-2" style="margin-left: -0.1rem;">
+              <input type="text" class="form-control" formControlName= "commodityCode"
+              placeholder="รหัสสินค้า" >
+            </div>
+            <button type="submit" class="ml-2 mr-3" mat-mini-fab color="primary">
+              <mat-icon>search</mat-icon>
+            </button>
+            <div class="col-2">
+              <button color="primary" type="button" mat-raised-button (click)="dialogExportExcelResultIndex()">
+                <mat-icon>cloud_download</mat-icon>&nbsp;
+                <span>ดาวน์โหลด Excel</span>
+              </button>
+            </div>
+          </div>
+        </form>
+    </div>
+  </div>
+  <div class="content" [ngClass]="showContent ? 'show-div' : 'hidden-div'">
+    <div class="section-content box-content">
+      <div class="row" [ngClass]="!noData ? 'show-div' : 'hidden-div'">
+        <div class="example-container mat-elevation-z8">
+          <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSortData($event)">
+            <ng-container matColumnDef="result" sticky>
+              <th mat-header-cell *matHeaderCellDef>
+                Commodity Code and Commodity Name
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <ng-container *ngFor="let level of [].constructor(element.level)">
+                  &nbsp;
+                </ng-container>
+                <!-- <ng-container *ngIf="element.level === 6; else elseTemplate">
+                  <a class="taglink" (click)="clickCommodityLevel(element)">{{ element.commodityCode }} {{ element.commodityName }}</a>
+                </ng-container> -->
+                <!-- <ng-template #elseTemplate> -->
+                {{ element.commodityCode }} {{ element.commodityName }}
+                <!-- </ng-template> -->
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="index">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Index</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.indexValue }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="mom">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>MOM</th>
+              <td mat-cell *matCellDef="let element">
+                <ng-container *ngIf="element.level === 6; else elseTemplate">
+                  <a class="taglink" (click)="clickCommodityLevel(element)">{{ element.changeMom }}</a>
+                </ng-container>
+                <ng-template #elseTemplate>
+                  {{ element.changeMom }}
+                </ng-template>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="aoa">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>AOA</th>
+              <td mat-cell *matCellDef="let element">
+                <!-- {{ element.changeAoa }} -->
+                <ng-container *ngIf="element.level === 6; else elseTemplate">
+                  <a class="taglink" (click)="clickCommodityLevel(element)">{{ element.changeAoa }}</a>
+                </ng-container>
+                <ng-template #elseTemplate>
+                  {{ element.changeAoa }}
+                </ng-template>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="yoy">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>YOY</th>
+              <td mat-cell *matCellDef="let element">
+                <!-- {{ element.changeYoy }} -->
+                <ng-container *ngIf="element.level === 6; else elseTemplate">
+                  <a class="taglink" (click)="clickCommodityLevel(element)">{{ element.changeYoy }}</a>
+                </ng-container>
+                <ng-template #elseTemplate>
+                  {{ element.changeYoy }}
+                </ng-template>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="baseIndex">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Index <br> at <br>Base&nbsp;year</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.baseIndexValue }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="baseMom">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>MOM <br> at <br>Base&nbsp;year</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.changeBaseMom }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="baseAoa">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                &emsp;&nbsp;&nbsp;&nbsp;&nbsp;AOA<br>&emsp;at<br>&nbsp;&nbsp;&nbsp;&nbsp;Base&nbsp;year</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.changeBaseAoa }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="baseYoy">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>YOY <br> at <br> Base&nbsp;year</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.changeBaseYoy }}
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+        </div>
+      </div>
+      <div class="row noDataResult" *ngIf="noData">
+        <div class="col-12">
+          <div style="text-align: center">ไม่พบข้อมูลดัชนี</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<swal #errorSwal title="" text="" type="error"></swal>

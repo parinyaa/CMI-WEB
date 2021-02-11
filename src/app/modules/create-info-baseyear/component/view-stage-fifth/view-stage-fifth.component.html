@@ -1,0 +1,173 @@
+<div class="col-12">
+  <mat-tab-group (selectedTabChange)="selectedTabChange($event)">
+    <mat-tab label="ดัชนีเฉลี่ย ณ ปีฐาน">
+      <app-filter-data #avgIndex (onSearch)="onSearchAvgBaseIndex($event)"></app-filter-data>
+      <button (click)="exportIndexBaseYear();" class="mt-2 btn-export" mat-raised-button color="primary">
+        <img src="/assets/img/export.png" style="width: 20px;">export
+      </button>
+      <button (click)="goNext()" class="mt-2 mb-2 mr-2" *ngIf="stage40 === 5.4" mat-raised-button color="primary"
+        style="float: right;">Rebase</button>
+      <button (click)="changeStage()" class="mt-2 mr-2" mat-raised-button color="primary" style="float: right;"
+        *ngIf="stage40 === 5.5">ประกาศดัชนี<mat-icon>chevron_right</mat-icon></button>
+      <table class="ibar-baseyear" mat-table [dataSource]="dataSourceAvgI" matSort
+        (matSortChange)="sortChangeAvgI($event);">
+
+        <ng-container matColumnDef="0">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> ปีฐาน</th>
+          <td mat-cell *matCellDef="let element" matTooltip="{{element.yearTerm}} ">
+            {{element.baseYear}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="1">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> รหัสรายการ</th>
+          <td mat-cell *matCellDef="let element" matTooltip="{{element.monthTerm}} ">
+            {{element.commodityCode}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="2">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> ชื่อรายการ
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.commodityName}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="3">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> ระดับรายการ
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.commodityLevel}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="4">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Avg I
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <!-- {{element.averageIndex}} -->
+            {{(element.averageIndex === 0 || element.averageIndex === null) ? null : element.averageIndex | number:'1.5-5':'en-US'  }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsAvgI"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsAvgI;"></tr>
+
+      </table>
+      <mat-paginator [length]="length" [pageSize]="pageSize" [pageIndex]="pageIndex" [pageSizeOptions]="pageSizeOptions"
+        (page)="pageEvent = pageChange($event)">
+      </mat-paginator>
+
+    </mat-tab>
+    <mat-tab label="ปรับดัชนีปีฐานเดิมให้เป็นปีฐานใหม่">
+      <app-filter-data #rebaseIndex (onSearch)="onSearchRebaseIndex($event)"></app-filter-data>
+      <button (click)="export();" class="mt-2 btn-export" mat-raised-button color="primary">
+        <mat-icon>cloud_download</mat-icon> export
+      </button>
+      <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortChangeAvgI($event);">
+
+        <ng-container matColumnDef="0">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> ปี</th>
+          <td mat-cell *matCellDef="let element" matTooltip="{{element.yearTerm}} ">
+            {{element.yearTerm}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="1">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> เดือน</th>
+          <td mat-cell *matCellDef="let element" matTooltip="{{element.monthTerm}} ">
+            {{element.monthTerm}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="2">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> รายการ
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.commodityName}}<br>
+
+            {{element.commodityCode}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="3">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> ระดับรายการ
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.commodityLevel}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="4">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> ดัชนี
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <!-- {{element.indexValue}} -->
+            {{(element.indexValue === 0 || element.indexValue === null) ? null : element.indexValue | number:'1.5-5':'en-US'  }}
+
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="5">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Mom
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.mom}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="6">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Aoa
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.aoa}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="7">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Yoy
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.yoy}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="8">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> ดัชนีฐาน
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <!-- {{element.baseIndex}} -->
+            {{(element.baseIndex === 0 || element.baseIndex === null) ? null : element.baseIndex | number:'1.5-5':'en-US'  }}
+
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="9">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Mom ฐาน
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.baseMom}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="10">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Aoa ฐาน
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.baseAoa}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="11">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Yoy ฐาน
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.baseYoy}}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+      <mat-paginator [length]="length" [pageSize]="pageSize" [pageIndex]="pageIndex" [pageSizeOptions]="pageSizeOptions"
+        (page)="pageEvent = pageChange($event)">
+      </mat-paginator>
+
+    </mat-tab>
+  </mat-tab-group>
+</div>

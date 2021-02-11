@@ -1,0 +1,31 @@
+table{
+    width: 600px;
+    table-layout: fixed;
+}
+.table-loaddata  tr {
+    border: 1px solid rgba(0,0,0,.12);
+}
+
+.dialogConfig{
+    width: 650px;
+    height: 550px;
+  
+}
+.mat-column-no{
+    width: 10%;
+}
+.mat-column-weightCode{
+    width: 10%;
+}
+.mat-column-weightSubcode{
+    width: 10%;
+}
+.mat-column-weightName{
+    width: 20%;
+}
+.mat-column-status{
+    width: 10%;
+}
+.mat-column-weight{
+    width: 10%;
+}

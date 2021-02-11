@@ -1,0 +1,61 @@
+<div class="row" style="justify-content: center;">
+  <div>
+    <mat-accordion displayMode="flat" multi class="mat-table2 resultCal" *ngIf="dataWeightStep.length > 0">
+      <section matSort class="mat-elevation-z2 mat-header-row2">
+        <span class="mat-header-cell">รหัส</span>
+        <span class="mat-header-cell">รหัสย่อย</span>
+        <span class="mat-header-cell">กิจกรรม</span>
+        <span class="mat-header-cell">การแก้ไข</span>
+      </section>
+
+      <mat-expansion-panel *ngFor="let item of dataWeightStep;let itemIndex  = index" [expanded]="step === itemIndex"
+        (opened)="getWeightHistory(item,itemIndex)">
+        <mat-expansion-panel-header class="mat-row2" open>
+          <span class="mat-cell">{{item.weightData.weightCode}}</span>
+          <span class="mat-cell">{{item.weightData.weightSubcode}}</span>
+          <span class="mat-cell">{{item.weightData.description}}</span>
+          <span class="mat-cell">{{item.weightAction.paramCode}}</span>
+        </mat-expansion-panel-header>
+        <table mat-table class="table-loaddata mt-3" [dataSource]="dataSourceStepHistory">
+
+          <ng-container matColumnDef="no">
+            <th mat-header-cell *matHeaderCellDef> No. </th>
+            <td mat-cell *matCellDef="let element; let i = index"> {{i+1}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="destinationCode">
+            <th mat-header-cell *matHeaderCellDef> รหัส </th>
+            <td mat-cell *matCellDef="let element"> {{element.destination.weightCode}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="destinationSubcode">
+            <th mat-header-cell *matHeaderCellDef> รหัสย่อย </th>
+            <td mat-cell *matCellDef="let element"> {{element.destination.weightSubcode}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef> กิจกรรม </th>
+            <td mat-cell *matCellDef="let element"> {{element.destination.description}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="adjustweight">
+            <th mat-header-cell *matHeaderCellDef class="text-right">น้ำหนักที่ได้รับ</th>
+            <td mat-cell *matCellDef="let element" class="text-right">
+              {{element.adjustedWeight | weight5Decimal}} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsResult"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsResult;"></tr>
+        </table>
+        <br />
+        <button *ngIf="item.isCancel" style="float: right;" (click)="openCancleStepDialog(item)" mat-raised-button
+          color="warn">ยกเลิก</button>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <ng-container *ngIf="dataWeightStep.length <= 0">
+      <div>
+        {{txtShow}}
+      </div>
+    </ng-container>
+  </div>
+</div>

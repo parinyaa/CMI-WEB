@@ -1,0 +1,184 @@
+<div class="col-12">
+  <fieldset class="border p-3">
+    <legend class="w-auto"> &nbsp; คำนวณดัชนี ณ ปีฐาน &nbsp; </legend>
+    <app-filter-data (onSearch)="onSearch($event)"></app-filter-data>
+    <button (click)="export();" class="mt-2 btn-export" mat-raised-button color="primary"><img
+        src="/assets/img/export.png" style="width: 20px;"> export </button>
+    <button (click)="goNext()" class="mt-2 mr-2" mat-raised-button color="primary" style="float: right;"
+      *ngIf="stage40 === 5.33">Re Weight </button>
+    <button (click)="changeStage()" class="mt-2 mr-2" mat-raised-button color="primary" style="float: right;"
+      *ngIf="stage40 === 5.4">Re base<mat-icon>chevron_right</mat-icon></button>
+      <div class="col-12" style="overflow: scroll;">
+    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortChange($event);">
+
+      
+      <ng-container matColumnDef="commodityLevel">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ระดับ <br>รายการ
+        </th>
+        <td mat-cell *matCellDef="let element">
+            {{element.commodityLevel}}
+        </td>
+    </ng-container>
+
+      <ng-container matColumnDef="commodityCode">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> รหัสรายการ
+        </th>
+        <td mat-cell *matCellDef="let element">
+            {{element.commodityCode}}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="commodityName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ชื่อรายการ
+        </th>
+        <td mat-cell *matCellDef="let element">
+            {{element.commodityName}}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="yearTerm">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ปี</th>
+        <td mat-cell *matCellDef="let element" >
+            {{element.yearTerm}}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="index01">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ดัชนี <br> เดือนมกราคม
+        </th>
+        <td mat-cell *matCellDef="let element">
+            <!-- {{element.index01 | number:'1.5-5':'en-US' }} -->
+            {{(element.index01 === 0 || element.index01 === null) ? null : element.index01 | number:'1.5-5':'en-US'  }}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="index02">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ดัชนี <br> เดือนกุมภาพันธ์
+        </th>
+        <td mat-cell *matCellDef="let element">
+            <!-- {{element.index02 | number:'1.5-5':'en-US' }} -->
+            {{(element.index02 === 0 || element.index02 === null) ? null : element.index02 | number:'1.5-5':'en-US'  }}
+
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="index03">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ดัชนี <br> เดือนมีนาคม
+        </th>
+        <td mat-cell *matCellDef="let element">
+            <!-- {{element.index03 | number:'1.5-5':'en-US' }} -->
+            {{(element.index03 === 0 || element.index03 === null) ? null : element.index03 | number:'1.5-5':'en-US'  }}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="index04">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ดัชนี <br> เดือนเมษายน
+        </th>
+        <td mat-cell *matCellDef="let element">
+            <!-- {{element.index04 | number:'1.5-5':'en-US' }} -->
+            {{(element.index04 === 0 || element.index04 === null) ? null : element.index04 | number:'1.5-5':'en-US'  }}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="index05">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ดัชนี <br> เดือนพฤษภาคม
+        </th>
+        <td mat-cell *matCellDef="let element">
+            <!-- {{element.index05 | number:'1.5-5':'en-US' }} -->
+            {{(element.index05 === 0 || element.index05 === null) ? null : element.index05 | number:'1.5-5':'en-US'  }}
+
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="index06">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ดัชนี <br> เดือนมิถุนายน
+        </th>
+        <td mat-cell *matCellDef="let element">
+            <!-- {{element.index06 | number:'1.5-5':'en-US' }} -->
+            {{(element.index06 === 0 || element.index06 === null) ? null : element.index06 | number:'1.5-5':'en-US'  }}
+
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="index07">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ดัชนี <br> เดือนกรกฎาคม
+        </th>
+        <td mat-cell *matCellDef="let element">
+            <!-- {{element.index07 | number:'1.5-5':'en-US' }} -->
+            {{(element.index07 === 0 || element.index07 === null) ? null : element.index07 | number:'1.5-5':'en-US'  }}
+
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="index08">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ดัชนี <br> เดือนสิงหาคม
+        </th>
+        <td mat-cell *matCellDef="let element">
+            <!-- {{element.index08 | number:'1.5-5':'en-US' }} -->
+            {{(element.index08 === 0 || element.index08 === null) ? null : element.index08 | number:'1.5-5':'en-US'  }}
+
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="index09">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ดัชนี <br> เดือนกันยายน
+        </th>
+        <td mat-cell *matCellDef="let element">
+            <!-- {{element.index09 | number:'1.5-5':'en-US' }} -->
+            {{(element.index09 === 0 || element.index09 === null) ? null : element.index09 | number:'1.5-5':'en-US'  }}
+
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="index10">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ดัชนี <br> เดือนตุลาคม
+        </th>
+        <td mat-cell *matCellDef="let element">
+            <!-- {{element.index10 | number:'1.5-5':'en-US' }} -->
+            {{(element.index10 === 0 || element.index10 === null) ? null : element.index10 | number:'1.5-5':'en-US'  }}
+
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="index11">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ดัชนี <br> เดือนพฤศจิกายน
+        </th>
+        <td mat-cell *matCellDef="let element">
+            <!-- {{element.index11 | number:'1.5-5':'en-US' }} -->
+            {{(element.index11 === 0 || element.index11 === null) ? null : element.index11 | number:'1.5-5':'en-US'  }}
+
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="index12">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>ดัชนี <br> เดือนธันวาคม
+        </th>
+        <td mat-cell *matCellDef="let element">
+            <!-- {{element.index12 | number:'1.5-5':'en-US' }} -->
+            {{(element.index12 === 0 || element.index12 === null) ? null : element.index12 | number:'1.5-5':'en-US'  }}
+
+        </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="indexAvg">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ดัชนีเฉลี่ย
+        </th>
+        <td mat-cell *matCellDef="let element">
+            <!-- {{element.indexAvg | number:'1.5-5':'en-US' }} -->
+            {{(element.indexAvg === 0 || element.indexAvg === null) ? null : element.indexAvg | number:'1.5-5':'en-US'  }}
+
+        </td>
+    </ng-container>
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+  </div>
+    <mat-paginator [length]="length" [pageSize]="pageSize" [pageIndex]="pageIndex" [pageSizeOptions]="pageSizeOptions"
+      (page)="pageEvent = pageChange($event)">
+    </mat-paginator>
+  </fieldset>
+</div>

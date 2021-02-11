@@ -1,0 +1,99 @@
+<mat-horizontal-stepper #stepper [linear]="true">
+  <ng-template matStepperIcon="edit">
+    <mat-icon>check</mat-icon>
+  </ng-template>
+  <mat-step [stepControl]="firstFormGroup">
+    <ng-template matStepLabel>ยุบสาขา</ng-template>
+    <div *ngIf="!isEditStep">
+      <mat-progress-bar *ngIf="isLoadingStep" mode="indeterminate"></mat-progress-bar>
+      <div *ngIf="!isLoadingStep">
+        <div class="row" style="margin: 16px;">
+          <div class="col-4 text-center">
+            น้ำหนักเริ่มต้น : {{sumWeight | weight5Decimal}}
+          </div>
+          <div class="col-4 text-center">
+            น้ำหนักคงเหลือ : {{totalWeight | weight5Decimal}}
+          </div>
+          <div class="col-4 text-right" *ngIf="currentStep == 2.1">
+            <button class="mat-btn-tpso" mat-raised-button (click)="changeModeEditStep()">
+              <mat-icon>remove_circle</mat-icon>&nbsp;
+              <span>ยกเลิกการยุบสาขา</span>
+            </button>
+            &nbsp;
+            <button class="mat-btn-tpso" mat-raised-button (click)="checkNextStep(-2.1)" matTooltip="ย้อนกลับขั้นตอน">
+              <mat-icon>undo</mat-icon>
+            </button>
+            &nbsp;
+            <button class="mat-btn-tpso" mat-raised-button (click)="checkNextStep(2.1)" matTooltip="ขั้นตอนถัดไป">
+              <mat-icon>redo</mat-icon>
+            </button>
+          </div>
+        </div>
+        <table mat-table class="table-loaddata" [dataSource]="dataSource" *ngIf="!isLoadingStep">
+
+          <ng-container matColumnDef="weightCode">
+            <th mat-header-cell *matHeaderCellDef> รหัส </th>
+            <td mat-cell *matCellDef="let element;"> {{element.weightCode}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="weightSubcode">
+            <th mat-header-cell *matHeaderCellDef> รหัสย่อย </th>
+            <td mat-cell *matCellDef="let element;"> {{element.weightSubcode}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef> กิจกรรม </th>
+            <td mat-cell *matCellDef="let element;"> {{element.description}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="weight">
+            <th mat-header-cell *matHeaderCellDef class="text-right"> น้ำหนัก </th>
+            <td mat-cell *matCellDef="let element;" class="text-right"> {{element.adjustedWeight | weight5Decimal}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef class="text-center"> คำนวณ </th>
+            <td mat-cell *matCellDef="let element" class="text-center">
+              <mat-select *ngIf="weight.stepNo == 2.1" (selectionChange)="onselectTypeCal($event,element)"
+                class="form-control col-8">
+                <mat-option *ngFor="let weightCalType of weightCal" [value]="weightCalType">
+                  {{weightCalType.paramLocalMessage}}
+                </mat-option>
+              </mat-select>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="history">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center;"> ประวัติ </th>
+            <td mat-cell *matCellDef="let element" style="text-align: center;">
+              <button mat-mini-fab color="primary" (click)="openDataHistoryDialog(element)"
+                [disabled]="element.listHistory.length < 1">
+                <mat-icon>search</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsCalWeight"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsCalWeight;"></tr>
+        </table>
+      </div>
+      <mat-paginator color="primary" [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+        (page)="pageEvent = pageChange($event,2.1)">
+      </mat-paginator>
+    </div>
+    <div class="row" style="margin: 16px;" *ngIf="isEditStep">
+      <div class="col-12 text-right">
+        <button class="mat-btn-tpso" mat-raised-button (click)="changeModeEditWeight(2.1)">
+          <mat-icon>backspace</mat-icon>&nbsp;
+          <span>กลับไปขั้นตอนยุบสาขา</span>
+        </button>
+      </div>
+      <div class="col-12">
+        <app-weight-cancel-step-components [weight]="weight" [currentStep]="2.1"></app-weight-cancel-step-components>
+      </div>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
+<swal #warningSwal title="" text="" type="warning" [confirmButtonText]="'ตกลง'" [cancelButtonText]="'ยกเลิก'"
+  [showCancelButton]="true"></swal>

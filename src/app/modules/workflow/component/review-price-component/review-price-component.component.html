@@ -1,0 +1,180 @@
+<section class="content-header">
+  <div class="section-header">
+    <div class="row">
+      <div class="col-6 col-sm-6">
+        <ol class="breadcrumb float-sm-left">
+          <li class="breadcrumb-item"><a style="color:black;">ตรวจสอบข้อมูลราคา</a></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section-content box-content " style="margin-bottom:18px;">
+  <div class="row mb-3">
+    <div class="col-2">
+      วันเริ่มต้น
+    </div>
+    <div class="col-2">
+      วันสิ้นสุด
+    </div>
+    <div class="col-2">
+      สถานะ
+    </div>
+    <div class="col-3">
+      ผู้ตรวจสอบข้อมูล
+    </div>
+    <div class="col-3">
+      เจ้าของข้อมูล
+    </div>
+  </div>
+  <form [formGroup]="inquiryPriceForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <div class="col-2">
+        <div class="input-group suffix">
+          <input class="form-control" [matDatepicker]="picker1" placeholder="กรุณาเลือกวัน" formControlName="startDate"
+            readonly>
+          <span class="input-group-addon">
+            &nbsp;<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          </span>
+        </div>
+        <mat-datepicker #picker1></mat-datepicker>
+        <div *ngIf="submitted && f.startDate.errors" class="invalid-feedback">
+          <div *ngIf="f.startDate.errors.required" class="text-danger help-block">
+            กรุณาเลือกวันที่
+          </div>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="input-group suffix">
+          <input class="form-control" [matDatepicker]="picker2" placeholder="กรุณาเลือกวัน" formControlName="endDate"
+            readonly>
+          <span class="input-group-addon">
+            &nbsp;<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          </span>
+        </div>
+        <mat-datepicker #picker2></mat-datepicker>
+        <div *ngIf="submitted && f.endDate.errors" class="invalid-feedback">
+          <div *ngIf="f.endDate.errors.required" class="text-danger help-block">
+            กรุณาเลือกวันที่
+          </div>
+        </div>
+      </div>
+      <div class="col-2">
+        <mat-select class="form-control" formControlName="status"
+          [ngClass]="{'is-invalid': submitted && f.status.errors}">
+          <mat-option [value]="">
+
+          </mat-option>
+          <mat-option *ngFor="let type of statusList" [value]="type">
+            {{type}}
+          </mat-option>
+        </mat-select>
+        <div *ngIf="submitted && f.status.errors" class="invalid-feedback">
+          <div *ngIf="f.status.errors.required" class="text-danger help-block">
+            กรุณาเลือกสถานะ
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <ng-container>
+          <mat-select class="form-control" formControlName="createBy"
+            [ngClass]="{'is-invalid': submitted && f.createBy.errors}">
+            <mat-option [value]="">
+
+            </mat-option>
+            <mat-option *ngFor="let type of createByList" [value]="type">
+              {{type}}
+            </mat-option>
+          </mat-select>
+          <div *ngIf="submitted && f.createBy.errors" class="invalid-feedback">
+            <div *ngIf="f.createBy.errors.required" class="text-danger help-block">
+              กรุณาเลือกผู้ตรวจสอบข้อมูล
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <div class="col-3">
+        <div class="input-group suffix">
+          <mat-select class="form-control" formControlName="assignTo"
+            [ngClass]="{'is-invalid': submitted && f.assignTo.errors}">
+            <mat-option [value]="">
+
+            </mat-option>
+            <mat-option *ngFor="let type of assignToList" [value]="type">
+              {{type}}
+            </mat-option>
+          </mat-select>
+          <span class="input-group-addon">
+            &nbsp;&nbsp;<button type="submit" mat-mini-fab color="primary">
+              <mat-icon>search</mat-icon>
+            </button>
+          </span>
+          <div *ngIf="submitted && f.assignTo.errors" class="invalid-feedback">
+            <div *ngIf="f.assignTo.errors.required" class="text-danger help-block">
+              กรุณาเลือกเจ้าของข้อมูล
+            </div>
+          </div>
+        </div>
+        <!-- <div class="input-group suffix" *ngIf="isReply && !isCreate">
+          <span class="input-group-addon">
+            &nbsp;&nbsp;<button type="submit" mat-mini-fab color="primary">
+              <mat-icon>search</mat-icon>
+            </button>
+          </span>
+        </div> -->
+      </div>
+    </div>
+  </form>
+</section>
+<section class="section-content box-content">
+  <div *ngIf="!noData">
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" (matSortChange)="onSortData($event)">
+
+      <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef> ลำดับ </th>
+        <td mat-cell *matCellDef="let element;let i = index">{{index+i+1}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>วันที่สร้างคำขอ </th>
+        <td mat-cell *matCellDef="let element"> {{element.createdDate | thaiDatePipe}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef> สถานะ </th>
+        <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="note">
+        <th mat-header-cell *matHeaderCellDef> รายละเอียด </th>
+        <td mat-cell *matCellDef="let element" matTooltip="{{element.note | splitWorkflowDesc}}">
+          {{element.note |  splitWorkflowDesc}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef style="text-align: center;"> Action </th>
+        <td mat-cell *matCellDef="let element" style="text-align: center;">
+          <button mat-icon-button (click)="openURLAssignTo(element)" *ngIf="!isCreate && isReply"
+            matTooltip="ไปที่ลิงค์">
+            <mat-icon>open_in_new</mat-icon>
+          </button>
+          <button mat-icon-button (click)="openURLCreator(element)" *ngIf="isCreate" matTooltip="ไปที่ลิงค์">
+            <mat-icon>open_in_new</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator color="primary" [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+      (page)="pageEvent = pageChange($event)">
+    </mat-paginator>
+  </div>
+  <div class="row noDataResult" *ngIf="noData">
+    <div class="col-12">
+      <div style="text-align: center;">ไม่พบข้อมูลคำขอ</div>
+    </div>
+  </div>
+</section>

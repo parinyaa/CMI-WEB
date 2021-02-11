@@ -1,0 +1,71 @@
+<h1 mat-dialog-title>แก้ไข พารามิเตอร์</h1>
+<form [formGroup]="editParamsGroupForm" (ngSubmit)="onSubmit()">
+  <div mat-dialog-content>
+    <div class="row">
+      <div class="col-3 text-right mt-1">
+        <p>ชื่อพารามิเตอร์:</p>
+      </div>
+      <div class="col-9">
+        <input class="form-control" formControlName="paramGroup" maxlength="30"
+          [ngClass]="{'is-invalid': submitted && f.paramGroup.errors}" readonly>
+        <div *ngIf="submitted && f.paramGroup.errors" class="invalid-feedback">
+          <div *ngIf="f.paramGroup.errors.required" class="text-danger help-block">
+            กรุณากรอกพารามิเตอร์
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3 text-right mt-1">
+        <p>ชื่อภาษาไทย:</p>
+      </div>
+      <div class="col-9">
+        <input class="form-control" formControlName="paramGroupNameTh" maxlength="200"
+          [ngClass]="{'is-invalid': submitted && f.paramGroupNameTh.errors}" *ngIf="isNotDeleted">
+        <input class="form-control" formControlName="paramGroupNameTh" maxlength="200"
+          [ngClass]="{'is-invalid': submitted && f.paramGroupNameTh.errors}" *ngIf="!isNotDeleted" readonly>
+        <div *ngIf="submitted && f.paramGroupNameTh.errors" class="invalid-feedback">
+          <div *ngIf="f.paramGroupNameTh.errors.required" class="text-danger help-block">
+            กรุณากรอกชื่อภาษาไทยพารามิเตอร์
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3 text-right mt-1">
+        <p>ชื่อภาษาอังกฤษ:</p>
+      </div>
+      <div class="col-9">
+        <input class="form-control" formControlName="paramGroupNameEn" maxlength="200"
+          [ngClass]="{'is-invalid': submitted && f.paramGroupNameEn.errors}" *ngIf="isNotDeleted">
+        <input class="form-control" formControlName="paramGroupNameEn" maxlength="200"
+          [ngClass]="{'is-invalid': submitted && f.paramGroupNameTh.errors}" *ngIf="!isNotDeleted" readonly>
+        <div *ngIf="submitted && f.paramGroupNameEn.errors" class="invalid-feedback">
+          <div *ngIf="f.paramGroupNameEn.errors.required" class="text-danger help-block">
+            กรุณากรอกชื่อภาษาอังกฤษพารามิเตอร์
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="!isNotDeleted">
+      <div class="col-3 text-right mt-1">
+        <p>สถานะ:</p>
+      </div>
+      <div class="col-9">
+        <mat-slide-toggle  [color]="color" [checked]="isNotDeleted" (click)="changeStatus()">
+          {{txtStatus}}
+        </mat-slide-toggle>        
+      </div>
+    </div>
+
+  </div>
+  <div mat-dialog-actions style="float: right;">
+    <button type="submit" mat-raised-button color="primary">บันทึก</button>
+    <button mat-raised-button [mat-dialog-close]="">ยกเลิก</button>
+  </div>
+</form>
+<swal #editParamGroupSwal title="คุณต้องการเปลี่ยนแปลงข้อมูล <br>ใช่หรือไม่" 
+  [confirmButtonText]="'ตกลง'" [cancelButtonText]="'ยกเลิก'" text="" type="info"
+  [showCancelButton]="true" (confirm)="onEditParamGroup()"></swal>
+<swal #succussParamGroupSwal title="บันทึกข้อมูลสำเร็จ" [allowOutsideClick]="false" (confirm)="closeDialog()" text=""
+  type="success" [confirmButtonText]="'ตกลง'"  ></swal>

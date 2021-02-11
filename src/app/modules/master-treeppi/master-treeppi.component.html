@@ -1,0 +1,26 @@
+<div class="page-main">
+    <section class="content-header">
+        <div class="section-header">
+            <div class="row">
+                <div class="col-6 col-sm-6">
+                    <label style="font-size: 18px;">
+                        2.1 โครงสร้างข้อมูล&nbsp;CPIP
+                    </label>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="section-content page-tree">
+            <div class="row">
+                <div class="col-12 col-sm-12">
+                    <app-tree-ppi [nodes]="nodes" (clickViewChildNode)="viewChildNode($event)" 
+                    (clickHideChildNode)="hideChildNode($event)" (addChildNode)="addNode($event)"
+                     (deletedChildNode)="deleteNode($event)" (editChildNode)="editNode($event)"></app-tree-ppi>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<swal #succussDeleteSwal title="ลบข้อมูลสำเร็จ" [confirmButtonText]="'ตกลง'" (confirm)="refreshNode()"  [allowOutsideClick]="false" text="" type="success"></swal>
+<swal #errorSwal title="" text="" [confirmButtonText]="'ตกลง'" type="error"></swal>

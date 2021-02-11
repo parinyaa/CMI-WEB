@@ -1,0 +1,363 @@
+<div class="page-main">
+    <section class="content-header">
+        <div class="section-header">
+            <div class="row">
+                <div class="col-6 col-sm-6">
+                    <label style="margin-top: 1%; font-size: 18px;">บทวิเคราะห์ <small></small></label>
+                </div>
+                <div class="col-6 col-sm-6" style="text-align: right">
+                    <button class="mr-2" mat-raised-button color="warn" (click)="openDialog()">PPI</button>
+                    <button mat-raised-button color="accent" (click)="openDialog2()">SOP</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="section-content">
+            <div class="row">
+                <div class="col-2">
+                    <select class="form-control mr-2 ml-2">
+                        <option value="0">กันยายน</option>
+
+                    </select>
+                </div>
+                <div class="col-2">
+                    <select class="form-control mr-2 ml-2">
+                        <option value="0">2562</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <p>คำอธิบาย :</p>
+                </div>
+                <div class="col-12">
+                    <textarea class="form-control" rows="5"></textarea>
+                </div>
+            </div>
+            <div class="row ml-4 mr-4 mt-3">
+                <div class="col-4 text-right mt-1">
+                    <p>Link:</p>
+                </div>
+                <div class="col-5">
+                    <input class="form-control">
+                </div>
+            </div>
+            <div class="row ml-4 mr-4 mt-3" style="justify-content: center;">
+                <div class="col-3 ml-2" >
+                    <input type="file" class="custom-file-input" (change)="onSelectFile($event)" multiple required>
+                    <label class="custom-file-label" for="validatedCustomFile">เลือกไฟล์</label>
+                    <div class="invalid-feedback">Example invalid custom file feedback</div>
+                    <mat-list>
+                        <mat-list-item *ngFor="let item of file">
+                            <mat-icon mat-list-icon>note</mat-icon>
+                            <h4 mat-line>{{item.name}}</h4>
+                            <p mat-line> {{item.updated | date}} </p>
+                        </mat-list-item>
+                    </mat-list>
+                </div>
+            </div>
+            <div class="row mt-3" style="justify-content: center;">
+                    <!-- <div class="col-4"> -->
+                        <button class="mr-2" mat-raised-button color="primary">บันทึก</button>
+                        <button mat-raised-button>ยกเลิก</button>
+                    <!-- </div> -->
+            </div>
+        </div>
+    </section>
+    <!-- <section class="content">
+        <div class="section-content">
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-source">
+                        <mat-grid-list cols="4" rowHeight="80px">
+                            <mat-grid-tile [colspan]="4" style="text-align: right;">
+                                <select class="form-control mr-2 ml-2" style="width: 15%; font-size: 12px;">
+                                    <option value="0">ปีฐาน</option>
+                                 
+                                </select>
+                                <select class="form-control mr-2 ml-2" style="width: 15%; font-size: 12px;">
+                                    <option value="0">เดือน</option>
+                                 
+                                </select>
+                                <select class="form-control mr-2 ml-2" style="width: 15%; font-size: 12px;">
+                                    <option value="0">ปี</option>
+                                   
+                                </select>
+                                <input type="text" class="form-control mr-2" placeholder="รหัสสินค้า"
+                                    style="width: 15%">
+                                <input type="text" class="form-control mr-2" placeholder="ชื่อรายการสินค้า"
+                                    style="width: 15%">
+                                <button class="form-control mr-2" style="width: 5%;"><i
+                                        class="fas fa-search"></i></button>
+                            </mat-grid-tile>
+                        </mat-grid-list>
+                        <table mat-table [dataSource]="dataSourceKey" matSort>
+
+                            <ng-container matColumnDef="action2">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <mat-checkbox (change)="$event ? masterToggle() : null"
+                                        [checked]="selection.hasValue() && isAllSelected()"
+                                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                        [aria-label]="checkboxLabel()">
+                                    </mat-checkbox>
+                                    <br> Index
+                                </th>
+                                <td mat-cell *matCellDef="let row">
+                                    <mat-checkbox (click)="$event.stopPropagation()"
+                                        (change)="$event ? selection.toggle(row) : null"
+                                        [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+                                    </mat-checkbox>
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef> </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="productCode">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> รหัสสินค้า /<br>รายละเอียด </th>
+                                <td mat-cell *matCellDef="let element" matTooltip="{{element.productDetail}} ">
+                                    {{element.productCode}} ({{element.produectUnit}}) (บาท) <br>
+                                    {{element.productDetail}}
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef> </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="surveyName">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> ผู้ให้ข้อมูล /<br>แหล่งข้อมูล
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.surveyName}}<br>
+                                    {{element.sourceName}}
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef>
+                                    <br>ค่าเฉลี่ย<br>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="pricePrevious">
+                                <th mat-header-cell *matHeaderCellDef> ราคา<br>เดือนที่<br>ผ่านมา </th>
+                                <td mat-cell *matCellDef="let element"> {{element.pricePrevious}} </td>
+                                <td mat-footer-cell *matFooterCellDef>
+                                    <br>{{getTotalCost1()}}<br></td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="priceCurrent">
+                                <th mat-header-cell *matHeaderCellDef> ราคา<br>ปัจจุบัน </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <input type="text" class="form-control" id="priceCurrent{{element.productCode}}"
+                                        value="{{element.pricePrevious}}">
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef>
+                                    <br>{{getTotalCost1()}}<br> </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="priceDb">
+                                <th mat-header-cell *matHeaderCellDef> ราคา<br>ที่เก็บแล้ว</th>
+                                <td mat-cell *matCellDef="let element">
+                                    <input type="text" class="form-control" id="priceCurrent{{element.productCode}}"
+                                        value="{{element.pricePrevious}}">
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef>
+                                    <br>{{getTotalCost1()}}<br> </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="priceUse">
+                                <th mat-header-cell *matHeaderCellDef> ราคา<br>ที่ใช้ได้จริง </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <input type="text" class="form-control" id="priceCurrent{{element.productCode}}"
+                                        value="{{element.pricePrevious}}">
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef>
+                                    <br>{{getTotalCost1()}}<br> </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="priceNot">
+                                <th mat-header-cell *matHeaderCellDef> ไม่<br>สามารถ<br>หาราคา </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <mat-checkbox [id]="element.productCode" (change)="onChangePriceNot($event)">
+                                    </mat-checkbox>
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef> </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="productLink">
+                                <th mat-header-cell *matHeaderCellDef> Link </th>
+                                <td mat-cell *matCellDef="let element"> {{element.productLink}} </td>
+                                <td mat-footer-cell *matFooterCellDef> </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="priceChange">
+                                <th mat-header-cell *matHeaderCellDef> ปรับ<br>ราคา </th>
+                                <td mat-cell *matCellDef="let element">
+                                    1000
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef>
+                                    <br>1000<br> </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="priceRel">
+                                <th mat-header-cell *matHeaderCellDef> Rel </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.priceRel}}
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef>
+                                    <br>{{getTotalCost4()}}<br> </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="productStatus">
+                                <th mat-header-cell *matHeaderCellDef> ภาวะ </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <input type="text" class="form-control ml-1 mr-1">
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef> </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="editBy">
+                                <th mat-header-cell *matHeaderCellDef> ผู้บันทึกข้อมูล </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <p *ngIf="element.productCode == 2011111011110101">user1<br>(ส่วนกลาง)</p>
+                                    <p *ngIf="element.productCode != 2011111011110101">user2<br>(ระดับจังหวัด)</p>
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef> </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5" *ngIf="isShowDiv1">
+                <div class="col-12">
+                    <table class="table-source" mat-table [dataSource]="dataSource">
+
+                        <ng-container matColumnDef="month">
+                            <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"></th>
+                            <td mat-cell *matCellDef="let element">
+                                <div *ngIf="element.month == 1">เดือนที่แล้ว</div>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="no1">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"></th>
+                        </ng-container>
+
+                        <ng-container matColumnDef="af1">
+                            <th mat-header-cell *matHeaderCellDef> P<sub>t</sub> </th>
+                            <td mat-cell *matCellDef="let element" matTooltip="{{element.sourceName}}">
+                                {{element.af1}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="af2">
+                            <th mat-header-cell *matHeaderCellDef> P<sub>t-1</sub> </th>
+                            <td mat-cell *matCellDef="let element"> {{element.af2}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="af3">
+                            <th mat-header-cell *matHeaderCellDef> Rel </th>
+                            <td mat-cell *matCellDef="let element"> {{element.af3}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="gm1">
+                            <th mat-header-cell *matHeaderCellDef> P<sub>t</sub> </th>
+                            <td mat-cell *matCellDef="let element"> {{element.gm1}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="gm2">
+                            <th mat-header-cell *matHeaderCellDef> P<sub>t-1</sub> </th>
+                            <td mat-cell *matCellDef="let element"> {{element.gm2}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="gm3">
+                            <th mat-header-cell *matHeaderCellDef> Rel </th>
+                            <td mat-cell *matCellDef="let element"> {{element.gm3}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="avgAf">
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="3"> ค่าเฉลี่ย AR </th>
+                        </ng-container>
+
+                        <ng-container matColumnDef="avgGm">
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="3"> ค่าเฉลี่ย GM </th>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="['no1','avgAf','avgGm']"></tr>
+                        <tr mat-header-row *matHeaderRowDef="displayedDatasource"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedDatasource;"></tr>
+                    </table>
+                </div>
+            </div>
+            <div class="row mt-3" *ngIf="isShowDiv1">
+                <div class="col-12">
+                    <button style="float: right;" mat-raised-button color="primary" (click)="calWeight()">คำนวณ Relative</button>
+                </div>
+            </div>
+            <div class="row mt-5" *ngIf="isShowDiv2">
+                <div class="col-12">
+                    <table class="table-source" mat-table [dataSource]="dataSource">
+
+                        <ng-container matColumnDef="month">
+                            <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"></th>
+                            <td mat-cell *matCellDef="let element">
+                                <div *ngIf="element.month == 1">เดือนที่แล้ว</div>
+                                <div *ngIf="element.month == 2">เดือนปัจจุบัน</div>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="no1">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"></th>
+                        </ng-container>
+
+                        <ng-container matColumnDef="af1">
+                            <th mat-header-cell *matHeaderCellDef> P<sub>t</sub> </th>
+                            <td mat-cell *matCellDef="let element" matTooltip="{{element.sourceName}}">
+                                {{element.af1}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="af2">
+                            <th mat-header-cell *matHeaderCellDef> P<sub>t-1</sub> </th>
+                            <td mat-cell *matCellDef="let element"> {{element.af2}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="af3">
+                            <th mat-header-cell *matHeaderCellDef> Rel </th>
+                            <td mat-cell *matCellDef="let element"> {{element.af3}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="gm1">
+                            <th mat-header-cell *matHeaderCellDef> P<sub>t</sub> </th>
+                            <td mat-cell *matCellDef="let element"> {{element.gm1}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="gm2">
+                            <th mat-header-cell *matHeaderCellDef> P<sub>t-1</sub> </th>
+                            <td mat-cell *matCellDef="let element"> {{element.gm2}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="gm3">
+                            <th mat-header-cell *matHeaderCellDef> Rel </th>
+                            <td mat-cell *matCellDef="let element"> {{element.gm3}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="avgAf">
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="3"> ค่าเฉลี่ย AF </th>
+                        </ng-container>
+
+                        <ng-container matColumnDef="avgGm">
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="3"> ค่าเฉลี่ย GM </th>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="['no1','avgAf','avgGm']"></tr>
+                        <tr mat-header-row *matHeaderRowDef="displayedDatasource"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedDatasource;"></tr>
+                    </table>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <button style="float: right;" mat-raised-button color="primary">ยืนยัน Relative</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+</div>

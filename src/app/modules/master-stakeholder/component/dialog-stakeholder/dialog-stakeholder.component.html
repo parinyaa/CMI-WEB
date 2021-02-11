@@ -1,0 +1,107 @@
+<h1 mat-dialog-title>ผู้มีส่วนได้ส่วนเสีย</h1>
+<form [formGroup]="addStakeholderForm" (ngSubmit)="onSubmit()">
+  <div mat-dialog-content>
+    <fieldset class="border p-3">
+      <legend class="w-auto">ข้อมูลพื้นฐาน</legend>
+      <div class="row">
+        <div class="col-2 text-right mt-1">
+          <p>ชื่อผู้มีส่วนได้ส่วนเสีย :</p>
+        </div>
+        <div class="col-4">
+          <input type="text" class="form-control" placeholder="" formControlName="stakeholderName"
+            [ngClass]="{'is-invalid': submitted && f.stakeholderName.errors}">
+          <div *ngIf="submitted && f.stakeholderName.errors" class="invalid-feedback">
+            <div *ngIf="f.stakeholderName.errors.required" class="text-danger help-block">
+              กรุณากรอกชื่อผู้มีส่วนได้ส่วนเสีย
+            </div>
+            <div *ngIf="f.stakeholderName.errors.whitespace" class="text-danger help-block">
+              กรุณากรอกชื่อผู้มีส่วนได้ส่วนเสีย
+            </div>
+          </div>
+        </div>
+        <div class="col-3 text-right mt-1">
+          <p>เลขประจำตัวผู้เสียภาษี :</p>
+        </div>
+        <div class="col-3">
+          <input type="text" class="form-control" placeholder="" formControlName="stakeholderTaxNo" maxlength="20"
+            pattern="[0-9]*" [ngClass]="{'is-invalid': submitted && f.stakeholderTaxNo.errors}">
+          <div *ngIf="submitted && f.stakeholderTaxNo.errors" class="invalid-feedback">
+            <div *ngIf="f.stakeholderTaxNo.errors.required" class="text-danger help-block">
+              กรุณากรอกหมายเลขประจำตัวผู้เสียภาษี
+            </div>
+            <div *ngIf="f.stakeholderTaxNo.errors.whitespace" class="text-danger help-block">
+              กรุณากรอกหมายเลขประจำตัวผู้เสียภาษี
+            </div>
+            <div *ngIf="f.stakeholderTaxNo.errors.pattern" class="text-danger help-block">
+              กรุณากรอกเป็นตัวเลข
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-2 text-right mt-1">
+          <p>รหัสไปรษณีย์ :</p>
+        </div>
+        <div class="col-2">
+          <input type="text" class="form-control" placeholder="" formControlName="stakeholderPostCode" pattern="[0-9]*"
+            maxlength="5" #postCodeSearchInput [ngClass]="{'is-invalid': submitted && f.stakeholderPostCode.errors}">
+          <div *ngIf="submitted && f.stakeholderPostCode.errors" class="invalid-feedback">
+            <div *ngIf="f.stakeholderPostCode.errors.required" class="text-danger help-block">
+              กรุณากรอกรหัสไปรษณีย์
+            </div>
+            <div *ngIf="f.stakeholderPostCode.errors.pattern" class="text-danger help-block">
+              กรุณากรอกเป็นตัวเลข
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-2 text-right mt-1">
+          <p>จังหวัด,อำเภอ,ตำบล :</p>
+        </div>
+        <div class="col-4">
+          <div class="input-group">
+            <input type="text" class="form-control" aria-label="Assignee" [matAutocomplete]="auto" #automatAutocomplete
+              formControlName="stakeholderAddr" [ngClass]="{'is-invalid': submitted && f.stakeholderAddr.errors}">
+            <div class="input-group-append" *ngIf="searchLoading">
+              <span class="input-group-text"><i class="fa fa-spinner fa-spin"></i></span>
+            </div>
+            <div *ngIf="submitted && f.stakeholderAddr.errors" class="invalid-feedback">
+              <div *ngIf="f.stakeholderAddr.errors.required" class="text-danger help-block">
+                กรุณากรอกข้อมูลที่อยู่
+              </div>
+            </div>
+          </div>
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+            <mat-option *ngFor="let option of options" (onSelectionChange)="onSelectAddr($event)" [value]="option">
+              {{option.addrName}}
+            </mat-option>
+          </mat-autocomplete>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-2 text-right mt-1">
+          <p>ที่อยู่ :</p>
+        </div>
+        <div class="col-6 mb-2">
+          <textarea type="text" rows="5" class="form-control" placeholder="" formControlName="stakeholderAddress1"
+            [ngClass]="{'is-invalid': submitted && f.stakeholderAddress1.errors}"></textarea>
+          <div *ngIf="submitted && f.stakeholderAddress1.errors" class="invalid-feedback">
+            <div *ngIf="f.stakeholderAddress1.errors.required  || f.stakeholderAddress1.errors.whitespace"
+              class="text-danger help-block">
+              กรุณากรอกที่อยู่
+            </div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+  <div mat-dialog-actions style="margin-top: 2%; float:right;">
+    <button type="submit" mat-raised-button color="primary">บันทึก</button>
+    <button mat-raised-button [mat-dialog-close]="data" cdkFocusInitial>ยกเลิก</button>
+  </div>
+</form>
+<swal #saveStakeholderSwal title="คุณต้องการบันทึกข้อมูล ใช่หรือไม่?" [allowOutsideClick]="false"
+  [showCancelButton]="true" text="" type="info" (confirm)="createStakeholder()"></swal>
+<swal #successStakeholderSwal title="บันทึกข้อมูลสำเร็จ" [allowOutsideClick]="false" (confirm)="onNoClick()" text=""
+  type="success"></swal>

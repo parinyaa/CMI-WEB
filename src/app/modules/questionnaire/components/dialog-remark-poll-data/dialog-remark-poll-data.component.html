@@ -1,0 +1,31 @@
+<h1 mat-dialog-title>คำตอบประเภทอื่นๆ</h1>
+<div mat-dialog-content>
+  <table mat-table class="table-loaddata" [dataSource]="dataSource">
+
+    <ng-container matColumnDef="position">
+      <th mat-header-cell *matHeaderCellDef> ลำดับที่ </th>
+      <td mat-cell *matCellDef="let element; let i = index"> {{index+i+1}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="remark">
+      <th mat-header-cell *matHeaderCellDef> คำตอบ </th>
+      <td mat-cell *matCellDef="let element;"> {{element.remark}} </td>
+    </ng-container>
+
+    <!-- <ng-container matColumnDef="createby">
+      <th mat-header-cell *matHeaderCellDef> ผู้ตอบ </th>
+      <td mat-cell *matCellDef="let element;"> {{element.createdBy}} </td>
+    </ng-container> -->
+
+    <!-- <ng-container matColumnDef="frequency">
+      <th mat-header-cell *matHeaderCellDef> ความถี่ </th>
+      <td mat-cell *matCellDef="let element;"> {{element.createdDate}} </td>
+    </ng-container> -->
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <mat-paginator color="primary" [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+    (page)="pageEvent = pageChange($event)">
+  </mat-paginator>
+</div>

@@ -1,0 +1,17 @@
+{
+  "hosting": {
+    "site": "dev-cpip",
+    "public": "dist/tpso-web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

@@ -1,0 +1,86 @@
+<div class="page-main">
+  <section class="content-header">
+    <div class="section-header">
+      <div class="row">
+        <div class="col-6 col-sm-6">
+          <h3>{{provinceName}}</h3>
+          <ol class="breadcrumb float-sm-left">
+            <li class="breadcrumb-item"><a [routerLink]="['/region']">ภูมิภาค</a></li>
+            <li class="breadcrumb-item"><a (click)="backToProvince()">{{breadcrumb.region}}</a></li>
+            <li class="breadcrumb-item active">{{breadcrumb.province}}</li>
+          </ol>
+        </div>
+        <div class="col-6 col-sm-6" style="text-align: right;">
+          <!-- <button class="mat-btn-tpso" mat-raised-button type="button" (click)="onAddAmphur()">
+                        <mat-icon>add_circle</mat-icon>&nbsp;เพิ่ม
+                    </button> -->
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="content">
+    <div class="section-content box-content">
+      <div class="row">
+        <div class="col-6 col-sm-6">
+          <!-- <button class="mat-btn-tpso" mat-raised-button type="button" (click)="onAddAmphur()"> -->
+            <button class="mat-btn-tpso" mat-raised-button type="button" (click)="onErrorSwal()">
+            <mat-icon>add_circle</mat-icon>&nbsp;เพิ่ม
+          </button>
+        </div>
+        <div class="col-6 col-sm-6">
+          <form [formGroup]="stateForm">
+            <div id="customInput">
+              <mat-form-field appearance="outline" style="float: right">
+                <mat-label style="font-size: 16px;">ค้นหา </mat-label>
+                <input type="text" matInput [matAutocomplete]="autoGroup" #inputAmphur>
+                <mat-autocomplete #autoGroup="matAutocomplete" (optionSelected)="optionSelected($event)"
+                  [displayWith]="displayFn">
+                  <mat-optgroup *ngFor="let group of stateGroupOptions | async" [label]="group.letter">
+                    <mat-option *ngFor="let name of group.names" [value]="name">
+                      {{name.name}}
+                    </mat-option>
+                  </mat-optgroup>
+                </mat-autocomplete>
+                <mat-icon *ngIf="!searchLoading" matSuffix>search</mat-icon>
+                <mat-spinner *ngIf="searchLoading" matSuffix [diameter]="15"></mat-spinner>
+              </mat-form-field>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="row ">
+        <div class="col-md-3 col-sm-4 col-12" *ngFor="let result of amphur">
+
+          <mat-card class="mt-4 center" appMaterialElevation>
+            <a (click)="goToTambol(result)">
+              <mat-card-header>
+                <div mat-card-avatar class="example-header-image"></div>
+                <mat-card-title>{{result.amphurName}}</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <h6 class="textHeader font-count">{{result.countTambol}}</h6>
+              </mat-card-content>
+            </a>
+            <mat-card-subtitle class="font-size">ตำบล</mat-card-subtitle>
+            <mat-card-actions>
+              <a (click)="onErrorSwal()" class="card-button" mat-button>แก้ไขข้อมูล</a>
+              <a (click)="onErrorSwal()" class="card-button" mat-button>ลบ</a>
+              <!-- <a (click)="onEditAmphur(result)" class="card-button" mat-button>แก้ไข</a>
+              <a [swal]="deleteAmphurSwal" class="card-button" mat-button>ลบ</a>
+              <swal #deleteAmphurSwal title="คุณต้องการลบ{{result.amphurName}} <br />ใช่หรือไม่?" text="" type="info"
+                [showCancelButton]="true" (confirm)="deleteAmphur(result)"></swal> -->
+            </mat-card-actions>
+          </mat-card>
+        </div>
+      </div>
+      <div class="row noDataResult" *ngIf="amphur.length <= 0">
+        <div class="col-12">
+          <div style="text-align: center;">ไม่พบข้อมูลอำเภอ</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<swal #deleteSuccussSwal title="ลบข้อมูลสำเร็จ" [allowOutsideClick]="false" text="" type="success"></swal>
+<swal #errorAmphurSwal text="" type="error"></swal>
+<swal #errorSwal title="" text="" type="error"></swal>

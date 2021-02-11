@@ -1,0 +1,27 @@
+table{
+    width: 100%;
+    table-layout: fixed;
+}
+.table-loaddata  tr {
+    border: 1px solid rgba(0,0,0,.12);
+}
+.mat-column-id {
+    text-align: center;
+    width: 20%;
+  }
+.mat-column-code {
+    text-align: center;
+    width: 40%;
+}
+.mat-column-weight {
+    text-align: center;
+    width: 40%;
+}
+.button-row button,
+.button-row a {
+  margin-right: 8px;
+}
+.section-content{
+    background-color: white;
+    padding: 2%;
+}
